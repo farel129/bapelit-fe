@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+::-webkit-scrollbar {
+  color: antiquewhite;
+  background-color: white;
+  width: 1px;
+}
+
+::-webkit-scrollbar-button {
+  background-color: white;
+  color: white;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: white;
+  color: white;
+}
