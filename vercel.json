@@ -5,6 +5,10 @@
       "dest": "https://dispoma-be-production.up.railway.app/api/$1"
     },
     {
+      "src": "/(assets|favicon|robots.txt|sitemap.xml|manifest.json|images|img|static)/.*",
+      "dest": "/$1/$2"
+    },
+    {
       "src": "/(.*)",
       "dest": "/index.html"
     }
