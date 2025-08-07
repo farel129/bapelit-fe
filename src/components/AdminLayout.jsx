@@ -38,7 +38,7 @@ const AdminLayout = ({ children }) => {
         <div className="fixed inset-0 bg-gray-600 bg-opacity-75" onClick={() => setSidebarOpen(false)} />
         <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl">
           <div className="flex items-center justify-between h-16 px-4 border-b">
-            <h1 className="text-xl font-bold text-gray-800">Sistem Surat</h1>
+            <h1 className="text-xl font-bold text-[#262628]">Dispoma</h1>
             <button onClick={() => setSidebarOpen(false)}>
               <X className="w-6 h-6" />
             </button>
@@ -60,21 +60,21 @@ const AdminLayout = ({ children }) => {
             ))}
           </nav>
           <div className='px-4 mt-2'>
-              <button
-                onClick={logout}
-                className="flex items-center space-x-1 cursor-pointer text-sm font-semibold text-red-400 hover:text-red-600"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Logout</span>
-              </button>
-            </div>
+            <button
+              onClick={logout}
+              className="flex items-center space-x-1 cursor-pointer text-sm font-semibold text-red-400 hover:text-red-600"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Desktop sidebar */}
       <div className="hidden lg:fixed lg:flex lg:inset-y-0 lg:w-50 lg:flex-col pl-4 rounded-3xl shadow-lg my-6 border border-black/5 bg-gradient-to-b from-gray-50 via-white to-white overflow-hidden">
-      <div className='bg-blue-300 h-10 w-10 rounded-full blur-xl bottom-0 right-0 absolute'></div>
-              <div className='bg-pink-300 h-10 w-10 rounded-full blur-xl bottom-5 right-0 absolute'></div>
+        <div className='bg-blue-300 h-10 w-10 rounded-full blur-xl bottom-0 right-0 absolute'></div>
+        <div className='bg-pink-300 h-10 w-10 rounded-full blur-xl bottom-5 right-0 absolute'></div>
         <div className="flex-1 flex flex-col pt-3">
           <div className=" flex flex-col pt-5 pb-4 overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4">
@@ -111,29 +111,26 @@ const AdminLayout = ({ children }) => {
       </div>
 
       {/* Main content */}
-      <div className="lg:pl-50 flex flex-col flex-1">
-        {/* Top bar */}
-        {/* <div className="sticky top-0 bg-white pt-3 z-30">
-          <div className="flex items-center justify-between h-16 px-4">
-            <button
-              className="lg:hidden"
-              onClick={() => setSidebarOpen(true)}
-            >
-              <Menu className="w-6 h-6" />
-            </button>
+      {/* Top bar */}
+      <div className="sticky lg:hidden top-0 bg-white pt-3 z-30 border-b border-b-black/10 overflow-hidden">
+        <div className="flex items-center gap-x-3 h-16 px-4">
+          <button
+            className="lg:hidden"
+            onClick={() => setSidebarOpen(true)}
+          >
+            <Menu className="w-6 h-6" />
+          </button>
 
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <User className="w-5 h-5 text-gray-400" />
-                <span className="text-sm font-medium text-gray-700">
-                  {user?.name} ({user?.jabatan})
-                </span>
-              </div>
-
+          <div className="flex items-center space-x-4">
+            <div className="flex items-center space-x-2">
+              <img src={img} className='w-4' alt="" />
+              <p className='text-[#262628] text-lg font-extrabold'>Dispoma</p>
             </div>
-          </div>
-        </div> */}
 
+          </div>
+        </div>
+      </div>
+      <div className='lg:pl-50'>
         {/* Page content */}
         <main className="flex-1 px-4 py-6 lg:px-5  min-h-screen">
           {children}

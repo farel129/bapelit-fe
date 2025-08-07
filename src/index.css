@@ -24,3 +24,7 @@ body {
   background-color: white;
   color: white;
 }
+
+body {
+  overflow-x: hidden;
+}

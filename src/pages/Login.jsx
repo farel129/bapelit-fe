@@ -147,7 +147,7 @@ export default function LoginPopup({ onClose }) {
         </div>
 
         {/* Right Side - Information */}
-        <div className="bg-gradient-to-br from-gray-50 to-cyan-50/30 p-8 lg:p-12 flex flex-col justify-center relative overflow-hidden">
+        <div className=" hidden bg-gradient-to-br from-gray-50 to-cyan-50/30 p-8 lg:p-12 lg:flex flex-col justify-center relative overflow-hidden">
           {/* Background decorations */}
           <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-blue-200/30 to-transparent rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-cyan-200/30 to-transparent rounded-full blur-2xl"></div>

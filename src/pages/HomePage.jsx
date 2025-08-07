@@ -237,7 +237,7 @@ const HomePage = () => {
         </div>
 
         {/* Right Elements */}
-        <div className='lg:w-1/2 flex justify-center relative'>
+        <div className='lg:w-1/2 hidden lg:flex justify-center relative'>
           <div ref={imageContainerRef} className='relative group'>
             {/* Decorative rings */}
             <div className='absolute -inset-6 animate-pulse rounded-full bg-white shadow-2xl group-hover:scale-105 transition-transform duration-500'></div>

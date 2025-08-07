@@ -95,13 +95,13 @@ const AdminDashboard = () => {
         <div className='min-h-screen space-y-4'>
 
             {/* TOP */}
-            <div className='flex space-x-5'>
+            <div className='flex flex-col lg:flex-row space-x-5'>
                 {/* Left */}
-                <div className="space-y-6 w-3/5">
+                <div className="space-y-6 lg:w-3/5 w-full">
                     <div className="flex justify-between bg-gradient-to-l from-gray-50 via-white to-gray-50 relative shadow-lg border-black/5 border p-5 rounded-2xl overflow-hidden">
                         <div className='bg-blue-300 h-10 w-10 rounded-full blur-xl bottom-0 right-0 absolute'></div>
                         <div className='bg-pink-300 h-10 w-10 rounded-full blur-xl bottom-5 right-0 absolute'></div>
-                        <div className='flex flex-col gap-y-2 '>
+                        <div className='flex flex-col gap-y-2 w-full '>
                             <div className='flex relative'>
                                 <div className="inline-flex items-center rounded-full justify-center w-10 h-10 bg-gray-300 shadow-lg">
                                     <InfinityIcon className="w-4 h-4 text-[#262628]" />
@@ -110,10 +110,10 @@ const AdminDashboard = () => {
                                     <LayoutDashboard className="w-4 h-4 text-[#262628]" />
                                 </div>
                             </div>
-                            <h1 className="text-3xl font-extrabold text-[#262628]">Admin Dashboard</h1>
+                            <h1 className="lg:text-3xl text-xl mt-3 font-extrabold text-[#262628]">Admin Dashboard</h1>
 
-                            <div className="mt-3 grid grid-cols-1 gap-y-5">
-                                <div className="bg-white overflow-hidden shadow rounded-full p-3 px-5">
+                            <div className="lg:mt-3 mt-1 grid grid-cols-1 gap-y-2 lg:gap-y-5">
+                                <div className="bg-white hidden lg:block overflow-hidden shadow rounded-full p-3 px-5">
                                     <div className="flex items-center gap-x-2">
                                         <div className="">
                                             <Mail className="h-6 w-6 text-pink-700" />
@@ -140,7 +140,7 @@ const AdminDashboard = () => {
                         <div className='w-60 h-full relative items-center'>
                             <div className='w-50 h-50 bg-white absolute rounded-full border-40 border-gray-300'></div>
                             <div className='w-10 self-start h-10 bg-[#999999] absolute rounded-full animate-bounce flex justify-center items-center'><IdCardLanyard className='text-white w-6 h-6' /></div>
-                            <img src={Admin} alt="Admin Dashboard" className=' absolute z-20 w-60 h-60' />
+                            <img src={Admin} alt="Admin Dashboard" className='hidden lg:block lg:absolute z-20 w-60 h-60' />
                         </div>
                     </div>
 
@@ -149,7 +149,7 @@ const AdminDashboard = () => {
                 </div>
 
                 {/* Right */}
-                <div className="w-2/5">
+                <div className="lg:w-2/5">
                     <div className="">
                         {/* Pie Chart - Status Distribution */}
                         <div className="group relative bg-white rounded-2xl shadow-lg border border-black/5">
@@ -263,7 +263,7 @@ const AdminDashboard = () => {
                         </div>
                         <div className="grid grid-cols-1 gap-3 mt-6 p-4 bg-white shadow-lg border border-black/5 rounded-3xl">
                             {jabatanChartData.map((entry, index) => (
-                                <div key={index} className="flex items-center justify-between p-3">
+                                <div key={index} className="flex lg:items-center flex-col lg:flex-row lg:justify-between p-3">
                                     <div className="flex items-center space-x-3">
                                         <div className="w-4 h-4 rounded-full bg-[#2ca5d1] shadow-sm flex-shrink-0"></div>
                                         <span className="text-sm font-medium text-slate-700 truncate">{entry.jabatan}</span>

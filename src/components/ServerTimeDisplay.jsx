@@ -26,7 +26,7 @@ const ServerTimeDisplay = () => {
   const timeString = serverTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
 
   return (
-    <div className='bg-white flex items-center text-sm rounded-xl shadow-lg p-5 border border-black/5'>
+    <div className='bg-white hidden lg:flex items-center text-sm rounded-xl shadow-lg p-5 border border-black/5'>
       <Timer className='w-8 h-8 mr-1' />
       <p className='font-semibold mr-2'>
         Waktu server:
