@@ -101,7 +101,7 @@ const AdminDashboard = () => {
                     <div className="flex justify-between bg-gradient-to-l from-gray-50 via-white to-gray-50 relative shadow-lg border-black/5 border p-5 rounded-2xl overflow-hidden">
                         <div className='bg-blue-300 h-10 w-10 rounded-full blur-xl bottom-0 right-0 absolute'></div>
                         <div className='bg-pink-300 h-10 w-10 rounded-full blur-xl bottom-5 right-0 absolute'></div>
-                        <div className='flex flex-col gap-y-2 w-full '>
+                        <div className='flex flex-col gap-y-2 w-full lg:w-fit'>
                             <div className='flex relative'>
                                 <div className="inline-flex items-center rounded-full justify-center w-10 h-10 bg-gray-300 shadow-lg">
                                     <InfinityIcon className="w-4 h-4 text-[#262628]" />
