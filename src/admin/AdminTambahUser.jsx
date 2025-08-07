@@ -216,7 +216,7 @@ function AdminTambahUser() {
           </div> */}
 
         {/* Kabid Card */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
+        {/* <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-all duration-200">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-4 bg-green-50 rounded-full">
                 <Users className="w-6 h-6 text-green-600" />
@@ -239,7 +239,7 @@ function AdminTambahUser() {
                 Buat Akun Kabid
               </button>
             </div>
-          </div>
+          </div> */}
 
         <div className='flex gap-x-4 p-8 bg-gradient-to-tl from-gray-50 via-white to-gray-50 rounded-3xl shadow-lg border border-black/5'>
           {/* Staff Card */}
