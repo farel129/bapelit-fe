@@ -50,25 +50,25 @@ export default function LoginPopup({ onClose }) {
       {/* Close Button */}
       <button
         onClick={onClose}
-        className="absolute -top-4 cursor-pointer -right-4 z-50 w-10 h-10 bg-[#303030] hover:bg-[#404040] rounded-full shadow-lg border border-[#404040] flex items-center justify-center transition-all duration-300 hover:scale-110"
+        className="absolute -top-4 cursor-pointer -right-4 z-50 w-10 h-10 bg-gradient-to-br from-[#EDE6E3] to-[#D4A373] hover:from-[#D4A373] hover:to-[#6D4C41] rounded-full shadow-lg border border-[#EDE6E3] flex items-center justify-center transition-all duration-300 hover:scale-110"
       >
-        <X className="w-5 h-5 text-gray-200" />
+        <X className="w-5 h-5 text-[#2E2A27]" />
       </button>
 
-      <div className="grid md:grid-cols-2 bg-gradient-to-br from-[#101010] via-[#202020] to-[#202020] backdrop-blur-xl rounded-3xl shadow-2xl shadow-black/30 border border-[#404040] overflow-hidden">
+      <div className="grid md:grid-cols-2 bg-gradient-to-br from-[#FDFCFB] via-[#F8F6F4] to-[#F0EDEA] backdrop-blur-xl rounded-3xl shadow-2xl shadow-[#D4A373]/20 border border-[#EDE6E3] overflow-hidden">
         {/* Left Side - Form */}
         <div className="p-8 lg:p-12 relative">
           {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#404040]/20 to-transparent rounded-full blur-2xl"></div>
-          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#303030]/20 to-transparent rounded-full blur-xl"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-[#D4A373]/20 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#EDE6E3]/20 to-transparent rounded-full blur-xl"></div>
 
           <div className="relative z-10">
             {/* Header */}
             <div className="mb-8">
-              <h2 className='bg-gradient-to-r text-xl lg:text-4xl font-extrabold text-gray-200'>
+              <h2 className='bg-gradient-to-r from-[#2E2A27] via-[#6D4C41] to-[#D4A373] bg-clip-text text-transparent text-xl lg:text-4xl font-extrabold'>
                 Halo!
               </h2>
-              <p className="text-gray-400 text-sm">Login untuk melanjutkan</p>
+              <p className="text-[#6D4C41] text-sm mt-2">Login untuk melanjutkan</p>
             </div>
 
             {/* Error Message */}
@@ -83,12 +83,12 @@ export default function LoginPopup({ onClose }) {
               <div className="space-y-5">
                 {/* Email Input */}
                 <div className="group">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-[#6D4C41] mb-2">
                     Email
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Mail className="h-5 w-5 text-gray-400 group-focus-within:text-gray-200 transition-colors duration-200" />
+                      <Mail className="h-5 w-5 text-[#D4A373] group-focus-within:text-[#6D4C41] transition-colors duration-200" />
                     </div>
                     <input
                       id="email"
@@ -97,7 +97,7 @@ export default function LoginPopup({ onClose }) {
                       required
                       value={form.email}
                       onChange={handleChange}
-                      className="block w-full pl-12 pr-4 py-3 border border-[#404040] rounded-xl bg-[#303030]/50 placeholder-gray-500 text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent focus:bg-[#303030] transition-all duration-200 text-sm"
+                      className="block w-full pl-12 pr-4 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-[#6D4C41]/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
                       placeholder="Masukan email"
                     />
                   </div>
@@ -105,12 +105,12 @@ export default function LoginPopup({ onClose }) {
 
                 {/* Password Input */}
                 <div className="group">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
+                  <label className="block text-sm font-medium text-[#6D4C41] mb-2">
                     Password
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-gray-400 group-focus-within:text-gray-200 transition-colors duration-200" />
+                      <Lock className="h-5 w-5 text-[#D4A373] group-focus-within:text-[#6D4C41] transition-colors duration-200" />
                     </div>
                     <input
                       id="password"
@@ -119,7 +119,7 @@ export default function LoginPopup({ onClose }) {
                       required
                       value={form.password}
                       onChange={handleChange}
-                      className="block w-full pl-12 pr-4 py-3 border border-[#404040] rounded-xl bg-[#303030]/50 placeholder-gray-500 text-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent focus:bg-[#303030] transition-all duration-200 text-sm"
+                      className="block w-full pl-12 pr-4 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-[#6D4C41]/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
                       placeholder="Masukan password"
                     />
                   </div>
@@ -131,11 +131,11 @@ export default function LoginPopup({ onClose }) {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="group relative cursor-pointer w-full flex justify-center items-center px-6 py-3 bg-[#404040] text-gray-200 font-semibold rounded-2xl shadow-lg border border-[#505050] hover:shadow-xl hover:shadow-black/50 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#303030]"
+                  className="group relative cursor-pointer w-full flex justify-center items-center px-6 py-3 bg-gradient-to-r from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white font-semibold rounded-2xl shadow-lg border border-[#EDE6E3] hover:shadow-xl hover:shadow-[#6D4C41]/20 focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-300 hover:-translate-y-0.5"
                 >
                   {loading ? (
                     <>
-                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-gray-200" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                      <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                         <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                         <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                       </svg>
@@ -156,25 +156,25 @@ export default function LoginPopup({ onClose }) {
         </div>
 
         {/* Right Side - Information */}
-        <div className="hidden bg-gradient-to-br from-[#303030] to-[#202020] p-8 lg:p-12 lg:flex flex-col justify-center relative overflow-hidden">
+        <div className="hidden bg-gradient-to-br from-[#EDE6E3] to-[#FDFCFB] p-8 lg:p-12 lg:flex flex-col justify-center relative overflow-hidden">
           {/* Background decorations */}
-          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[#404040]/30 to-transparent rounded-full blur-3xl"></div>
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#303030]/30 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-[#D4A373]/30 to-transparent rounded-full blur-3xl"></div>
+          <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-[#6D4C41]/20 to-transparent rounded-full blur-2xl"></div>
 
           <div className="relative z-10">
             {/* Logo and Header */}
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-6">
-                <img src={img} alt="" className="w-6 filter invert" />
+                <img src={img} alt="" className="w-6" />
                 <div>
-                  <h3 className="font-bold text-gray-200 text-lg leading-tight">
+                  <h3 className="font-bold text-[#2E2A27] text-lg leading-tight">
                     Bapelitbangda
                   </h3>
-                  <p className="text-gray-400 text-sm">Kota Tasikmalaya</p>
+                  <p className="text-[#6D4C41] text-sm">Kota Tasikmalaya</p>
                 </div>
               </div>
 
-              <p className="text-gray-400 leading-relaxed">
+              <p className="text-[#6D4C41] leading-relaxed opacity-90">
                 Portal ini hanya dapat diakses oleh pegawai internal Bapelitbangda.
                 Silakan login menggunakan akun resmi Anda untuk mengelola dan memantau surat masuk instansi.
               </p>
@@ -183,24 +183,24 @@ export default function LoginPopup({ onClose }) {
             {/* Features */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-green-900/30 rounded-lg flex items-center justify-center border border-green-800/50">
-                  <Shield className="w-4 h-4 text-green-400" />
+                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-[#D4A373] shadow-sm">
+                  <Shield className="w-4 h-4 text-[#6D4C41]" />
                 </div>
-                <span className="text-sm text-gray-300">Akses Aman & Terenkripsi</span>
+                <span className="text-sm text-[#6D4C41] font-medium">Akses Aman & Terenkripsi</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-blue-900/30 rounded-lg flex items-center justify-center border border-blue-800/50">
-                  <Building2 className="w-4 h-4 text-blue-400" />
+                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-[#D4A373] shadow-sm">
+                  <Building2 className="w-4 h-4 text-[#6D4C41]" />
                 </div>
-                <span className="text-sm text-gray-300">Khusus Pegawai Internal</span>
+                <span className="text-sm text-[#6D4C41] font-medium">Khusus Pegawai Internal</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-purple-900/30 rounded-lg flex items-center justify-center border border-purple-800/50">
-                  <Mail className="w-4 h-4 text-purple-400" />
+                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-[#D4A373] shadow-sm">
+                  <Mail className="w-4 h-4 text-[#6D4C41]" />
                 </div>
-                <span className="text-sm text-gray-300">Manajemen Surat Real-time</span>
+                <span className="text-sm text-[#6D4C41] font-medium">Manajemen Surat Real-time</span>
               </div>
             </div>
 

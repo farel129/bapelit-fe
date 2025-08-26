@@ -106,14 +106,14 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 min-h-screen bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
-      <div className="bg-gradient-to-bl from-[#101010] via-[#101010] to-[#202020] rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto border border-black/15 shadow-lg">
+    <div className="fixed inset-0 min-h-screen bg-gradient-to-br from-[#2E2A27]/60 via-[#6D4C41]/40 to-[#D4A373]/30 backdrop-blur-md flex items-center justify-center z-50 p-4">
+      <div className="bg-gradient-to-br from-[#FDFCFB] via-[#F8F6F4] to-[#F0EDEA] rounded-lg max-w-md w-full max-h-[90vh] overflow-y-auto border border-[#EDE6E3] shadow-2xl shadow-[#D4A373]/20">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-black/20">
-          <h3 className="text-lg font-semibold text-gray-200">Teruskan Disposisi</h3>
+        <div className="flex items-center justify-between p-6 border-b border-[#EDE6E3]">
+          <h3 className="text-lg font-semibold text-[#2E2A27]">Teruskan Disposisi</h3>
           <button
             onClick={handleClose}
-            className="text-gray-400 hover:text-gray-200 transition-colors"
+            className="text-[#6D4C41] hover:text-[#2E2A27] transition-colors"
           >
             <X className="w-5 h-5" />
           </button>
@@ -122,38 +122,41 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
         {/* Content */}
         <div className="p-6">
           {/* Info Disposisi */}
-          <div className="bg-[#303030] rounded-lg p-4 mb-6">
-            <h4 className="font-medium text-gray-200 mb-2">Disposisi yang akan diteruskan:</h4>
-            <p className="text-sm text-gray-300 mb-1">
+          <div className="bg-gradient-to-br from-white to-[#FDFCFB] rounded-lg p-4 mb-6 border border-[#EDE6E3] shadow-sm">
+            <h4 className="font-medium text-[#2E2A27] mb-2 flex items-center gap-2">
+              <FileText className="w-4 h-4 text-[#D4A373]" />
+              Disposisi yang akan diteruskan:
+            </h4>
+            <p className="text-sm text-[#6D4C41] mb-1">
               <span className="font-medium">Perihal:</span> {disposisi.perihal}
             </p>
-            <p className="text-sm text-gray-300">
+            <p className="text-sm text-[#6D4C41]">
               <span className="font-medium">Sifat:</span> {disposisi.sifat}
             </p>
           </div>
 
           {/* Pilihan Tipe Penerusan */}
           <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-200 mb-2">
+            <label className="block text-sm font-medium text-[#6D4C41] mb-2">
               Cara Penerusan
             </label>
             <div className="flex gap-2">
               <button
                 onClick={() => setTipePenerusan('user')}
-                className={`flex-1 py-2 px-3 text-sm rounded-lg border transition-colors ${
+                className={`flex-1 py-2 px-3 text-sm rounded-lg border transition-all duration-200 ${
                   tipePenerusan === 'user'
-                    ? 'bg-gray-700 border-gray-500 text-gray-200'
-                    : 'bg-[#404040] border-black/20 text-gray-300 hover:bg-[#505050]'
+                    ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white border-[#6D4C41] shadow-md'
+                    : 'bg-white/60 backdrop-blur-sm text-[#6D4C41] border-[#EDE6E3] hover:bg-white hover:shadow-sm'
                 }`}
               >
                 Ke User Spesifik
               </button>
               <button
                 onClick={() => setTipePenerusan('jabatan')}
-                className={`flex-1 py-2 px-3 text-sm rounded-lg border transition-colors ${
+                className={`flex-1 py-2 px-3 text-sm rounded-lg border transition-all duration-200 ${
                   tipePenerusan === 'jabatan'
-                    ? 'bg-gray-700 border-gray-500 text-gray-200'
-                    : 'bg-[#404040] border-black/20 text-gray-300 hover:bg-[#505050]'
+                    ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white border-[#6D4C41] shadow-md'
+                    : 'bg-white/60 backdrop-blur-sm text-[#6D4C41] border-[#EDE6E3] hover:bg-white hover:shadow-sm'
                 }`}
               >
                 Ke Jabatan
@@ -165,31 +168,31 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
           {tipePenerusan === 'jabatan' ? (
             // Penerusan ke Jabatan
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-200 mb-2">
-                Teruskan Kepada Jabatan <span className="text-red-400">*</span>
+              <label className="block text-sm font-medium text-[#6D4C41] mb-2">
+                Teruskan Kepada Jabatan <span className="text-red-500">*</span>
               </label>
               {loadingData ? (
-                <div className="flex items-center justify-center py-4">
-                  <Loader className="w-4 h-4 animate-spin mr-2 text-gray-200" />
-                  <span className="text-sm text-gray-300">Memuat daftar jabatan...</span>
+                <div className="flex items-center justify-center py-4 bg-white/60 backdrop-blur-sm rounded-lg border border-[#EDE6E3]">
+                  <Loader className="w-4 h-4 animate-spin mr-2 text-[#6D4C41]" />
+                  <span className="text-sm text-[#6D4C41]">Memuat daftar jabatan...</span>
                 </div>
               ) : (
                 <select
                   value={selectedJabatan}
                   onChange={(e) => setSelectedJabatan(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#404040] border border-black/20 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white/60 backdrop-blur-sm border border-[#EDE6E3] text-[#2E2A27] rounded-lg focus:ring-2 focus:ring-[#D4A373] focus:border-transparent shadow-sm"
                   disabled={loading}
                 >
-                  <option value="" className="bg-[#404040] text-gray-200">Pilih jabatan penerima</option>
+                  <option value="" className="bg-white text-[#2E2A27]">Pilih jabatan penerima</option>
                   {jabatanList.map((jabatan) => (
-                    <option key={jabatan} value={jabatan} className="bg-[#404040] text-gray-200">
+                    <option key={jabatan} value={jabatan} className="bg-white text-[#2E2A27]">
                       {jabatan}
                     </option>
                   ))}
                 </select>
               )}
-              <div className="bg-yellow-900/30 border border-yellow-800 rounded-lg p-3 mt-2">
-                <p className="text-sm text-yellow-200">
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mt-2">
+                <p className="text-sm text-yellow-800">
                   <strong>Info:</strong> Disposisi akan hilang dari daftar Anda setelah diteruskan ke jabatan.
                 </p>
               </div>
@@ -197,31 +200,31 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
           ) : (
             // Penerusan ke User Spesifik (hanya bawahan)
             <div className="mb-4">
-              <label className="block text-sm font-medium text-gray-200 mb-2">
-                Teruskan Kepada Bawahan <span className="text-red-400">*</span>
+              <label className="block text-sm font-medium text-[#6D4C41] mb-2">
+                Teruskan Kepada Bawahan <span className="text-red-500">*</span>
               </label>
               {loadingData ? (
-                <div className="flex items-center justify-center py-4">
-                  <Loader className="w-4 h-4 animate-spin mr-2 text-gray-200" />
-                  <span className="text-sm text-gray-300">Memuat daftar bawahan...</span>
+                <div className="flex items-center justify-center py-4 bg-white/60 backdrop-blur-sm rounded-lg border border-[#EDE6E3]">
+                  <Loader className="w-4 h-4 animate-spin mr-2 text-[#6D4C41]" />
+                  <span className="text-sm text-[#6D4C41]">Memuat daftar bawahan...</span>
                 </div>
               ) : (
                 <select
                   value={selectedUserId}
                   onChange={(e) => setSelectedUserId(e.target.value)}
-                  className="w-full px-3 py-2 bg-[#404040] border border-black/20 text-gray-200 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  className="w-full px-3 py-2 bg-white/60 backdrop-blur-sm border border-[#EDE6E3] text-[#2E2A27] rounded-lg focus:ring-2 focus:ring-[#D4A373] focus:border-transparent shadow-sm"
                   disabled={loading}
                 >
-                  <option value="" className="bg-[#404040] text-gray-200">Pilih bawahan</option>
+                  <option value="" className="bg-white text-[#2E2A27]">Pilih bawahan</option>
                   {bawahanList.map((bawahan) => (
-                    <option key={bawahan.id} value={bawahan.id} className="bg-[#404040] text-gray-200">
+                    <option key={bawahan.id} value={bawahan.id} className="bg-white text-[#2E2A27]">
                       {bawahan.name} - {bawahan.jabatan}
                     </option>
                   ))}
                 </select>
               )}
               {bawahanList.length === 0 && !loadingData && (
-                <p className="text-sm text-gray-400 mt-1">
+                <p className="text-sm text-[#6D4C41]/70 mt-1">
                   Tidak ada bawahan di bidang Anda
                 </p>
               )}
@@ -230,7 +233,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
 
           {/* Catatan */}
           <div className="mb-6">
-            <label className="block text-sm font-medium text-gray-200 mb-2">
+            <label className="block text-sm font-medium text-[#6D4C41] mb-2">
               Catatan Atasan (Opsional)
             </label>
             <textarea
@@ -238,10 +241,10 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
               onChange={(e) => setCatatan(e.target.value)}
               placeholder="Tambahkan catatan untuk penerima..."
               rows={3}
-              className="w-full px-3 py-2 bg-[#404040] border border-black/20 text-gray-200 placeholder-gray-400 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none"
+              className="w-full px-3 py-2 bg-white/60 backdrop-blur-sm border border-[#EDE6E3] text-[#2E2A27] placeholder-[#6D4C41]/60 rounded-lg focus:ring-2 focus:ring-[#D4A373] focus:border-transparent resize-none shadow-sm"
               disabled={loading}
             />
-            <p className="text-xs text-gray-400 mt-1">
+            <p className="text-xs text-[#6D4C41]/70 mt-1">
               Catatan ini akan disimpan sebagai catatan atasan
             </p>
           </div>
@@ -251,7 +254,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
             <button
               onClick={handleClose}
               disabled={loading}
-              className="px-4 py-2 text-gray-200 bg-[#404040] rounded-lg hover:bg-black disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="px-4 py-2 text-[#6D4C41] bg-gradient-to-br from-white to-[#FDFCFB] rounded-lg hover:from-[#FDFCFB] hover:to-[#EDE6E3] border border-[#EDE6E3] disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 shadow-sm hover:shadow-md"
             >
               Batal
             </button>
@@ -260,7 +263,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
               disabled={loading || loadingData || 
                 (tipePenerusan === 'jabatan' && !selectedJabatan) || 
                 (tipePenerusan === 'user' && !selectedUserId)}
-              className="flex items-center gap-2 px-4 py-2 bg-gray-800 text-gray-200 rounded-lg hover:bg-gray-900 disabled:bg-gray-700 disabled:cursor-not-allowed transition-colors"
+              className="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white rounded-lg disabled:from-[#EDE6E3] disabled:to-[#D4A373] disabled:cursor-not-allowed transition-all duration-200 shadow-lg hover:shadow-xl border border-[#EDE6E3]"
             >
               {loading ? (
                 <>
