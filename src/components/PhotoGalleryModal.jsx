@@ -1,6 +1,6 @@
 // components/PhotoGalleryModal.jsx
 import React, { useState, useEffect } from 'react';
-import { RefreshCw, AlertCircle, X, Maximize2, Minimize2, Image, Loader } from 'lucide-react';
+import { AlertCircle, X, Maximize2, Minimize2, Image, Loader } from 'lucide-react';
 import { suratService } from '../services/suratService';
 
 const PhotoGalleryModal = ({ photos, suratInfo, onClose }) => {

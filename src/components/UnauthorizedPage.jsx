@@ -11,14 +11,16 @@ const UnauthorizedPage = () => {
     // Redirect berdasarkan role user
     if (user?.role === 'admin') {
       navigate('/admin');
+    } else if (user?.role === 'kepala') {
+      navigate('/kepala');
     } else if (user?.role === 'sekretaris') {
       navigate('/sekretaris');
     } else if (user?.role === 'staff') {
       navigate('/staff');
     } else if (user?.role === 'user') {
-      navigate('/');
+      navigate('/kabid');
     } else {
-      navigate('/login');
+      navigate('/');
     }
   };
 

@@ -1,39 +1,38 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
-import AdminDashboard from './admin/AdminDashboard';
-import AdminBuatSurat from './admin/AdminBuatSurat';
-import AdminDaftarUser from './admin/AdminDaftarUser';
-import AdminTambahUser from './admin/AdminTambahUser';
-import AdminSuratMasuk from './admin/AdminSuratMasuk';
-import Dashboard from './pages/Dashboard';
-import SemuaData from './pages/SemuaData';
-import UsersList from './pages/UsersList';
-import ProcessSurat from './pages/ProcessSurat';
-import Notifications from './pages/Notifications';
-import UserLayout from './components/UserLayout';
-import AdminLayout from './components/AdminLayout';
+
 import HomePage from './pages/HomePage';
-import StaffNotifications from './staff/StaffNotifications';
-import StaffLayout from './components/StaffLayout';
-import StaffDashboard from './staff/StaffDashboard';
-import StaffProcessSurat from './staff/StaffProcessSurat';
-import StaffUsersList from './staff/StaffUsersList';
-import StaffSemuaData from './staff/StaffSemuaData';
 import UnauthorizedPage from './components/UnauthorizedPage'; // Import halaman unauthorized
-import SekretarisDashboard from './sekretaris/SekretarisDashboard';
-import SekretarisNotifications from './sekretaris/SekretarisNotifications';
-import SekretarisProcessSurat from './sekretaris/SekretarisProcessSurat';
-import SekretarisSemuaData from './sekretaris/SekretarisSemuaData';
-import SekretarisUsersList from './sekretaris/SekretarisUsersList';
-import SekretarisLayout from './components/SekretarisLayout';
+import KepalaLayout from './components/Layout/KepalaLayout';
+import KepalaDashboard from './pages/kepala/KepalaDashboard';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import AdminLayout from './components/Layout/AdminLayout';
+import AdminBuatSurat from './pages/admin/AdminBuatSurat';
+import AdminDaftarUser from './pages/admin/AdminDaftarUser';
+import AdminTambahUser from './pages/admin/AdminTambahUser';
+import AdminSuratMasuk from './pages/admin/AdminSuratMasuk';
+import SekretarisDashboard from './pages/sekretaris/SekretarisDashboard';
+import KabidDashboard from './pages/kabid/KabidDashboard';
+import SekretarisLayout from './components/Layout/SekretarisLayout';
+import KabidLayout from './components/Layout/KabidLayout';
+import KabidDisposisiDetail from './pages/kabid/KabidDisposisiDetail';
+import StaffDashboard from './pages/staff/StaffDashboard';
+import StaffLayout from './components/Layout/StaffLayout';
+import StaffDisposisiDetail from './pages/staff/StaffDisposisiDetail';
+import KepalaDisposisiDetail from './pages/kepala/KepalaDisposisiDetail';
+import AdminSuratKeluar from './pages/admin/AdminSuratKeluar';
+import ScrollToTop from './utils/scrollToTop';
+import DaftarUser from './components/common/DaftarUser';
+import SekretarisDisposisiDetail from './pages/sekretaris/SekretarisDisposisiDetail';
+import Leaderboard from './components/common/Leaderboard';
 
 const PrivateRoute = ({ children, role }) => {
   const { user, loading } = useAuth();
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div className='h-screen flex justify-center items-center'>...</div>;
 
-  if (!user) return <Navigate to="/login" />;
-  
+  if (!user) return <Navigate to="/" />;
+
   // Jika role diperlukan dan user tidak memiliki role yang sesuai
   if (role && user.role !== role) {
     return <Navigate to="/unauthorized" />;
@@ -45,12 +44,43 @@ const PrivateRoute = ({ children, role }) => {
 function App() {
   return (
     <AuthProvider>
+      <ScrollToTop />
       <Routes>
-        <Route path="/login" element={<HomePage />} />
-        
+        <Route path="/" element={<HomePage />} />
+
         {/* Halaman Unauthorized */}
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
-        
+
+        {/* ----------------------KEPALA----------------------- */}
+        <Route path="/kepala" element={
+          <PrivateRoute role="kepala">
+            <KepalaLayout>
+              <KepalaDashboard />
+            </KepalaLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kepala/disposisi/:id" element={
+          <PrivateRoute role="kepala">
+            <KepalaLayout>
+              <KepalaDisposisiDetail />
+            </KepalaLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kepala/daftar-user" element={
+          <PrivateRoute role='kepala'>
+            <KepalaLayout>
+              <DaftarUser />
+            </KepalaLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kepala/leaderboard" element={
+          <PrivateRoute role='kepala'>
+            <KepalaLayout>
+              <Leaderboard />
+            </KepalaLayout>
+          </PrivateRoute>
+        } />
+
         {/* ----------------------ADMIN----------------------- */}
         <Route path="/admin" element={
           <PrivateRoute role="admin">
@@ -87,6 +117,20 @@ function App() {
             </AdminLayout>
           </PrivateRoute>
         } />
+        <Route path="/admin-surat-keluar" element={
+          <PrivateRoute role="admin">
+            <AdminLayout>
+              <AdminSuratKeluar />
+            </AdminLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/admin/leaderboard" element={
+          <PrivateRoute role='admin'>
+            <AdminLayout>
+              <Leaderboard />
+            </AdminLayout>
+          </PrivateRoute>
+        } />
 
         {/* ----------------------SEKRETARIS----------------------- */}
         <Route path="/sekretaris" element={
@@ -96,71 +140,57 @@ function App() {
             </SekretarisLayout>
           </PrivateRoute>
         } />
-        <Route path="/sekretaris-notifications" element={
+        <Route path="/sekretaris/disposisi/detail/:id" element={
           <PrivateRoute role='sekretaris'>
             <SekretarisLayout>
-              <SekretarisNotifications />
+              <SekretarisDisposisiDetail />
             </SekretarisLayout>
           </PrivateRoute>
         } />
-        <Route path="/sekretaris-process/:id" element={
+        <Route path="/sekretaris/daftar-user" element={
           <PrivateRoute role='sekretaris'>
             <SekretarisLayout>
-              <SekretarisProcessSurat />
+              <DaftarUser />
             </SekretarisLayout>
           </PrivateRoute>
         } />
-        <Route path="/sekretaris-semua-data" element={
+        <Route path="/sekretaris/leaderboard" element={
           <PrivateRoute role='sekretaris'>
             <SekretarisLayout>
-              <SekretarisSemuaData />
+              <Leaderboard />
             </SekretarisLayout>
           </PrivateRoute>
         } />
-        <Route path="/sekretaris-list-user" element={
-          <PrivateRoute role='sekretaris'>
-            <SekretarisLayout>
-              <SekretarisUsersList />
-            </SekretarisLayout>
+        {/* ----------------------KABID----------------------- */}
+        <Route path="/kabid" element={
+          <PrivateRoute role='user'>
+            <KabidLayout>
+              <KabidDashboard />
+            </KabidLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kabid/disposisi/detail/:id" element={
+          <PrivateRoute role='user'>
+            <KabidLayout>
+              <KabidDisposisiDetail />
+            </KabidLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kabid/daftar-user" element={
+          <PrivateRoute role='user'>
+            <KabidLayout>
+              <DaftarUser />
+            </KabidLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kabid/leaderboard" element={
+          <PrivateRoute role='user'>
+            <KabidLayout>
+              <Leaderboard />
+            </KabidLayout>
           </PrivateRoute>
         } />
 
-        {/* ----------------------KABID----------------------- */}
-        <Route path="/" element={
-          <PrivateRoute role='user'>
-            <UserLayout>
-              <Dashboard />
-            </UserLayout>
-          </PrivateRoute>
-        } />
-        <Route path="/semua-data" element={
-          <PrivateRoute role='user'>
-            <UserLayout>
-              <SemuaData />
-            </UserLayout>
-          </PrivateRoute>
-        } />
-        <Route path="/list-user" element={
-          <PrivateRoute role='user'>
-            <UserLayout>
-              <UsersList />
-            </UserLayout>
-          </PrivateRoute>
-        } />
-        <Route path="/process/:id" element={
-          <PrivateRoute role='user'>
-            <UserLayout>
-              <ProcessSurat />
-            </UserLayout>
-          </PrivateRoute>
-        } />
-        <Route path="/notifications" element={
-          <PrivateRoute role='user'>
-            <UserLayout>
-              <Notifications />
-            </UserLayout>
-          </PrivateRoute>
-        } />
 
         {/* ----------------------STAFF----------------------- */}
         <Route path="/staff" element={
@@ -170,31 +200,24 @@ function App() {
             </StaffLayout>
           </PrivateRoute>
         } />
-        <Route path="/staff-notifications" element={
+        <Route path="/staff/disposisi/:id" element={
           <PrivateRoute role='staff'>
             <StaffLayout>
-              <StaffNotifications />
+              <StaffDisposisiDetail />
             </StaffLayout>
           </PrivateRoute>
         } />
-        <Route path="/staff-process/:id" element={
+        <Route path="/staff/daftar-user" element={
           <PrivateRoute role='staff'>
             <StaffLayout>
-              <StaffProcessSurat />
+              <DaftarUser />
             </StaffLayout>
           </PrivateRoute>
         } />
-        <Route path="/staff-semua-data" element={
+        <Route path="/staff/leaderboard" element={
           <PrivateRoute role='staff'>
             <StaffLayout>
-              <StaffSemuaData />
-            </StaffLayout>
-          </PrivateRoute>
-        } />
-        <Route path="/staff-list-user" element={
-          <PrivateRoute role='staff'>
-            <StaffLayout>
-              <StaffUsersList />
+              <Leaderboard />
             </StaffLayout>
           </PrivateRoute>
         } />
