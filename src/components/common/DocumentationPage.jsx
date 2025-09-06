@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../utils/api';
 import { useAuth } from '../../contexts/AuthContext';
-import SearchBar from '../documentation/Searchbar';
 import { Camera } from 'lucide-react';
 import PostCard from '../documentation/PostCard';
 import TrendingView from '../documentation/TrendingView';
@@ -13,6 +12,7 @@ import EditPostModal from '../documentation/EditPostModal';
 import DeleteConfirmModal from '../documentation/DeleteConfirmModal';
 import PostDetailModal from '../documentation/PostDetailModal';
 import Navbar from '../documentation/Navbar';
+import SearchBar from '../documentation/SearchBar';
 
 const DocumentationPage = () => {
     const { user, loading: authLoading } = useAuth();
