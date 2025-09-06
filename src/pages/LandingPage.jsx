@@ -8,7 +8,7 @@ import LoginPopup from './Login'
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger)
 
-const HomePage = () => {
+const LandingPage = () => {
   const [showLogin, setShowLogin] = useState(false)
   const containerRef = useRef(null)
   const headerRef = useRef(null)
@@ -280,4 +280,4 @@ const HomePage = () => {
   )
 }
 
-export default HomePage
+export default LandingPage

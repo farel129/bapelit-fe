@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Mail, FileText, ChartColumnBig } from 'lucide-react';
+import { Mail, FileText, BarChart3 } from 'lucide-react';
 import DisposisiList from '../../components/Kepala/DisposisiList';
 import SuratMasukList from '../../components/Kepala/SuratMasukList';
 import KepalaStatistikDisposisi from '../../components/Kepala/KepalaStatistikDisposisi';
 import Avatar from '../../assets/img/adminrobot.png'
-
 const KepalaDashboard = () => {
   const [activeTab, setActiveTab] = useState('surat-masuk');
 
@@ -12,19 +11,22 @@ const KepalaDashboard = () => {
     {
       id: 'surat-masuk',
       label: 'Surat Masuk',
+      shortLabel: 'Surat',
       icon: Mail,
       color: 'text-[#D4A373]'
     },
     {
       id: 'disposisi-saya',
       label: 'Disposisi Saya',
+      shortLabel: 'Disposisi',
       icon: FileText,
       color: 'text-[#4CAF50]'
     },
     {
       id: 'statistik-disposisi',
       label: 'Statistik',
-      icon: ChartColumnBig,
+      shortLabel: 'Statistik',
+      icon: BarChart3,
       color: 'text-[#D9534F]'
     }
   ];
@@ -44,69 +46,106 @@ const KepalaDashboard = () => {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen p-4 md:p-6 rounded-2xl" style={{ backgroundColor: '#FDFCFB' }}>
-      {/* Header Section with Glass Effect */}
-      <div className="sticky top-0 z-20 backdrop-blur-xl bg-white/95 border-b border-[#EDE6E3] shadow-sm rounded-2xl overflow-hidden">
-        <div className="p-6">
-          {/* Title and Description */}
-          <div className="flex flex-col lg:flex-row lg:items-center mb-6">
-            <div className="flex items-center space-x-4 mb-4 lg:mb-0">
-              <div className="p-3 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-2xl shadow-md">
-                <Mail className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl font-bold" style={{ color: '#2E2A27' }}>
-                  Dashboard Kepala Kantor
-                </h1>
-                <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Kelola surat masuk dan disposisi dengan elegan</p>
-              </div>
+    <div className="min-h-screen bg-[#FDFCFB]">
+      {/* Mobile Header */}
+      <div className=" md:sticky top-0 z-20 backdrop-blur-xl bg-white/95 border-b border-[#EDE6E3] shadow-sm">
+        <div className="px-4 py-4 sm:px-6 sm:py-6">
+          {/* Title and Description - Mobile Optimized */}
+          <div className="flex items-start space-x-3 mb-4">
+            <div className="p-2.5 sm:p-3 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-xl sm:rounded-2xl shadow-md flex-shrink-0">
+              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
             </div>
-            <div className='h-40 w-40 lg:h-48 lg:w-48 ml-auto hidden lg:block absolute right-0 top-0'>
-              <img src={Avatar} alt="" className='h-full w-full object-contain opacity-90' />
+            <div className="flex-1 min-w-0">
+              <h1 className="text-lg sm:text-xl font-bold text-[#2E2A27] truncate">
+                Dashboard Kepala
+              </h1>
+              <p className="text-xs sm:text-sm font-medium text-[#6D4C41] mt-1 line-clamp-2">
+                Kelola surat masuk dan disposisi dengan elegan
+              </p>
             </div>
           </div>
 
-          {/* Modern Tab Navigation */}
+          {/* Mobile Tab Navigation */}
           <div className="relative">
-            <div className="flex space-x-2 p-1.5 bg-[#FDFCFB] rounded-2xl border-2 border-[#EDE6E3] shadow-sm w-fit">
-              {tabs.map((tab) => {
-                const Icon = tab.icon;
-                return (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`relative flex items-center space-x-3 cursor-pointer px-6 py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
-                      activeTab === tab.id
-                        ? 'bg-white text-[#2E2A27] shadow-md border border-[#EDE6E3] scale-[1.02]'
-                        : 'text-[#6D4C41] hover:text-[#2E2A27] hover:bg-gray-50 hover:shadow-sm'
-                    }`}
-                  >
-                    <Icon className={`w-4 h-4 ${
-                      activeTab === tab.id 
-                        ? tab.color
-                        : 'text-[#6D4C41]'
-                    } transition-colors duration-300`} />
-                    <span>{tab.label}</span>
-                    
-                    {/* Active indicator */}
-                    {activeTab === tab.id && (
-                      <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-10 h-1 rounded-full transition-all duration-300 ${
-                        tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-[#6D4C41]' :
-                        tab.id === 'disposisi-saya' ? 'bg-gradient-to-r from-[#4CAF50] to-[#2E7D32]' :
-                        'bg-gradient-to-r from-[#D9534F] to-[#B52B27]'
-                      }`} />
-                    )}
-                  </button>
-                );
-              })}
+            {/* Mobile: Horizontal scrollable tabs */}
+            <div className="sm:hidden">
+              <div className="flex space-x-1 p-1 bg-[#FDFCFB] rounded-xl border border-[#EDE6E3] shadow-sm overflow-x-auto scrollbar-hide">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`relative flex flex-col items-center space-y-1 cursor-pointer px-3 py-3 rounded-lg font-semibold text-xs transition-all duration-300 flex-shrink-0 min-w-[80px] ${
+                        activeTab === tab.id
+                          ? 'bg-white text-[#2E2A27] shadow-sm border border-[#EDE6E3]'
+                          : 'text-[#6D4C41] hover:text-[#2E2A27] hover:bg-gray-50'
+                      }`}
+                    >
+                      <Icon className={`w-4 h-4 ${
+                        activeTab === tab.id 
+                          ? tab.color
+                          : 'text-[#6D4C41]'
+                      } transition-colors duration-300`} />
+                      <span className="text-center leading-tight">{tab.shortLabel}</span>
+                      
+                      {/* Active indicator for mobile */}
+                      {activeTab === tab.id && (
+                        <div className={`absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-6 h-0.5 rounded-full transition-all duration-300 ${
+                          tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-[#6D4C41]' :
+                          tab.id === 'disposisi-saya' ? 'bg-gradient-to-r from-[#4CAF50] to-[#2E7D32]' :
+                          'bg-gradient-to-r from-[#D9534F] to-[#B52B27]'
+                        }`} />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Desktop: Original tab design */}
+            <div className="hidden sm:block">
+              <div className="flex space-x-2 p-1.5 bg-[#FDFCFB] rounded-2xl border-2 border-[#EDE6E3] shadow-sm w-fit">
+                {tabs.map((tab) => {
+                  const Icon = tab.icon;
+                  return (
+                    <button
+                      key={tab.id}
+                      onClick={() => setActiveTab(tab.id)}
+                      className={`relative flex items-center space-x-3 cursor-pointer px-4 lg:px-6 py-3 lg:py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                        activeTab === tab.id
+                          ? 'bg-white text-[#2E2A27] shadow-md border border-[#EDE6E3] scale-[1.02]'
+                          : 'text-[#6D4C41] hover:text-[#2E2A27] hover:bg-gray-50 hover:shadow-sm'
+                      }`}
+                    >
+                      <Icon className={`w-4 h-4 ${
+                        activeTab === tab.id 
+                          ? tab.color
+                          : 'text-[#6D4C41]'
+                      } transition-colors duration-300`} />
+                      <span className="hidden md:inline">{tab.label}</span>
+                      <span className="md:hidden">{tab.shortLabel}</span>
+                      
+                      {/* Active indicator for desktop */}
+                      {activeTab === tab.id && (
+                        <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 lg:w-10 h-1 rounded-full transition-all duration-300 ${
+                          tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-[#6D4C41]' :
+                          tab.id === 'disposisi-saya' ? 'bg-gradient-to-r from-[#4CAF50] to-[#2E7D32]' :
+                          'bg-gradient-to-r from-[#D9534F] to-[#B52B27]'
+                        }`} />
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Content Area */}
-      <div className="mt-6">
-        <div className=" transition-all duration-300">
+      {/* Content Area - Mobile Optimized */}
+      <div className="py-4">
+        <div className="transition-all duration-300">
           <div className="transition-all duration-300">
             {activeTab === 'surat-masuk' && <SuratMasukList />}
             {activeTab === 'disposisi-saya' && <DisposisiList />}

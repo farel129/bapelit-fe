@@ -1,7 +1,6 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 
-import HomePage from './pages/HomePage';
 import UnauthorizedPage from './components/UnauthorizedPage'; // Import halaman unauthorized
 import KepalaLayout from './components/Layout/KepalaLayout';
 import KepalaDashboard from './pages/kepala/KepalaDashboard';
@@ -25,6 +24,13 @@ import ScrollToTop from './utils/scrollToTop';
 import DaftarUser from './components/common/DaftarUser';
 import SekretarisDisposisiDetail from './pages/sekretaris/SekretarisDisposisiDetail';
 import Leaderboard from './components/common/Leaderboard';
+import LandingPage from './pages/LandingPage';
+import HomePage from './components/common/HomePage';
+import AdminJadwalAcara from './pages/admin/AdminJadwalAcara';
+import FeedPage from './components/common/FeedPage';
+import DocumentationPage from './components/common/DocumentationPage';
+import AdminBukuTamu from './pages/admin/AdminBukuTamu';
+import PublikBukuTamu from './pages/public/PublicBukuTamu';
 
 const PrivateRoute = ({ children, role }) => {
   const { user, loading } = useAuth();
@@ -46,7 +52,10 @@ function App() {
     <AuthProvider>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/guest/:qrToken" element={<PublikBukuTamu />} />
+
 
         {/* Halaman Unauthorized */}
         <Route path="/unauthorized" element={<UnauthorizedPage />} />
@@ -131,6 +140,34 @@ function App() {
             </AdminLayout>
           </PrivateRoute>
         } />
+        <Route path="/admin-jadwal-acara" element={
+          <PrivateRoute role='admin'>
+            <AdminLayout>
+              <AdminJadwalAcara />
+            </AdminLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/admin-feed" element={
+          <PrivateRoute role='admin'>
+            <AdminLayout>
+              <FeedPage />
+            </AdminLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/admin-profile" element={
+          <PrivateRoute role='admin'>
+            <AdminLayout>
+              <DocumentationPage />
+            </AdminLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/admin-buku-tamu" element={
+          <PrivateRoute role='admin'>
+            <AdminLayout>
+              <AdminBukuTamu />
+            </AdminLayout>
+          </PrivateRoute>
+        } />
 
         {/* ----------------------SEKRETARIS----------------------- */}
         <Route path="/sekretaris" element={
@@ -191,6 +228,13 @@ function App() {
           </PrivateRoute>
         } />
 
+        <Route path="/kabid-profile" element={
+          <PrivateRoute role='user'>
+            <KabidLayout>
+              <DocumentationPage />
+            </KabidLayout>
+          </PrivateRoute>
+        } />
 
         {/* ----------------------STAFF----------------------- */}
         <Route path="/staff" element={

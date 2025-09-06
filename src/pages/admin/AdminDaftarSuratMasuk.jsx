@@ -56,11 +56,11 @@ const AdminDaftarSuratMasuk = () => {
 
     const getStatusBadge = (status) => {
         const styles = {
-            pending: 'bg-red-50 text-red-700 border-2 border-red-200',
-            processed: 'bg-green-50 text-green-700 border-2 border-green-200'
+            pending: 'bg-gradient-to-br from-red-50 to-red-100 text-red-700 border-2 border-red-200',
+            processed: 'bg-gradient-to-br from-green-50 to-green-100 text-green-700 border-2 border-green-200'
         };
         return (
-            <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${styles[status] || 'bg-[#EDE6E3] text-[#6D4C41] border-2 border-[#EDE6E3]'}`}>
+            <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${styles[status] || 'bg-gradient-to-br from-[#FDFCFB] to-[#EDE6E3] text-[#6D4C41] border-2 border-[#EDE6E3]'}`}>
                 {status === 'pending' ? 'Belum Dibaca' : status === 'processed' ? 'Sudah Dibaca' : status}
             </span>
         );
@@ -164,7 +164,7 @@ const AdminDaftarSuratMasuk = () => {
                 </p>
                 <button
                     onClick={fetchAllData}
-                    className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] mt-3 text-sm font-semibold text-[#2E2A27] shadow-lg py-3 px-6 rounded-xl items-center flex gap-x-2 transition-colors hover:border-[#D4A373]"
+                    className="bg-gradient-to-br from-white/95 via-[#FDFCFB]/90 to-[#EDE6E3]/60 hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] mt-3 text-sm font-semibold text-[#2E2A27] shadow-lg py-3 px-6 rounded-xl items-center flex gap-x-2 transition-colors hover:border-[#D4A373]"
                 >
                     <RefreshCcw className='w-4 h-4' />
                     Retry
@@ -175,16 +175,16 @@ const AdminDaftarSuratMasuk = () => {
 
     return (
         <div className="">
-            <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-md mb-10 hover:shadow-lg transition-all duration-300">
+            <div className="bg-gradient-to-br from-white/95 via-[#FDFCFB]/90 to-[#EDE6E3]/60 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#EDE6E3]/60 shadow-lg hover:shadow-xl transition-all duration-300">
                 <div className="flex items-center space-x-3 mb-3 p-6">
                     <div className="w-3 h-8 bg-gradient-to-b from-[#D4A373] to-[#6D4C41] rounded-full shadow-sm"></div>
                     <h3 className="text-lg font-bold text-[#2E2A27] tracking-tight">Surat Masuk yang Dibuat</h3>
                 </div>
-                
+
                 {/* Tabel Surat Masuk */}
                 <div className="overflow-x-auto">
                     <table className="min-w-full divide-y divide-[#EDE6E3]">
-                        <thead className="bg-[#FDFCFB]">
+                        <thead className="bg-gradient-to-br from-[#FDFCFB]/95 to-[#EDE6E3]/50">
                             <tr>
                                 <th className="px-8 py-4 text-left text-xs font-semibold text-[#6D4C41] uppercase tracking-wider">
                                     Asal Instansi
@@ -208,7 +208,7 @@ const AdminDaftarSuratMasuk = () => {
                                 <tr key={surat.id} className="group hover:bg-[#FDFCFB] transition-colors">
                                     <td className="px-8 py-6">
                                         <div className="flex items-center">
-                                            <div className="flex-shrink-0 h-10 w-10 border-2 border-[#EDE6E3] bg-[#FDFCFB] rounded-xl flex items-center justify-center shadow-sm">
+                                            <div className="flex-shrink-0 h-10 w-10 border-2 border-[#EDE6E3] bg-gradient-to-br from-[#FDFCFB] to-[#EDE6E3]/50 rounded-xl flex items-center justify-center shadow-sm">
                                                 <Building2 className="h-5 w-5 text-[#D4A373]" />
                                             </div>
                                             <div className="ml-4">
@@ -257,23 +257,23 @@ const AdminDaftarSuratMasuk = () => {
                             ))}
                         </tbody>
                     </table>
-                    
+
                     {/* Tombol navigasi jika jumlah surat lebih dari 5 */}
                     {suratData.length > 5 && (
                         <div className="px-6 py-6 flex justify-center bg-white border-t-2 border-[#EDE6E3]">
                             <button
                                 onClick={() => navigate('/admin-daftar-surat-masuk')}
-                                className="inline-flex gap-x-2 items-center px-6 py-3 bg-gradient-to-r from-[#4CAF50] to-[#2E7D32] hover:from-[#2E7D32] hover:to-[#1B5E20] cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl text-white text-sm font-semibold rounded-xl border-2 border-green-400 transform hover:scale-105"
+                                className="inline-flex gap-x-2 items-center px-6 py-3 bg-gradient-to-r from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] cursor-pointer transition-all duration-300 shadow-lg hover:shadow-xl text-white text-sm font-semibold rounded-xl border-2 border-[#EDE6E3] transform hover:scale-105"
                             >
                                 Lihat Semua
                                 <ChevronRightCircle className='w-4 h-4' />
                             </button>
                         </div>
                     )}
-                    
+
                     {suratData.length === 0 && (
                         <div className="text-center py-16 bg-white">
-                            <div className="mx-auto h-24 w-24 bg-[#EDE6E3] rounded-2xl flex items-center justify-center mb-6 border-2 border-[#EDE6E3] shadow-sm">
+                            <div className="mx-auto h-24 w-24 bg-gradient-to-br from-[#EDE6E3]/50 to-[#D4A373]/20 rounded-2xl flex items-center justify-center mb-6 border-2 border-[#EDE6E3] shadow-sm">
                                 <FileText className="h-12 w-12 text-[#6D4C41]" />
                             </div>
                             <h3 className="text-lg font-bold text-[#2E2A27] mb-2">Belum ada surat masuk</h3>
@@ -288,11 +288,11 @@ const AdminDaftarSuratMasuk = () => {
             {/* Delete Confirmation Modal */}
             {deleteModal.isOpen && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border-2 border-[#EDE6E3]">
+                    <div className="bg-gradient-to-br from-white/95 via-[#FDFCFB]/90 to-[#EDE6E3]/60 backdrop-blur-sm rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border-2 border-[#EDE6E3]">
                         {/* Header */}
                         <div className="p-6 pb-4">
                             <div className="flex items-center gap-4">
-                                <div className="flex-shrink-0 w-12 h-12 bg-red-50 rounded-2xl flex items-center justify-center border-2 border-red-200">
+                                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl flex items-center justify-center border-2 border-red-200">
                                     <AlertTriangle className="w-6 h-6 text-red-500" />
                                 </div>
                                 <div className="flex-1">
@@ -305,7 +305,7 @@ const AdminDaftarSuratMasuk = () => {
                         </div>
                         {/* Content */}
                         <div className="px-6 pb-2">
-                            <div className="bg-[#FDFCFB] rounded-xl p-4 mb-4 border-2 border-[#EDE6E3]">
+                            <div className="bg-gradient-to-br from-[#FDFCFB]/90 to-[#EDE6E3]/50 rounded-xl p-4 mb-4 border-2 border-[#EDE6E3]">
                                 <p className="text-sm text-[#6D4C41] font-medium mb-3">
                                     Apakah Anda yakin ingin menghapus surat dari:
                                 </p>
@@ -332,10 +332,10 @@ const AdminDaftarSuratMasuk = () => {
                             </div>
                         </div>
                         {/* Footer */}
-                        <div className="px-6 py-4 flex gap-3 justify-end bg-[#FDFCFB] border-t-2 border-[#EDE6E3]">
+                        <div className="px-6 py-4 flex gap-3 justify-end bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 border-t-2 border-[#EDE6E3]">
                             <button
                                 onClick={closeDeleteModal}
-                                className="px-4 py-2.5 text-sm font-semibold text-[#6D4C41] bg-white hover:bg-[#FDFCFB] shadow-md border-2 border-[#EDE6E3] rounded-xl transition-all hover:border-[#D4A373]"
+                                className="px-4 py-2.5 text-sm font-semibold text-[#6D4C41] bg-gradient-to-br from-white/95 to-[#FDFCFB]/80 hover:bg-[#FDFCFB] shadow-md border-2 border-[#EDE6E3] rounded-xl transition-all hover:border-[#D4A373]"
                             >
                                 Batal
                             </button>
@@ -352,15 +352,15 @@ const AdminDaftarSuratMasuk = () => {
 
             {/* Modal Detail Surat */}
             {selectedSurat && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-60 flex items-center justify-center p-4">
                     <div className="relative w-full max-w-2xl h-[90vh] overflow-y-auto">
                         {/* Background with elegant theme */}
-                        <div className="absolute inset-0 bg-white rounded-2xl shadow-2xl border-2 border-[#EDE6E3]"></div>
+                        <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-[#FDFCFB]/90 to-[#EDE6E3]/60 backdrop-blur-sm rounded-2xl shadow-2xl border-2 border-[#EDE6E3]"></div>
 
                         {/* Content */}
                         <div className="relative h-full overflow-y-auto rounded-2xl">
                             {/* Header */}
-                            <div className="sticky top-0 bg-white backdrop-blur-sm border-b-2 border-[#EDE6E3] px-8 py-6">
+                            <div className="sticky top-0 bg-gradient-to-br from-white/95 via-[#FDFCFB]/85 to-[#EDE6E3]/50 backdrop-blur-sm border-b-2 border-[#EDE6E3] px-8 py-6">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
                                         <div className="p-3 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-xl shadow-md">
@@ -373,7 +373,7 @@ const AdminDaftarSuratMasuk = () => {
                                     </div>
                                     <button
                                         onClick={() => setSelectedSurat(null)}
-                                        className="p-2.5 hover:bg-[#FDFCFB] rounded-xl transition-all duration-200 group border-2 border-transparent hover:border-[#EDE6E3]"
+                                        className="p-2.5 hover:bg-gradient-to-br hover:from-[#FDFCFB]/80 hover:to-[#EDE6E3]/30 rounded-xl transition-all duration-200 group border-2 border-transparent hover:border-[#EDE6E3]"
                                     >
                                         <X className="h-5 w-5 text-[#6D4C41] group-hover:text-[#2E2A27]" />
                                     </button>
@@ -395,7 +395,7 @@ const AdminDaftarSuratMasuk = () => {
                                                 <FileText className="h-4 w-4 text-[#D4A373]" />
                                                 Nomor Surat
                                             </label>
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-l-4 border-[#D4A373] border-2">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-l-4 border-[#D4A373] border-2">
                                                 <p className={`${selectedSurat.nomor_surat ? 'text-[#2E2A27] font-semibold' : 'text-[#6D4C41] italic font-medium'}`}>
                                                     {selectedSurat.nomor_surat || 'akan muncul bila sudah diproses jabatan terkait'}
                                                 </p>
@@ -407,7 +407,7 @@ const AdminDaftarSuratMasuk = () => {
                                                 <Building2 className="h-4 w-4 text-[#D4A373]" />
                                                 Asal Instansi
                                             </label>
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-l-4 border-[#D4A373] border-2">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-l-4 border-[#D4A373] border-2">
                                                 <p className="text-[#2E2A27] font-semibold">{selectedSurat.asal_instansi}</p>
                                             </div>
                                         </div>
@@ -417,7 +417,7 @@ const AdminDaftarSuratMasuk = () => {
                                                 <User className="h-4 w-4 text-[#D4A373]" />
                                                 Tujuan Jabatan
                                             </label>
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-l-4 border-[#D4A373] border-2">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-l-4 border-[#D4A373] border-2">
                                                 <p className="text-[#2E2A27] font-semibold capitalize">{selectedSurat.tujuan_jabatan?.replace(/-/g, ' ')}</p>
                                             </div>
                                         </div>
@@ -426,10 +426,10 @@ const AdminDaftarSuratMasuk = () => {
                                     <div className="space-y-6">
                                         <div className="group">
                                             <label className="flex items-center gap-2 text-sm font-bold text-[#6D4C41] mb-3">
-                                                <MessageSquare className="h-4 w-4 text-[#4CAF50]" />
+                                                <MessageSquare className="h-4 w-4 text-[#6D4C41]" />
                                                 Perihal
                                             </label>
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-l-4 border-[#4CAF50] border-2 ">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-l-4 border-[#6D4C41] border-2 ">
                                                 <p className={`${selectedSurat.perihal ? 'text-[#2E2A27] font-semibold' : 'text-[#6D4C41] italic font-medium'}`}>
                                                     {selectedSurat.perihal || 'akan muncul bila sudah diproses jabatan terkait'}
                                                 </p>
@@ -438,10 +438,10 @@ const AdminDaftarSuratMasuk = () => {
 
                                         <div className="group">
                                             <label className="flex items-center gap-2 text-sm font-bold text-[#6D4C41] mb-3">
-                                                <User className="h-4 w-4 text-[#4CAF50]" />
+                                                <User className="h-4 w-4 text-[#6D4C41]" />
                                                 Dibuat oleh
                                             </label>
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-l-4 border-[#4CAF50] border-2 ">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-l-4 border-[#6D4C41] border-2 ">
                                                 <p className="text-[#2E2A27] font-bold">{selectedSurat.users?.name}</p>
                                                 <p className="text-sm text-[#6D4C41] font-medium">({selectedSurat.users?.jabatan})</p>
                                             </div>
@@ -449,10 +449,10 @@ const AdminDaftarSuratMasuk = () => {
 
                                         <div className="group">
                                             <label className="flex items-center gap-2 text-sm font-bold text-[#6D4C41] mb-3">
-                                                <Calendar className="h-4 w-4 text-[#4CAF50]" />
+                                                <Calendar className="h-4 w-4 text-[#6D4C41]" />
                                                 Tanggal Dibuat
                                             </label>
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-l-4 border-[#4CAF50] border-2">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-l-4 border-[#6D4C41] border-2">
                                                 <p className="text-[#2E2A27] font-semibold">{formatDate(selectedSurat.created_at)}</p>
                                             </div>
                                         </div>
@@ -462,10 +462,10 @@ const AdminDaftarSuratMasuk = () => {
                                 {/* Description */}
                                 <div className="mb-8">
                                     <label className="flex items-center gap-2 text-sm font-bold text-[#6D4C41] mb-3">
-                                        <FileText className="h-4 w-4 text-red-500" />
+                                        <FileText className="h-4 w-4 text-[#2E2A27]" />
                                         Keterangan
                                     </label>
-                                    <div className="p-6 bg-[#FDFCFB] rounded-xl border-2 border-[#EDE6E3] shadow-md">
+                                    <div className="p-6 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-2 border-[#EDE6E3] shadow-md">
                                         <p className="text-[#2E2A27] leading-relaxed font-medium">{selectedSurat.keterangan}</p>
                                     </div>
                                 </div>
@@ -495,7 +495,7 @@ const AdminDaftarSuratMasuk = () => {
                                 {(selectedSurat.disposisi_kepada || selectedSurat.catatan) && (
                                     <div className="mb-8 space-y-4">
                                         {selectedSurat.disposisi_kepada && (
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-2 border-[#EDE6E3] shadow-sm">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-2 border-[#EDE6E3] shadow-sm">
                                                 <label className="text-sm font-bold text-[#6D4C41] uppercase tracking-wide mb-1 block">
                                                     Disposisi Kepada
                                                 </label>
@@ -504,7 +504,7 @@ const AdminDaftarSuratMasuk = () => {
                                         )}
 
                                         {selectedSurat.catatan && (
-                                            <div className="p-4 bg-[#FDFCFB] rounded-xl border-2 border-[#EDE6E3] shadow-sm">
+                                            <div className="p-4 bg-gradient-to-br from-[#FDFCFB]/80 to-[#EDE6E3]/40 rounded-xl border-2 border-[#EDE6E3] shadow-sm">
                                                 <label className="text-sm font-bold text-[#6D4C41] uppercase tracking-wide mb-1 block">
                                                     Catatan
                                                 </label>
@@ -516,7 +516,7 @@ const AdminDaftarSuratMasuk = () => {
                             </div>
 
                             {/* Footer Actions */}
-                            <div className="sticky bottom-0 bg-white/90 backdrop-blur-sm border-t-2 border-[#EDE6E3] px-8 py-6">
+                            <div className="sticky bottom-0 bg-gradient-to-br from-white/95 via-[#FDFCFB]/85 to-[#EDE6E3]/50 backdrop-blur-sm border-t-2 border-[#EDE6E3] px-8 py-6">
                                 <div className="flex justify-end gap-3">
                                     {selectedSurat.status === 'processed' && (
                                         <button
@@ -530,7 +530,7 @@ const AdminDaftarSuratMasuk = () => {
                                     )}
                                     <button
                                         onClick={() => setSelectedSurat(null)}
-                                        className="inline-flex items-center gap-2 bg-white hover:bg-[#FDFCFB] text-[#6D4C41] hover:text-[#2E2A27] px-6 py-3 rounded-xl font-semibold transition-all duration-200 border-2 border-[#EDE6E3] hover:border-[#D4A373] shadow-md hover:shadow-lg"
+                                        className="inline-flex items-center gap-2 bg-gradient-to-br from-white/95 to-[#FDFCFB]/80 hover:bg-[#FDFCFB] text-[#6D4C41] hover:text-[#2E2A27] px-6 py-3 rounded-xl font-semibold transition-all duration-200 border-2 border-[#EDE6E3] hover:border-[#D4A373] shadow-md hover:shadow-lg"
                                     >
                                         Tutup
                                     </button>

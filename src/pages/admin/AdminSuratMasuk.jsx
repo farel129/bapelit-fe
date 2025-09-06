@@ -50,7 +50,25 @@ const AdminSuratMasuk = () => {
             setError('');
             // Fetch semua surat masuk menggunakan axios
             const suratResponse = await api.get('/admin/surat-masuk/all');
-            setSuratData(suratResponse.data?.data || []);
+            
+            // Fetch mapping disposisi untuk mendapatkan disposisi_id
+            const disposisiResponse = await api.get('/kepala/disposisi/all');
+            
+            // Buat mapping surat_id -> disposisi_id
+            const disposisiMapping = {};
+            disposisiResponse.data?.data?.forEach(disposisi => {
+                if (disposisi.surat_masuk?.id) {
+                    disposisiMapping[disposisi.surat_masuk.id] = disposisi.id;
+                }
+            });
+            
+            // Tambahkan disposisi_id ke data surat
+            const suratWithDisposisiId = suratResponse.data?.data?.map(surat => ({
+                ...surat,
+                disposisi_id: disposisiMapping[surat.id] || null
+            })) || [];
+            
+            setSuratData(suratWithDisposisiId);
         } catch (err) {
             console.error('Error fetching data:', err);
             if (err.response) {
@@ -97,7 +115,16 @@ const AdminSuratMasuk = () => {
         setIsDownloading(true);
         setDownloadProgress(0);
         try {
-            const response = await api.get(`/surat/${suratId}/pdf`, {
+            // Cari disposisi_id dari suratId
+            const surat = suratData.find(s => s.id === suratId);
+            const disposisiId = surat?.disposisi_id;
+            
+            if (!disposisiId) {
+                toast.error('Disposisi tidak ditemukan untuk surat ini');
+                return;
+            }
+            
+            const response = await api.get(`/disposisi/${disposisiId}/pdf`, {
                 responseType: 'blob',
                 onDownloadProgress: (progressEvent) => {
                     const total = progressEvent.total;
@@ -177,8 +204,8 @@ const AdminSuratMasuk = () => {
 
     // Calculate statistics
     const totalSurat = suratData.length;
-    const belumDibaca = suratData.filter(surat => surat.status === 'pending').length;
-    const sudahDibaca = suratData.filter(surat => surat.status === 'processed').length;
+    const belumDibaca = suratData.filter(surat => surat.status === 'belum dibaca').length;
+    const sudahDibaca = suratData.filter(surat => surat.status === 'dibaca').length;
 
     const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor }) => (
         <div className={`${bgColor} p-6 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
@@ -189,6 +216,75 @@ const AdminSuratMasuk = () => {
                 </div>
                 <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
                     <Icon className={`w-6 h-6 text-white`} />
+                </div>
+            </div>
+        </div>
+    );
+
+    // Card disposisi component
+    const DisposisiCard = ({ surat }) => (
+        <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
+            <div className="p-6">
+                {/* Header Card */}
+                <div className="flex justify-between items-start mb-4">
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-lg">
+                            <FileText className="h-5 w-5 text-white" />
+                        </div>
+                        <div>
+                            <h3 className="font-bold text-[#2E2A27] truncate max-w-[200px]">{surat.asal_instansi}</h3>
+                            <p className="text-xs text-[#6D4C41] capitalize">{surat.tujuan_jabatan?.replace(/-/g, ' ')}</p>
+                        </div>
+                    </div>
+                    <div className="flex flex-col items-end">
+                        {getStatusBadge(surat.status)}
+                        <span className="text-xs text-[#6D4C41] mt-1">{formatDate(surat.created_at)}</span>
+                    </div>
+                </div>
+
+                {/* Content Card */}
+                <div className="space-y-3 mb-4">
+                    <div className="flex items-start gap-2">
+                        <MessageSquare className="h-4 w-4 text-[#6D4C41] mt-0.5 flex-shrink-0" />
+                        <p className="text-sm text-[#2E2A27] line-clamp-2">
+                            {surat.perihal || surat.keterangan || 'Tidak ada keterangan'}
+                        </p>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                        <User className="h-4 w-4 text-[#6D4C41] flex-shrink-0" />
+                        <p className="text-xs text-[#6D4C41] truncate">
+                            {surat.users?.name || 'Tidak diketahui'}
+                        </p>
+                    </div>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex gap-2">
+                    <button
+                        onClick={() => setSelectedSurat(surat)}
+                        className="flex-1 bg-white text-black py-2 rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-1.5 border border-slate-200"
+                    >
+                        <Eye className="w-3.5 h-3.5" />
+                        Detail
+                    </button>
+
+                    {surat.has_disposisi === true && surat.disposisi_id && (
+                        <button
+                            onClick={() => handleDownloadPDF(surat.id, surat.nomor_surat)}
+                            disabled={isDownloading}
+                            className="px-3 bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] hover:from-[#2E7D32] hover:to-[#1B5E20] text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-1.5 disabled:opacity-50 border border-[#EDE6E3]"
+                        >
+                            <Download className="w-3.5 h-3.5" />
+                        </button>
+                    )}
+
+                    <button
+                        onClick={() => openDeleteModal(surat)}
+                        className="px-3 bg-gradient-to-br from-[#D9534F] to-[#B52B27] hover:from-[#B52B27] hover:to-[#8B0000] text-white rounded-lg text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center justify-center gap-1.5 border border-[#EDE6E3]"
+                    >
+                        <Trash2 className="w-3.5 h-3.5" />
+                    </button>
                 </div>
             </div>
         </div>
@@ -221,25 +317,10 @@ const AdminSuratMasuk = () => {
     }
 
     return (
-        <div className='min-h-screen p-4 md:p-6 rounded-2xl' style={{backgroundColor: '#FDFCFB'}}>
-            <div className="flex justify-between items-center mb-6">
-                <div className="flex items-center gap-x-3">
-                    <div className="h-8 w-1.5 bg-gradient-to-b from-[#D4A373] via-[#6D4C41] to-[#2E2A27] rounded-full shadow-sm"></div>
-                    <div>
-                        <h1 className="text-xl font-bold" style={{color: '#2E2A27'}}>Surat Masuk</h1>
-                        <p className="text-sm font-medium" style={{color: '#6D4C41'}}>Kelola surat masuk dengan elegan</p>
-                    </div>
-                </div>
-                <button
-                    onClick={fetchAllData}
-                    className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-[#2E2A27] px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-[#D4A373]"
-                >
-                    <RefreshCcw className="w-4 h-4" /> Refresh
-                </button>
-            </div>
+        <div className='min-h-screen'>
 
             {/* Stat Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
                 <StatCard
                     title="Total Surat"
                     count={totalSurat}
@@ -308,8 +389,8 @@ const AdminSuratMasuk = () => {
                                 className="pl-10 pr-8 py-3 shadow-sm border border-[#EDE6E3] rounded-xl text-sm bg-white text-[#2E2A27] appearance-none focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:border-transparent transition-all min-w-[140px]"
                             >
                                 <option value="all">Semua Status</option>
-                                <option value="pending">Pending</option>
-                                <option value="processed">Diproses</option>
+                                <option value="belum dibaca">Belum dibaca</option>
+                                <option value="dibaca">Dibaca</option>
                             </select>
                         </div>
                         
@@ -359,66 +440,9 @@ const AdminSuratMasuk = () => {
                     <p className="text-[#2E2A27] text-lg">Tidak ada surat masuk</p>
                 </div>
             ) : (
-                <div className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {filteredData.map((surat) => (
-                        <div key={surat.id} className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm hover:shadow-lg transition-all duration-300">
-                            <div className="flex justify-between items-start">
-                                <div className="flex-1">
-                                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                                        <div>
-                                            <p className="text-sm font-medium" style={{color: '#6D4C41'}}>Asal Instansi</p>
-                                            <p className="font-semibold text-[#2E2A27]">{surat.asal_instansi}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-medium" style={{color: '#6D4C41'}}>Tujuan Jabatan</p>
-                                            <p className="font-semibold text-[#2E2A27] capitalize">{surat.tujuan_jabatan?.replace(/-/g, ' ')}</p>
-                                        </div>
-                                        <div>
-                                            <p className="text-sm font-medium" style={{color: '#6D4C41'}}>Tanggal Dibuat</p>
-                                            <p className="font-semibold text-[#2E2A27]">{formatDate(surat.created_at)}</p>
-                                        </div>
-                                        <div className="flex items-center gap-3">
-                                            <span className="text-sm font-medium" style={{color: '#6D4C41'}}>Status:</span>
-                                            {getStatusBadge(surat.status)}
-                                        </div>
-                                    </div>
-
-                                    <div className="bg-[#FDFCFB] p-3 rounded-xl border border-[#EDE6E3] mb-3">
-                                        <p className="text-sm font-medium" style={{color: '#6D4C41'}}>Keterangan</p>
-                                        <p className="text-[#2E2A27]">{surat.keterangan}</p>
-                                    </div>
-                                </div>
-
-                                <div className="ml-6 flex flex-col space-y-2">
-                                    <button
-                                        onClick={() => setSelectedSurat(surat)}
-                                        className="bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 border border-[#EDE6E3]"
-                                    >
-                                        <Eye className="w-4 h-4" />
-                                        Detail
-                                    </button>
-
-                                    {surat.status === 'processed' && (
-                                        <button
-                                            onClick={() => handleDownloadPDF(surat.id, surat.nomor_surat)}
-                                            disabled={isDownloading}
-                                            className="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] hover:from-[#2E7D32] hover:to-[#1B5E20] text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 disabled:opacity-50 border border-[#EDE6E3]"
-                                        >
-                                            <Download className="w-4 h-4" />
-                                            {isDownloading ? `${downloadProgress}%` : 'PDF'}
-                                        </button>
-                                    )}
-
-                                    <button
-                                        onClick={() => openDeleteModal(surat)}
-                                        className="bg-gradient-to-br from-[#D9534F] to-[#B52B27] hover:from-[#B52B27] hover:to-[#8B0000] text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2 border border-[#EDE6E3]"
-                                    >
-                                        <Trash2 className="w-4 h-4" />
-                                        Hapus
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
+                        <DisposisiCard key={surat.id} surat={surat} />
                     ))}
                 </div>
             )}
@@ -641,7 +665,7 @@ const AdminSuratMasuk = () => {
                             {/* Footer Actions */}
                             <div className="sticky bottom-0 bg-white/90 backdrop-blur-sm border-t border-[#EDE6E3] px-8 py-6">
                                 <div className="flex justify-end gap-3">
-                                    {selectedSurat.status === 'processed' && (
+                                    {selectedSurat.has_disposisi === true && selectedSurat.disposisi_id && (
                                         <button
                                             onClick={() => handleDownloadPDF(selectedSurat.id, selectedSurat.nomor_surat)}
                                             disabled={isDownloading}

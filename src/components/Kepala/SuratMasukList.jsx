@@ -10,11 +10,11 @@ const SuratMasukList = () => {
   const [loading, setLoading] = useState(true);
   const [selectedSurat, setSelectedSurat] = useState(null);
   const [viewDetailSurat, setViewDetailSurat] = useState(null);
-  
+
   // Search and filter states
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedStatus, setSelectedStatus] = useState('');
-  
+
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
@@ -58,11 +58,11 @@ const SuratMasukList = () => {
 
   // Filter data berdasarkan search dan filter
   const filteredSurat = suratMasuk.filter(surat => {
-    const matchSearch = searchTerm === '' || 
+    const matchSearch = searchTerm === '' ||
       surat.asal_instansi?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       surat.keterangan?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       surat.tanggal_surat?.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     const matchStatus = selectedStatus === '' || surat.status === selectedStatus;
 
     return matchSearch && matchStatus;
@@ -111,8 +111,8 @@ const SuratMasukList = () => {
   const sudahDibaca = suratMasuk.filter(surat => surat.status === 'sudah dibaca').length;
 
   const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor }) => (
-    <div className={`${bgColor} p-6 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
-      <div className="flex items-center justify-between">
+    <div className={`${bgColor} p-3 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
+      <div className="flex items-center gap-x-7 justify-between">
         <div>
           <p className={`text-sm font-medium ${textColor} opacity-80`}>{title}</p>
           <p className={`text-3xl font-bold ${textColor} mt-2`}>{count}</p>
@@ -132,7 +132,7 @@ const SuratMasukList = () => {
     const getVisiblePages = () => {
       const visiblePages = [];
       const maxVisible = 5;
-      
+
       if (totalPages <= maxVisible) {
         for (let i = 1; i <= totalPages; i++) {
           visiblePages.push(i);
@@ -160,7 +160,7 @@ const SuratMasukList = () => {
           visiblePages.push(totalPages);
         }
       }
-      
+
       return visiblePages;
     };
 
@@ -170,7 +170,7 @@ const SuratMasukList = () => {
           <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>
             Menampilkan {startIndex + 1} - {Math.min(endIndex, totalItems)} dari {totalItems} data
           </span>
-          
+
           <div className="flex items-center gap-2">
             <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>Per halaman:</span>
             <select
@@ -204,11 +204,10 @@ const SuratMasukList = () => {
                   <button
                     key={index}
                     onClick={() => goToPage(page)}
-                    className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${
-                      currentPage === page
-                        ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white border-[#EDE6E3]'
-                        : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-[#2E2A27] hover:text-[#6D4C41]'
-                    }`}
+                    className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${currentPage === page
+                      ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white border-[#EDE6E3]'
+                      : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-[#2E2A27] hover:text-[#6D4C41]'
+                      }`}
                   >
                     {page}
                   </button>
@@ -240,12 +239,12 @@ const SuratMasukList = () => {
 
   return (
     <div>
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-x-3">
           <div className="h-8 w-1.5 bg-gradient-to-b from-[#D4A373] via-[#6D4C41] to-[#2E2A27] rounded-full shadow-sm"></div>
           <div>
             <h1 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Surat Masuk</h1>
-            <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Kelola surat masuk dengan elegan</p>
+            <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Kelola surat masuk dan buat disposisi</p>
           </div>
         </div>
         <button
@@ -257,7 +256,7 @@ const SuratMasukList = () => {
       </div>
 
       {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
         <StatCard
           title="Total Surat"
           count={totalSurat}
@@ -288,125 +287,128 @@ const SuratMasukList = () => {
       </div>
 
       {/* Filters */}
-      <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl border-2 border-[#EDE6E3] shadow-md p-6 mb-8">
-        <div className="flex flex-col lg:flex-row gap-4">
-          
-          {/* Search */}
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#6D4C41]" />
-              <input
-                type="text"
-                placeholder="Cari berdasarkan asal instansi, keterangan, atau tanggal..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] placeholder-[#6D4C41] shadow-sm"
-              />
-            </div>
-          </div>
+      <div className="p-3 shadow-lg rounded-2xl border-black/15 border">
+        <div className=" mb-3">
+          <div className="flex flex-col lg:flex-row gap-4">
 
-          {/* Filter Status */}
-          <div className="w-full lg:w-48">
-            <div className="relative">
-              <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#6D4C41] z-10" />
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] shadow-sm appearance-none"
-              >
-                <option value="">Semua Status</option>
-                <option value="belum dibaca">Belum Dibaca</option>
-                <option value="sudah dibaca">Sudah Dibaca</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Reset */}
-          <div className="flex gap-2">
-            <button
-              onClick={resetFilters}
-              className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-[#2E2A27] font-semibold shadow-sm hover:shadow-md"
-            >
-              <Filter className="h-4 w-4" />
-              Reset
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Surat Masuk List */}
-      {currentItems.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-          <FileText className="h-12 w-12 text-[#6D4C41] mx-auto mb-4" />
-          <p className="text-[#2E2A27] text-lg font-semibold">
-            {suratMasuk.length === 0 ? 'Tidak ada surat masuk' : 'Tidak ada surat yang sesuai filter'}
-          </p>
-          <p className="text-[#6D4C41] mt-1">
-            {suratMasuk.length === 0 ? 'Belum ada surat masuk yang diterima' : 'Coba ubah filter pencarian'}
-          </p>
-        </div>
-      ) : (
-        <div className="space-y-6 mb-8">
-          {currentItems.map((surat) => (
-            <div key={surat.id} className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm hover:shadow-lg transition-all duration-300">
-              <div className="flex justify-between items-start">
-                <div className="flex-1">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                    <div>
-                      <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Asal Instansi</p>
-                      <p className="font-semibold text-[#2E2A27]">{surat.asal_instansi}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Tanggal Surat</p>
-                      <p className="font-semibold text-[#2E2A27]">{surat.tanggal_surat}</p>
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Diterima Tanggal</p>
-                      <p className="font-semibold text-[#2E2A27]">{surat.diterima_tanggal}</p>
-                    </div>
-                    <div className="flex items-center gap-3">
-                      <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>Status:</span>
-                      <span className={`px-3 py-1 rounded-full text-sm font-semibold ${surat.status === 'sudah dibaca'
-                        ? 'bg-green-100 text-green-800 border border-green-200'
-                        : 'bg-yellow-100 text-yellow-800 border border-yellow-200'
-                        }`}>
-                        {surat.status}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="bg-[#FDFCFB] p-4 rounded-xl border border-[#EDE6E3] mb-4">
-                    <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Keterangan</p>
-                    <p className="text-[#2E2A27]">{surat.keterangan}</p>
-                  </div>
-                </div>
-
-                <div className="ml-6 flex flex-col space-y-3">
-                  <button
-                    onClick={() => handleViewDetail(surat)}
-                    className="bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] flex items-center gap-x-2 justify-center shadow-md text-white px-4 py-3 text-sm font-semibold cursor-pointer rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
-                  >
-                    Lihat Detail<span><ChevronRight className="w-5 h-5" /></span>
-                  </button>
-
-                  {surat.has_disposisi ? (
-                    <div className="text-green-700 text-sm text-center bg-green-50 px-3 py-2.5 rounded-xl border border-green-200 font-semibold">
-                      ✓ Disposisi Sudah Dibuat
-                    </div>
-                  ) : (
-                    <button
-                      onClick={() => setSelectedSurat(surat)}
-                      className="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] hover:from-[#2E7D32] hover:to-[#1B5E20] flex items-center gap-x-2 shadow-md text-white px-4 py-3 rounded-xl cursor-pointer text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
-                    >
-                      Buat Disposisi <FileText className="w-4 h-4" />
-                    </button>
-                  )}
-                </div>
+            {/* Search */}
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#6D4C41]" />
+                <input
+                  type="text"
+                  placeholder="Cari berdasarkan asal instansi, keterangan, atau tanggal..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] placeholder-[#6D4C41] shadow-sm"
+                />
               </div>
             </div>
-          ))}
+
+            {/* Filter Status */}
+            <div className="w-full lg:w-48">
+              <div className="relative">
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#6D4C41] z-10" />
+                <select
+                  value={selectedStatus}
+                  onChange={(e) => setSelectedStatus(e.target.value)}
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] shadow-sm appearance-none"
+                >
+                  <option value="">Semua Status</option>
+                  <option value="belum dibaca">Belum Dibaca</option>
+                  <option value="sudah dibaca">Sudah Dibaca</option>
+                </select>
+              </div>
+            </div>
+
+            {/* Reset */}
+            <div className="flex gap-2">
+              <button
+                onClick={resetFilters}
+                className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-[#2E2A27] font-semibold shadow-sm hover:shadow-md"
+              >
+                <Filter className="h-4 w-4" />
+                Reset
+              </button>
+            </div>
+          </div>
         </div>
-      )}
+
+        {/* Surat Masuk List */}
+        {currentItems.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
+            <FileText className="h-12 w-12 text-[#6D4C41] mx-auto mb-4" />
+            <p className="text-[#2E2A27] text-lg font-semibold">
+              {suratMasuk.length === 0 ? 'Tidak ada surat masuk' : 'Tidak ada surat yang sesuai filter'}
+            </p>
+            <p className="text-[#6D4C41] mt-1">
+              {suratMasuk.length === 0 ? 'Belum ada surat masuk yang diterima' : 'Coba ubah filter pencarian'}
+            </p>
+          </div>
+        ) : (
+          <div className="space-y-6 mb-8">
+            {currentItems.map((surat) => (
+              <div key={surat.id} className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm hover:shadow-lg transition-all duration-300">
+                <div className="flex justify-between items-start">
+                  <div className="flex-1">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+                      <div>
+                        <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Asal Instansi</p>
+                        <p className="font-semibold text-[#2E2A27]">{surat.asal_instansi}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Tanggal Surat</p>
+                        <p className="font-semibold text-[#2E2A27]">{surat.tanggal_surat}</p>
+                      </div>
+                      <div>
+                        <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Diterima Tanggal</p>
+                        <p className="font-semibold text-[#2E2A27]">{surat.diterima_tanggal}</p>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>Status:</span>
+                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${surat.status === 'sudah dibaca'
+                          ? 'bg-green-100 text-green-800 border border-green-200'
+                          : 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+                          }`}>
+                          {surat.status}
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="bg-[#FDFCFB] p-4 rounded-xl border border-[#EDE6E3] mb-4">
+                      <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Keterangan</p>
+                      <p className="text-[#2E2A27]">{surat.keterangan}</p>
+                    </div>
+                  </div>
+
+                  <div className="ml-6 flex flex-col space-y-3">
+                    <button
+                      onClick={() => handleViewDetail(surat)}
+                      className="bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] flex items-center gap-x-2 justify-center shadow-md text-white px-4 py-3 text-sm font-semibold cursor-pointer rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
+                    >
+                      Lihat Detail<span><ChevronRight className="w-5 h-5" /></span>
+                    </button>
+
+                    {surat.has_disposisi ? (
+                      <div className="text-green-700 text-sm text-center bg-green-50 px-3 py-2.5 rounded-xl border border-green-200 font-semibold">
+                        ✓ Disposisi Sudah Dibuat
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => setSelectedSurat(surat)}
+                        className="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] hover:from-[#2E7D32] hover:to-[#1B5E20] flex items-center gap-x-2 shadow-md text-white px-4 py-3 rounded-xl cursor-pointer text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
+                      >
+                        Buat Disposisi <FileText className="w-4 h-4" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
 
       {/* Pagination */}
       {totalItems > 0 && <Pagination />}

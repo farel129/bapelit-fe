@@ -195,29 +195,12 @@ const AdminBuatSurat = () => {
   }
 
   return (
-    <div className='min-h-screen p-4 md:p-6 rounded-2xl' style={{backgroundColor: '#FDFCFB'}}>
-      {/* Header */}
-      <div className="flex justify-between items-center mb-6">
-        <div className="flex gap-x-3 items-center">
-          <div className="h-8 w-1.5 bg-gradient-to-b from-[#D4A373] via-[#6D4C41] to-[#2E2A27] rounded-full shadow-sm"></div>
-          <div>
-            <h1 className="text-xl font-bold" style={{color: '#2E2A27'}}>Buat Surat Masuk</h1>
-            <p className="text-sm font-medium" style={{color: '#6D4C41'}}>Kelola surat masuk dengan mudah</p>
-          </div>
-        </div>
-        <button
-          onClick={() => setIsTutorialModalOpen(true)}
-          className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-[#2E2A27] px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-[#D4A373]"
-        >
-          <BookOpen className="w-4 h-4" /> Tutorial
-        </button>
-      </div>
-
+    <div className='min-h-screen'>
       {/* Single Form */}
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* Data Surat Masuk Section */}
         <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-md hover:shadow-lg transition-all duration-300">
-          <h2 className="text-lg font-bold mb-6 flex items-center" style={{color: '#2E2A27'}}>
+          <h2 className="text-lg font-bold mb-6 flex items-center" style={{ color: '#2E2A27' }}>
             <div className="p-2.5 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-xl shadow-md mr-3">
               <Building2 className="w-5 h-5 text-white" />
             </div>
@@ -225,7 +208,7 @@ const AdminBuatSurat = () => {
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{color: '#6D4C41'}}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>
                 Asal Instansi <span className="text-red-500">*</span>
               </label>
               <input
@@ -238,13 +221,13 @@ const AdminBuatSurat = () => {
                 className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300 bg-[#FDFCFB] ${focusedField === 'asal_instansi'
                   ? 'border-[#D4A373] shadow-lg ring-4 ring-[#D4A373]/20'
                   : 'border-[#EDE6E3] hover:border-[#D4A373]'}`}
-                style={{color: '#2E2A27'}}
+                style={{ color: '#2E2A27' }}
                 placeholder="Contoh: Dinas Pendidikan Kota Tasikmalaya"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{color: '#6D4C41'}}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>
                 Nomor Surat <span className="text-red-500">*</span>
               </label>
               <input
@@ -253,13 +236,13 @@ const AdminBuatSurat = () => {
                 value={formData.nomor_surat}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-[#D4A373] focus:shadow-lg focus:ring-4 focus:ring-[#D4A373]/20 hover:border-[#D4A373] transition-all duration-300"
-                style={{color: '#2E2A27'}}
+                style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 123/ABC/2024"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{color: '#6D4C41'}}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>
                 Tanggal Surat <span className="text-red-500">*</span>
               </label>
               <input
@@ -268,7 +251,7 @@ const AdminBuatSurat = () => {
                 value={formData.tanggal_surat}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-[#D4A373] focus:shadow-lg focus:ring-4 focus:ring-[#D4A373]/20 hover:border-[#D4A373] transition-all duration-300"
-                style={{color: '#2E2A27'}}
+                style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 1 Januari 2025"
                 required
               />
@@ -276,7 +259,7 @@ const AdminBuatSurat = () => {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{color: '#6D4C41'}}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>
                 Diterima Tanggal <span className="text-red-500">*</span>
               </label>
               <input
@@ -285,13 +268,13 @@ const AdminBuatSurat = () => {
                 value={formData.diterima_tanggal}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-[#D4A373] focus:shadow-lg focus:ring-4 focus:ring-[#D4A373]/20 hover:border-[#D4A373] transition-all duration-300"
-                style={{color: '#2E2A27'}}
+                style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 1 Januari 2025"
                 required
               />
             </div>
             <div>
-              <label className="block text-sm font-semibold mb-2" style={{color: '#6D4C41'}}>
+              <label className="block text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>
                 Nomor Agenda <span className="text-red-500">*</span>
               </label>
               <input
@@ -300,14 +283,14 @@ const AdminBuatSurat = () => {
                 value={formData.nomor_agenda}
                 onChange={handleChange}
                 className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-[#D4A373] focus:shadow-lg focus:ring-4 focus:ring-[#D4A373]/20 hover:border-[#D4A373] transition-all duration-300"
-                style={{color: '#2E2A27'}}
+                style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 1212"
                 required
               />
             </div>
           </div>
           <div>
-            <label className="block text-sm font-semibold mb-2" style={{color: '#6D4C41'}}>
+            <label className="block text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>
               Keterangan <span className="text-red-500">*</span>
             </label>
             <textarea
@@ -316,7 +299,7 @@ const AdminBuatSurat = () => {
               onChange={handleChange}
               rows={4}
               className="w-full px-4 py-3 rounded-xl outline-none border-2 bg-[#FDFCFB] border-[#EDE6E3] resize-none focus:border-[#D4A373] focus:shadow-lg focus:ring-4 focus:ring-[#D4A373]/20 hover:border-[#D4A373] transition-all duration-300"
-              style={{color: '#2E2A27'}}
+              style={{ color: '#2E2A27' }}
               placeholder="Jelaskan isi surat secara singkat..."
               required
             />
@@ -325,7 +308,7 @@ const AdminBuatSurat = () => {
 
         {/* Upload Foto Section */}
         <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-md hover:shadow-lg transition-all duration-300">
-          <h2 className="text-lg font-bold mb-6 flex items-center" style={{color: '#2E2A27'}}>
+          <h2 className="text-lg font-bold mb-6 flex items-center" style={{ color: '#2E2A27' }}>
             <div className="p-2.5 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-xl shadow-md mr-3">
               <Camera className="w-5 h-5 text-white" />
             </div>
@@ -342,9 +325,9 @@ const AdminBuatSurat = () => {
 
           {selectedFiles.length === 0 ? (
             <label htmlFor="photos" className="block text-center p-12 border-2 border-dashed border-[#EDE6E3] rounded-xl cursor-pointer hover:bg-[#FDFCFB] hover:border-[#D4A373] transition-all duration-300">
-              <Upload className="w-10 h-10 mx-auto mb-4" style={{color: '#6D4C41'}} />
-              <p className="font-bold" style={{color: '#2E2A27'}}>Klik untuk upload file</p>
-              <p className="text-sm" style={{color: '#6D4C41'}}>JPEG, PNG, GIF, WEBP, PDF (maks 5MB)</p>
+              <Upload className="w-10 h-10 mx-auto mb-4" style={{ color: '#6D4C41' }} />
+              <p className="font-bold" style={{ color: '#2E2A27' }}>Klik untuk upload file</p>
+              <p className="text-sm" style={{ color: '#6D4C41' }}>JPEG, PNG, GIF, WEBP, PDF (maks 5MB)</p>
             </label>
           ) : (
             <div>
@@ -358,7 +341,7 @@ const AdminBuatSurat = () => {
                         onClick={() => openPreviewModal(null, index)}
                       >
                         <FileIcon className="w-8 h-8 text-red-500 mb-1" />
-                        <span className="text-xs text-center px-1 truncate w-full" style={{color: '#6D4C41'}}>
+                        <span className="text-xs text-center px-1 truncate w-full" style={{ color: '#6D4C41' }}>
                           {file.name.substring(0, 15)}{file.name.length > 15 ? '...' : ''}
                         </span>
                       </div>
@@ -401,12 +384,12 @@ const AdminBuatSurat = () => {
                     htmlFor="photos"
                     className="flex flex-col items-center justify-center border-2 border-dashed border-[#EDE6E3] rounded-lg h-24 cursor-pointer hover:bg-[#FDFCFB] hover:border-[#D4A373] transition-all duration-300"
                   >
-                    <Plus className="w-5 h-5" style={{color: '#6D4C41'}} />
-                    <span className="text-xs" style={{color: '#6D4C41'}}>Tambah</span>
+                    <Plus className="w-5 h-5" style={{ color: '#6D4C41' }} />
+                    <span className="text-xs" style={{ color: '#6D4C41' }}>Tambah</span>
                   </label>
                 )}
               </div>
-              <p className="text-sm" style={{color: '#6D4C41'}}>
+              <p className="text-sm" style={{ color: '#6D4C41' }}>
                 {selectedFiles.length}/{MAX_FILES} file — Total {(selectedFiles.reduce((a, b) => a + b.size, 0) / 1024 / 1024).toFixed(1)} MB
               </p>
             </div>
@@ -451,7 +434,7 @@ const AdminBuatSurat = () => {
               <div className="bg-white rounded-xl shadow-2xl h-[80vh] flex flex-col border-2 border-[#EDE6E3]">
                 <div className="p-4 border-b border-[#EDE6E3] flex items-center">
                   <FileIcon className="w-5 h-5 text-red-500 mr-2" />
-                  <span className="font-medium truncate" style={{color: '#2E2A27'}}>
+                  <span className="font-medium truncate" style={{ color: '#2E2A27' }}>
                     {selectedFiles[previewModal.index]?.name}
                   </span>
                 </div>
@@ -488,25 +471,25 @@ const AdminBuatSurat = () => {
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold" style={{color: '#2E2A27'}}>
+                  <h3 className="text-lg font-bold" style={{ color: '#2E2A27' }}>
                     Tutorial Interaktif
                   </h3>
-                  <p className="text-sm mt-1" style={{color: '#6D4C41'}}>Buat Surat dan Lembar Disposisi</p>
+                  <p className="text-sm mt-1" style={{ color: '#6D4C41' }}>Buat Surat dan Lembar Disposisi</p>
                 </div>
               </div>
               <button
                 onClick={closeTutorialModal}
-                className="p-3 rounded-2xl hover:bg-[#FDFCFB] transition-all duration-200 group" style={{color: '#6D4C41'}}
+                className="p-3 rounded-2xl hover:bg-[#FDFCFB] transition-all duration-200 group" style={{ color: '#6D4C41' }}
               >
                 <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200" />
               </button>
             </div>
             <div className="px-8 pb-4">
               <div className="flex items-center justify-between mb-3">
-                <span className="text-sm font-medium" style={{color: '#2E2A27'}}>
+                <span className="text-sm font-medium" style={{ color: '#2E2A27' }}>
                   Langkah {currentStep + 1} dari {steps.length}
                 </span>
-                <span className="text-sm" style={{color: '#6D4C41'}}>
+                <span className="text-sm" style={{ color: '#6D4C41' }}>
                   {Math.round(((currentStep + 1) / steps.length) * 100)}% selesai
                 </span>
               </div>
@@ -528,10 +511,10 @@ const AdminBuatSurat = () => {
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <h4 className="text-lg font-bold" style={{color: '#2E2A27'}}>
+                    <h4 className="text-lg font-bold" style={{ color: '#2E2A27' }}>
                       {steps[currentStep].title}
                     </h4>
-                    <p className="leading-relaxed max-w-md mx-auto" style={{color: '#6D4C41'}}>
+                    <p className="leading-relaxed max-w-md mx-auto" style={{ color: '#6D4C41' }}>
                       {steps[currentStep].description}
                     </p>
                   </div>

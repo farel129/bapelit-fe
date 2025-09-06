@@ -122,7 +122,7 @@ const KepalaLayout = ({ children }) => {
 
       <div className='lg:pl-52'>
         {/* Page content */}
-        <main className="flex-1 px-4 py-6 lg:px-6 min-h-screen">
+        <main className="flex-1 px-2 py-6 lg:px-6 min-h-screen">
           {children}
         </main>
       </div>
