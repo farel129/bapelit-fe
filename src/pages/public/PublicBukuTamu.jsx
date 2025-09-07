@@ -54,29 +54,28 @@ const LoadingSpinner = ({ size = 'md', text = '' }) => {
   );
 };
 
-// Input Component with Icon
-const InputField = ({ icon: Icon, label, name, value, onChange, type = 'text', placeholder, required = false, rows = null, iconColor = 'text-blue-600', disabled = false }) => {
-  const InputComponent = rows ? 'textarea' : 'input';
+// Device Submission Hook
+const useDeviceSubmission = () => {
+  const [submissionState, setSubmissionState] = useState(new Map());
   
-  return (
-    <div>
-      <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-        <Icon size={18} className={iconColor} />
-        {label} {required && '*'}
-      </label>
-      <InputComponent
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        rows={rows}
-        required={required}
-        disabled={disabled}
-        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${rows ? 'resize-none' : ''} ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
-        placeholder={placeholder}
-      />
-    </div>
-  );
+  const checkSubmission = (qrToken, deviceId) => {
+    const key = `${qrToken}_${deviceId}`;
+    return submissionState.get(key) || null;
+  };
+  
+  const markSubmitted = (qrToken, deviceId, data) => {
+    const key = `${qrToken}_${deviceId}`;
+    const submissionInfo = {
+      submitted: true,
+      data: data,
+      timestamp: new Date().toISOString()
+    };
+    
+    setSubmissionState(prev => new Map(prev).set(key, submissionInfo));
+    return submissionInfo;
+  };
+  
+  return { checkSubmission, markSubmitted };
 };
 
 // File Preview Component
@@ -196,7 +195,6 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
 };
 
 // Main Component
-// Main Component - Bagian 2
 const PublikBukuTamu = () => {
   const [eventData, setEventData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -204,6 +202,10 @@ const PublikBukuTamu = () => {
   const [modal, setModal] = useState({ isOpen: false, type: 'default', title: '', message: '' });
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [submissionData, setSubmissionData] = useState(null);
+  const [deviceId, setDeviceId] = useState(null);
+  
+  // Use custom hook for device submission
+  const { checkSubmission, markSubmitted } = useDeviceSubmission();
   
   // Form state
   const [formData, setFormData] = useState({
@@ -226,70 +228,25 @@ const PublikBukuTamu = () => {
 
   const qrToken = getQRTokenFromURL();
 
-  // Generate unique device ID
-  const getDeviceId = () => {
-    let deviceId = null;
-    
+  // Generate safe device ID
+  const generateDeviceId = () => {
     try {
-      // Try to get existing device ID from memory
-      if (window.deviceId) {
-        deviceId = window.deviceId;
-      } else {
-        // Generate new device ID and store in memory
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.textBaseline = 'top';
-        ctx.font = '14px Arial';
-        ctx.fillText('Device fingerprint', 2, 2);
-        
-        const fingerprint = canvas.toDataURL();
-        const timestamp = Date.now();
-        const random = Math.random().toString(36).substring(2);
-        
-        deviceId = btoa(`${fingerprint}-${timestamp}-${random}`).substring(0, 32);
-        window.deviceId = deviceId;
-      }
+      const timestamp = Date.now();
+      const random = Math.random().toString(36).substring(2, 15);
+      const userAgent = navigator.userAgent.slice(0, 20);
+      
+      return btoa(`${timestamp}-${random}-${userAgent}`).substring(0, 32);
     } catch (error) {
-      // Fallback if canvas fingerprinting fails
-      deviceId = `fallback-${Date.now()}-${Math.random().toString(36).substring(2)}`;
-      window.deviceId = deviceId;
+      console.warn('Device ID generation fallback:', error);
+      return `device-${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
     }
-    
-    return deviceId;
   };
 
-  // Check if already submitted
-  const checkSubmissionStatus = () => {
-    const deviceId = getDeviceId();
-    const storageKey = `guestbook_${qrToken}_${deviceId}`;
-    
-    // Check if already submitted in memory
-    if (window.submissionStatus && window.submissionStatus[storageKey]) {
-      return window.submissionStatus[storageKey];
-    }
-    
-    return null;
-  };
-
-  // Mark as submitted
-  const markAsSubmitted = (data) => {
-    const deviceId = getDeviceId();
-    const storageKey = `guestbook_${qrToken}_${deviceId}`;
-    
-    const submissionInfo = {
-      submitted: true,
-      data: data,
-      timestamp: new Date().toISOString()
-    };
-    
-    // Store in memory
-    if (!window.submissionStatus) {
-      window.submissionStatus = {};
-    }
-    window.submissionStatus[storageKey] = submissionInfo;
-    
-    return submissionInfo;
-  };
+  // Initialize device ID
+  useEffect(() => {
+    const id = generateDeviceId();
+    setDeviceId(id);
+  }, []);
 
   // Fetch event data
   const fetchEventData = async () => {
@@ -299,17 +256,20 @@ const PublikBukuTamu = () => {
       return;
     }
 
-    // Check if already submitted
-    const submissionStatus = checkSubmissionStatus();
-    if (submissionStatus) {
-      setAlreadySubmitted(true);
-      setSubmissionData(submissionStatus.data);
-    }
-
     try {
       const response = await guestBookAPI.getEventInfo(qrToken);
       setEventData(response.event);
+      
+      // Check if already submitted after getting device ID
+      if (deviceId) {
+        const submissionStatus = checkSubmission(qrToken, deviceId);
+        if (submissionStatus) {
+          setAlreadySubmitted(true);
+          setSubmissionData(submissionStatus.data);
+        }
+      }
     } catch (error) {
+      console.error('Fetch event data error:', error);
       showModal('error', 'Acara Tidak Ditemukan', 
         error.response?.data?.error || 'Acara tidak ditemukan atau sudah tidak aktif.');
     } finally {
@@ -317,9 +277,12 @@ const PublikBukuTamu = () => {
     }
   };
 
+  // Effect untuk fetch data setelah deviceId tersedia
   useEffect(() => {
-    fetchEventData();
-  }, []);
+    if (deviceId) {
+      fetchEventData();
+    }
+  }, [deviceId]);
 
   // Utility function to show modal
   const showModal = (type, title, message) => {
@@ -416,16 +379,23 @@ const PublikBukuTamu = () => {
   // Submit form
   const handleSubmit = async () => {
     // Double check if already submitted
-    const submissionStatus = checkSubmissionStatus();
-    if (submissionStatus) {
-      showModal('warning', 'Sudah Terisi', 'Anda sudah mengisi buku tamu untuk acara ini sebelumnya.');
-      setAlreadySubmitted(true);
-      setSubmissionData(submissionStatus.data);
-      return;
+    if (deviceId) {
+      const submissionStatus = checkSubmission(qrToken, deviceId);
+      if (submissionStatus) {
+        showModal('warning', 'Sudah Terisi', 'Anda sudah mengisi buku tamu untuk acara ini sebelumnya.');
+        setAlreadySubmitted(true);
+        setSubmissionData(submissionStatus.data);
+        return;
+      }
     }
 
     if (!formData.nama_lengkap.trim()) {
       showModal('error', 'Data Tidak Lengkap', 'Nama lengkap harus diisi.');
+      return;
+    }
+
+    if (!deviceId) {
+      showModal('error', 'System Error', 'Device ID tidak tersedia. Silakan refresh halaman.');
       return;
     }
 
@@ -438,9 +408,7 @@ const PublikBukuTamu = () => {
       submitData.append('instansi', formData.instansi);
       submitData.append('jabatan', formData.jabatan);
       submitData.append('keperluan', formData.keperluan);
-
-      // Add device ID to prevent duplicate submissions
-      submitData.append('device_id', getDeviceId());
+      submitData.append('device_id', deviceId);
 
       selectedFiles.forEach(file => {
         submitData.append('photos', file);
@@ -462,7 +430,7 @@ const PublikBukuTamu = () => {
       clearInterval(progressInterval);
       setUploadProgress(100);
 
-      // Mark as submitted
+      // Mark as submitted using custom hook
       const submissionInfo = {
         nama_lengkap: formData.nama_lengkap,
         instansi: formData.instansi,
@@ -472,7 +440,7 @@ const PublikBukuTamu = () => {
         photo_count: selectedFiles.length
       };
 
-      markAsSubmitted(submissionInfo);
+      markSubmitted(qrToken, deviceId, submissionInfo);
 
       setTimeout(() => {
         showModal('success', 'Berhasil!', 
@@ -488,6 +456,7 @@ const PublikBukuTamu = () => {
       }, 500);
 
     } catch (error) {
+      console.error('Submit error:', error);
       setUploadProgress(0);
       showModal('error', 'Gagal Menyimpan', 
         error.response?.data?.error || 'Terjadi kesalahan saat menyimpan data.'
@@ -504,12 +473,7 @@ const PublikBukuTamu = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center bg-white rounded-3xl p-8 shadow-xl">
-          <div className="flex items-center justify-center gap-3">
-            <div className="w-8 h-8 animate-spin text-blue-600">
-              ⟳
-            </div>
-            {text && <span className="text-gray-600">Memuat informasi acara...</span>}
-          </div>
+          <LoadingSpinner size="lg" text="Memuat informasi acara..." />
         </div>
       </div>
     );
@@ -520,7 +484,7 @@ const PublikBukuTamu = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-3xl shadow-xl">
-          <div className="text-red-500 mx-auto mb-4 text-6xl">⚠</div>
+          <AlertCircle className="text-red-500 mx-auto mb-4" size={64} />
           <h1 className="text-2xl font-bold text-red-800 mb-2">Acara Tidak Ditemukan</h1>
           <p className="text-red-600">QR Code atau link yang Anda gunakan tidak valid.</p>
         </div>
@@ -540,12 +504,12 @@ const PublikBukuTamu = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4">
-              <div className="text-white text-3xl">📝</div>
+              <FileText className="text-white" size={32} />
             </div>
             <h1 className="text-4xl font-bold text-gray-800 mb-2">Buku Tamu Digital</h1>
             <p className="text-gray-600">Silakan isi data kehadiran Anda dengan lengkap</p>
             <div className="mt-2 inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm">
-              <div className="text-base">🔒</div>
+              <Lock size={16} />
               <span>Form hanya dapat diisi sekali per perangkat</span>
             </div>
           </div>
@@ -558,7 +522,7 @@ const PublikBukuTamu = () => {
                 
                 <div className="grid md:grid-cols-3 gap-6 text-left">
                   <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl">
-                    <div className="text-blue-600 mt-1 flex-shrink-0 text-xl">📅</div>
+                    <Calendar className="text-blue-600 mt-1 flex-shrink-0" size={20} />
                     <div>
                       <p className="font-semibold text-gray-800">Tanggal</p>
                       <p className="text-gray-600">
@@ -573,7 +537,7 @@ const PublikBukuTamu = () => {
                   </div>
                   
                   <div className="flex items-start gap-3 p-4 bg-red-50 rounded-xl">
-                    <div className="text-red-600 mt-1 flex-shrink-0 text-xl">📍</div>
+                    <MapPin className="text-red-600 mt-1 flex-shrink-0" size={20} />
                     <div>
                       <p className="font-semibold text-gray-800">Lokasi</p>
                       <p className="text-gray-600">{eventData.lokasi}</p>
@@ -582,7 +546,7 @@ const PublikBukuTamu = () => {
                   
                   {eventData.deskripsi && (
                     <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl">
-                      <div className="text-green-600 mt-1 flex-shrink-0 text-xl">📄</div>
+                      <FileText className="text-green-600 mt-1 flex-shrink-0" size={20} />
                       <div>
                         <p className="font-semibold text-gray-800">Deskripsi</p>
                         <p className="text-gray-600">{eventData.deskripsi}</p>
@@ -601,7 +565,7 @@ const PublikBukuTamu = () => {
                 {/* Form Fields */}
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                    <div className="text-blue-600">👤</div>
+                    <User className="text-blue-600" size={18} />
                     Nama Lengkap *
                   </label>
                   <input
@@ -618,7 +582,7 @@ const PublikBukuTamu = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                    <div className="text-purple-600">🏢</div>
+                    <Building className="text-purple-600" size={18} />
                     Instansi/Organisasi
                   </label>
                   <input
@@ -634,7 +598,7 @@ const PublikBukuTamu = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                    <div className="text-green-600">💼</div>
+                    <Briefcase className="text-green-600" size={18} />
                     Jabatan/Posisi
                   </label>
                   <input
@@ -650,7 +614,7 @@ const PublikBukuTamu = () => {
 
                 <div>
                   <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                    <div className="text-orange-600">💬</div>
+                    <MessageSquare className="text-orange-600" size={18} />
                     Keperluan/Tujuan
                   </label>
                   <textarea
@@ -668,7 +632,7 @@ const PublikBukuTamu = () => {
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                      <div className="text-pink-600">📷</div>
+                      <Camera className="text-pink-600" size={18} />
                       Foto (Opsional)
                     </label>
                     {previewFiles.length > 0 && !submitting && (
@@ -677,7 +641,7 @@ const PublikBukuTamu = () => {
                         onClick={clearAllFiles}
                         className="text-sm text-red-600 hover:text-red-800 flex items-center gap-1"
                       >
-                        <div>❌</div>
+                        <X size={14} />
                         Hapus Semua
                       </button>
                     )}
@@ -690,7 +654,7 @@ const PublikBukuTamu = () => {
                         className={`flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200 hover:border-blue-400 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <div className="w-8 h-8 mb-2 text-gray-400 text-2xl">📤</div>
+                          <Upload className="w-8 h-8 mb-2 text-gray-400" />
                           <p className="mb-2 text-sm text-gray-500">
                             <span className="font-semibold">Klik untuk upload</span> atau drag & drop
                           </p>
@@ -712,31 +676,11 @@ const PublikBukuTamu = () => {
                     </div>
 
                     {/* File Previews */}
-                    {previewFiles.length > 0 && (
-                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                        {previewFiles.map((file, index) => (
-                          <div key={file.id} className="relative group">
-                            <img
-                              src={file.preview}
-                              alt={`Preview ${index + 1}`}
-                              className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
-                            />
-                            {!submitting && (
-                              <button
-                                type="button"
-                                onClick={() => removeFile(index)}
-                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-                              >
-                                <div className="text-xs">❌</div>
-                              </button>
-                            )}
-                            <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
-                              {(file.file.size / 1024 / 1024).toFixed(1)}MB
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                    <FilePreview 
+                      files={previewFiles}
+                      onRemove={removeFile}
+                      disabled={submitting}
+                    />
                   </div>
                 </div>
 
@@ -765,13 +709,10 @@ const PublikBukuTamu = () => {
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
                     {submitting ? (
-                      <div className="flex items-center justify-center gap-3">
-                        <div className="w-4 h-4 animate-spin text-white">⟳</div>
-                        <span className="text-white">Menyimpan data...</span>
-                      </div>
+                      <LoadingSpinner size="sm" text="Menyimpan data..." />
                     ) : (
                       <>
-                        <div className="text-xl">✅</div>
+                        <CheckCircle size={20} />
                         Catat Kehadiran
                       </>
                     )}
@@ -781,7 +722,10 @@ const PublikBukuTamu = () => {
                 {/* Info Text */}
                 <div className="text-center text-sm text-gray-500 pt-2">
                   <p>Data yang Anda masukkan akan disimpan dengan aman dan hanya digunakan untuk keperluan acara ini.</p>
-                  <p className="mt-1 font-semibold text-yellow-600">⚠️ Form ini hanya dapat diisi sekali per perangkat</p>
+                  <p className="mt-1 font-semibold text-yellow-600 flex items-center justify-center gap-1">
+                    <AlertCircle size={16} />
+                    Form ini hanya dapat diisi sekali per perangkat
+                  </p>
                 </div>
               </div>
             </div>
@@ -790,40 +734,22 @@ const PublikBukuTamu = () => {
       </div>
 
       {/* Modal */}
-      <div className={`fixed inset-0 ${modal.isOpen ? 'flex' : 'hidden'} bg-black bg-opacity-50 items-center justify-center z-50 p-4`}>
-        <div className={`w-full max-w-md rounded-2xl shadow-2xl border-2 transform transition-all duration-300 scale-100 ${
-          modal.type === 'success' ? 'border-green-500 bg-green-50' :
-          modal.type === 'error' ? 'border-red-500 bg-red-50' :
-          modal.type === 'warning' ? 'border-yellow-500 bg-yellow-50' :
-          'border-gray-200 bg-white'
-        }`}>
-          <div className="flex justify-between items-center p-6 border-b border-gray-200">
-            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-              {modal.type === 'success' && <div className="text-green-600 text-2xl">✅</div>}
-              {modal.type === 'error' && <div className="text-red-600 text-2xl">⚠️</div>}
-              {modal.type === 'warning' && <div className="text-yellow-600 text-2xl">⚠️</div>}
-              {modal.title}
-            </h3>
-            <button
-              onClick={closeModal}
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-            >
-              <div className="text-xl">❌</div>
-            </button>
-          </div>
-          <div className="p-6">
-            <p className="text-gray-700 leading-relaxed mb-4">{modal.message}</p>
-            <div className="flex justify-end gap-3">
-              <button
-                onClick={closeModal}
-                className="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
+      <Modal
+        isOpen={modal.isOpen}
+        onClose={closeModal}
+        title={modal.title}
+        type={modal.type}
+      >
+        <p className="text-gray-700 leading-relaxed mb-4">{modal.message}</p>
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={closeModal}
+            className="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors"
+          >
+            Tutup
+          </button>
         </div>
-      </div>
+      </Modal>
     </>
   );
 };
