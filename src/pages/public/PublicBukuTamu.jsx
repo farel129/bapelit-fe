@@ -258,24 +258,81 @@ const PublikBukuTamu = () => {
     const qrToken = getQRTokenFromURL();
 
     // Generate safe device ID
+    // GANTI: generateDeviceId function dengan yang ini
     const generateDeviceId = () => {
         try {
-            const timestamp = Date.now();
-            const random = Math.random().toString(36).substring(2, 15);
-            const userAgent = navigator.userAgent.slice(0, 20);
+            // 1. Cek apakah sudah ada di localStorage
+            let deviceId = localStorage.getItem('guest_device_id');
+            if (deviceId) {
+                console.log('Using existing device ID:', deviceId);
+                return deviceId;
+            }
 
-            return btoa(`${timestamp}-${random}-${userAgent}`).substring(0, 32);
+            // 2. Generate device fingerprint yang konsisten
+            const screen = window.screen;
+            const navigator = window.navigator;
+
+            const fingerprint = [
+                navigator.userAgent,
+                navigator.language,
+                screen.width,
+                screen.height,
+                screen.colorDepth,
+                Intl.DateTimeFormat().resolvedOptions().timeZone,
+                navigator.hardwareConcurrency || 'unknown',
+                navigator.platform
+            ].join('|');
+
+            // 3. Hash fingerprint untuk mendapat ID yang konsisten tapi tidak mudah ditebak
+            let hash = 0;
+            for (let i = 0; i < fingerprint.length; i++) {
+                const char = fingerprint.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convert to 32bit integer
+            }
+
+            // 4. Tambah timestamp hari ini (bukan millisecond) untuk uniqueness per hari
+            const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+            const todayHash = today.split('-').join('');
+
+            // 5. Generate final device ID
+            deviceId = `device_${Math.abs(hash).toString(36)}_${todayHash}`;
+
+            // 6. Simpan ke localStorage untuk persistence
+            localStorage.setItem('guest_device_id', deviceId);
+            console.log('Generated new device ID:', deviceId);
+
+            return deviceId;
+
         } catch (error) {
             console.warn('Device ID generation fallback:', error);
-            return `device-${Date.now()}-${Math.random().toString(36).substring(2, 10)}`;
+
+            // Fallback: gunakan localStorage dengan random ID
+            let deviceId = localStorage.getItem('guest_device_id_fallback');
+            if (!deviceId) {
+                deviceId = `fallback_${Date.now()}_${Math.random().toString(36).substring(2, 10)}`;
+                localStorage.setItem('guest_device_id_fallback', deviceId);
+            }
+            return deviceId;
         }
     };
 
-    // Initialize device ID
     useEffect(() => {
         const id = generateDeviceId();
         setDeviceId(id);
-    }, []);
+        console.log('Device ID initialized:', id);
+    }, []); // Empty dependency - hanya run sekali saat mount
+
+    // TAMBAH: Debug info (optional, untuk testing)
+    useEffect(() => {
+        if (deviceId && eventData) {
+            console.log('Debug Info:', {
+                qrToken,
+                deviceId,
+                eventName: eventData.nama_acara
+            });
+        }
+    }, [deviceId, eventData]);
 
     // Fetch event data
     // GANTI: Function fetchEventData dengan yang ini
