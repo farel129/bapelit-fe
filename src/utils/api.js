@@ -16,18 +16,45 @@ api.interceptors.request.use((config) => {
 export const guestBookAPI = {
   // Get event info by QR token
   getEventInfo: async (qrToken) => {
-    const response = await api.get(`/public/buku-tamu/${qrToken}`);
-    return response.data;
+    try {
+      const response = await api.get(`/public/buku-tamu/${qrToken}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.error || 'Event not found');
+    }
   },
 
-  // Submit attendance with photos
+  // 🆕 NEW: Check apakah device sudah pernah submit
+  checkDeviceSubmission: async (qrToken, deviceId) => {
+    try {
+      const response = await api.post(`/public/buku-tamu/${qrToken}/check-device`, {
+        device_id: deviceId
+      });
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.error || 'Check submission failed');
+    }
+  },
+
+  // Submit attendance with photos (UPDATED - sudah include device_id)
   submitAttendance: async (qrToken, formData) => {
-    const response = await api.post(`/public/buku-tamu/${qrToken}`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
-    return response.data;
+    try {
+      const response = await api.post(`/public/buku-tamu/${qrToken}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      return response.data;
+    } catch (error) {
+      // Preserve error structure untuk handling di component
+      const errorResponse = {
+        response: {
+          data: error.response?.data || { error: 'Unknown error' },
+          status: error.response?.status || 500
+        }
+      };
+      throw errorResponse;
+    }
   }
 };
 

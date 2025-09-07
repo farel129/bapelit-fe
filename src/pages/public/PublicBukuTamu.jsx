@@ -280,29 +280,39 @@ const PublikBukuTamu = () => {
     // Fetch event data
     // GANTI: Function fetchEventData dengan yang ini
     const fetchEventData = async () => {
-        if (!qrToken) {
-            showModal('error', 'Token Tidak Valid', 'QR Code atau link yang Anda gunakan tidak valid.');
+        if (!qrToken || !deviceId) {
+            if (!qrToken) {
+                showModal('error', 'Token Tidak Valid', 'QR Code atau link yang Anda gunakan tidak valid.');
+            }
             setLoading(false);
             return;
         }
 
         try {
-            const response = await guestBookAPI.getEventInfo(qrToken);
+            // 🚨 PENTING: Gunakan API check-device yang menggabungkan event info + device check
+            const response = await guestBookAPI.checkDeviceSubmission(qrToken, deviceId);
+
             setEventData(response.event);
 
-            // PENTING: Check submission status setelah mendapat device ID
-            if (deviceId) {
-                const submissionStatus = checkSubmission(qrToken, deviceId);
-                if (submissionStatus && submissionStatus.submitted) {
-                    console.log('Found existing submission for device:', deviceId);
-                    setAlreadySubmitted(true);
-                    setSubmissionData(submissionStatus.data);
-                }
+            // Check apakah device sudah pernah submit
+            if (response.hasSubmitted) {
+                console.log('Device already submitted:', deviceId);
+                setAlreadySubmitted(true);
+                setSubmissionData(response.submission);
             }
+
         } catch (error) {
             console.error('Fetch event data error:', error);
-            showModal('error', 'Acara Tidak Ditemukan',
-                error.response?.data?.error || 'Acara tidak ditemukan atau sudah tidak aktif.');
+
+            // Fallback: Jika API check-device gagal, coba get event info saja
+            try {
+                const eventResponse = await guestBookAPI.getEventInfo(qrToken);
+                setEventData(eventResponse.event);
+                // Tidak ada device check, form akan muncul
+            } catch (fallbackError) {
+                showModal('error', 'Acara Tidak Ditemukan',
+                    error.message || 'Acara tidak ditemukan atau sudah tidak aktif.');
+            }
         } finally {
             setLoading(false);
         }
@@ -409,98 +419,94 @@ const PublikBukuTamu = () => {
 
     // Submit form
     // GANTI: Function handleSubmit dengan yang ini  
-const handleSubmit = async () => {
-  // Triple check - pastikan belum pernah submit
-  if (deviceId) {
-    const submissionStatus = checkSubmission(qrToken, deviceId);
-    if (submissionStatus && submissionStatus.submitted) {
-      console.log('Preventing duplicate submission');
-      showModal('warning', 'Sudah Terisi', 'Anda sudah mengisi buku tamu untuk acara ini sebelumnya.');
-      setAlreadySubmitted(true);
-      setSubmissionData(submissionStatus.data);
-      return;
-    }
-  }
-
-  if (!formData.nama_lengkap.trim()) {
-    showModal('error', 'Data Tidak Lengkap', 'Nama lengkap harus diisi.');
-    return;
-  }
-
-  if (!deviceId) {
-    showModal('error', 'System Error', 'Device ID tidak tersedia. Silakan refresh halaman.');
-    return;
-  }
-
-  setSubmitting(true);
-  setUploadProgress(0);
-
-  try {
-    const submitData = new FormData();
-    submitData.append('nama_lengkap', formData.nama_lengkap);
-    submitData.append('instansi', formData.instansi);
-    submitData.append('jabatan', formData.jabatan);
-    submitData.append('keperluan', formData.keperluan);
-    submitData.append('device_id', deviceId);
-
-    selectedFiles.forEach(file => {
-      submitData.append('photos', file);
-    });
-
-    // Simulate upload progress
-    const progressInterval = setInterval(() => {
-      setUploadProgress(prev => {
-        if (prev >= 90) {
-          clearInterval(progressInterval);
-          return 90;
+    const handleSubmit = async () => {
+        if (!formData.nama_lengkap.trim()) {
+            showModal('error', 'Data Tidak Lengkap', 'Nama lengkap harus diisi.');
+            return;
         }
-        return prev + 10;
-      });
-    }, 200);
 
-    const response = await guestBookAPI.submitAttendance(qrToken, submitData);
-    
-    clearInterval(progressInterval);
-    setUploadProgress(100);
+        if (!deviceId) {
+            showModal('error', 'System Error', 'Device ID tidak tersedia. Silakan refresh halaman.');
+            return;
+        }
 
-    // PENTING: Mark sebagai submitted DI SINI
-    const submissionInfo = {
-      nama_lengkap: formData.nama_lengkap,
-      instansi: formData.instansi,
-      jabatan: formData.jabatan,
-      keperluan: formData.keperluan,
-      submitted_at: new Date().toISOString(),
-      photo_count: selectedFiles.length
+        setSubmitting(true);
+        setUploadProgress(0);
+
+        try {
+            const submitData = new FormData();
+            submitData.append('nama_lengkap', formData.nama_lengkap);
+            submitData.append('instansi', formData.instansi);
+            submitData.append('jabatan', formData.jabatan);
+            submitData.append('keperluan', formData.keperluan);
+            submitData.append('device_id', deviceId); // 👈 PENTING!
+
+            selectedFiles.forEach(file => {
+                submitData.append('photos', file);
+            });
+
+            // Progress simulation
+            const progressInterval = setInterval(() => {
+                setUploadProgress(prev => prev >= 90 ? 90 : prev + 10);
+            }, 200);
+
+            const response = await guestBookAPI.submitAttendance(qrToken, submitData);
+
+            clearInterval(progressInterval);
+            setUploadProgress(100);
+
+            // Prepare submission info for UI
+            const submissionInfo = {
+                nama_lengkap: formData.nama_lengkap,
+                instansi: formData.instansi,
+                jabatan: formData.jabatan,
+                keperluan: formData.keperluan,
+                submitted_at: new Date().toISOString(),
+                photo_count: selectedFiles.length
+            };
+
+            setTimeout(() => {
+                showModal('success', 'Berhasil!',
+                    `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''}`
+                );
+
+                setTimeout(() => {
+                    setAlreadySubmitted(true);
+                    setSubmissionData(submissionInfo);
+                }, 2000);
+            }, 500);
+
+        } catch (error) {
+            console.error('Submit error:', error);
+            setUploadProgress(0);
+
+            // 🚨 PENTING: Handle error 409 untuk duplicate submission
+            if (error.response?.status === 409) {
+                showModal('warning', 'Sudah Pernah Mengisi',
+                    error.response.data.error || 'Anda sudah mengisi buku tamu untuk acara ini.');
+
+                if (error.response.data.existing_submission) {
+                    setAlreadySubmitted(true);
+                    setSubmissionData({
+                        nama_lengkap: error.response.data.existing_submission.nama_lengkap,
+                        submitted_at: error.response.data.existing_submission.submitted_at,
+                        instansi: '',
+                        jabatan: '',
+                        keperluan: '',
+                        photo_count: 0
+                    });
+                }
+            } else {
+                showModal('error', 'Gagal Menyimpan',
+                    error.response?.data?.error || 'Terjadi kesalahan saat menyimpan data.'
+                );
+            }
+        } finally {
+            setTimeout(() => {
+                setSubmitting(false);
+            }, 1000);
+        }
     };
-
-    // Save ke storage dan state
-    markSubmitted(qrToken, deviceId, submissionInfo);
-
-    setTimeout(() => {
-      showModal('success', 'Berhasil!', 
-        `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''} Form ini tidak dapat diisi ulang dari perangkat ini.`
-      );
-
-      // Set to already submitted state
-      setTimeout(() => {
-        setAlreadySubmitted(true);
-        setSubmissionData(submissionInfo);
-      }, 2000);
-
-    }, 500);
-
-  } catch (error) {
-    console.error('Submit error:', error);
-    setUploadProgress(0);
-    showModal('error', 'Gagal Menyimpan', 
-      error.response?.data?.error || 'Terjadi kesalahan saat menyimpan data.'
-    );
-  } finally {
-    setTimeout(() => {
-      setSubmitting(false);
-    }, 1000);
-  }
-};
 
     // Loading state
     if (loading) {
