@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader } from 'lucide-react';
+import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock } from 'lucide-react';
 import { guestBookAPI } from '../../utils/api';
 
 // Modal Component
@@ -9,6 +9,7 @@ const Modal = ({ isOpen, onClose, children, title, type = 'default' }) => {
   const modalTypes = {
     success: 'border-green-500 bg-green-50',
     error: 'border-red-500 bg-red-50',
+    warning: 'border-yellow-500 bg-yellow-50',
     default: 'border-gray-200 bg-white'
   };
 
@@ -19,6 +20,7 @@ const Modal = ({ isOpen, onClose, children, title, type = 'default' }) => {
           <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
             {type === 'success' && <CheckCircle className="text-green-600" size={24} />}
             {type === 'error' && <AlertCircle className="text-red-600" size={24} />}
+            {type === 'warning' && <AlertCircle className="text-yellow-600" size={24} />}
             {title}
           </h3>
           <button
@@ -53,7 +55,7 @@ const LoadingSpinner = ({ size = 'md', text = '' }) => {
 };
 
 // Input Component with Icon
-const InputField = ({ icon: Icon, label, name, value, onChange, type = 'text', placeholder, required = false, rows = null, iconColor = 'text-blue-600' }) => {
+const InputField = ({ icon: Icon, label, name, value, onChange, type = 'text', placeholder, required = false, rows = null, iconColor = 'text-blue-600', disabled = false }) => {
   const InputComponent = rows ? 'textarea' : 'input';
   
   return (
@@ -69,7 +71,8 @@ const InputField = ({ icon: Icon, label, name, value, onChange, type = 'text', p
         onChange={onChange}
         rows={rows}
         required={required}
-        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${rows ? 'resize-none' : ''}`}
+        disabled={disabled}
+        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${rows ? 'resize-none' : ''} ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}`}
         placeholder={placeholder}
       />
     </div>
@@ -77,7 +80,7 @@ const InputField = ({ icon: Icon, label, name, value, onChange, type = 'text', p
 };
 
 // File Preview Component
-const FilePreview = ({ files, onRemove }) => {
+const FilePreview = ({ files, onRemove, disabled = false }) => {
   if (files.length === 0) return null;
 
   return (
@@ -89,13 +92,15 @@ const FilePreview = ({ files, onRemove }) => {
             alt={`Preview ${index + 1}`}
             className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
           />
-          <button
-            type="button"
-            onClick={() => onRemove(index)}
-            className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
-          >
-            <X size={14} />
-          </button>
+          {!disabled && (
+            <button
+              type="button"
+              onClick={() => onRemove(index)}
+              className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+            >
+              <X size={14} />
+            </button>
+          )}
           <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
             {(file.file.size / 1024 / 1024).toFixed(1)}MB
           </div>
@@ -105,12 +110,100 @@ const FilePreview = ({ files, onRemove }) => {
   );
 };
 
+// Already Submitted Component
+const AlreadySubmitted = ({ eventData, submissionData }) => {
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50">
+      <div className="container mx-auto px-4 py-8">
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-green-600 to-emerald-600 rounded-full mb-4">
+            <CheckCircle className="text-white" size={32} />
+          </div>
+          <h1 className="text-4xl font-bold text-gray-800 mb-2">Buku Tamu Digital</h1>
+          <p className="text-gray-600">Kehadiran Anda sudah tercatat</p>
+        </div>
+
+        <div className="max-w-2xl mx-auto">
+          <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 backdrop-blur-sm">
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                <Lock className="text-green-600" size={24} />
+              </div>
+              <h2 className="text-2xl font-bold text-gray-800 mb-2">Terima Kasih!</h2>
+              <p className="text-gray-600 mb-6">Anda sudah mengisi buku tamu untuk acara ini. Setiap perangkat hanya dapat mengisi sekali.</p>
+              
+              <div className="bg-green-50 rounded-xl p-6 text-left">
+                <h3 className="text-lg font-semibold text-gray-800 mb-4">Detail Kehadiran Anda:</h3>
+                
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <User className="text-green-600" size={18} />
+                    <div>
+                      <p className="text-sm text-gray-600">Nama</p>
+                      <p className="font-semibold">{submissionData.nama_lengkap}</p>
+                    </div>
+                  </div>
+                  
+                  {submissionData.instansi && (
+                    <div className="flex items-center gap-3">
+                      <Building className="text-green-600" size={18} />
+                      <div>
+                        <p className="text-sm text-gray-600">Instansi</p>
+                        <p className="font-semibold">{submissionData.instansi}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  {submissionData.jabatan && (
+                    <div className="flex items-center gap-3">
+                      <Briefcase className="text-green-600" size={18} />
+                      <div>
+                        <p className="text-sm text-gray-600">Jabatan</p>
+                        <p className="font-semibold">{submissionData.jabatan}</p>
+                      </div>
+                    </div>
+                  )}
+                  
+                  <div className="flex items-center gap-3">
+                    <Calendar className="text-green-600" size={18} />
+                    <div>
+                      <p className="text-sm text-gray-600">Waktu Submit</p>
+                      <p className="font-semibold">{new Date(submissionData.submitted_at).toLocaleString('id-ID')}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="mt-6 p-4 bg-blue-50 rounded-xl">
+                <h4 className="font-semibold text-gray-800 mb-2">Informasi Acara</h4>
+                <p className="text-lg font-bold text-blue-800">{eventData.nama_acara}</p>
+                <p className="text-gray-600">{eventData.lokasi}</p>
+                <p className="text-gray-600">
+                  {new Date(eventData.tanggal_acara).toLocaleDateString('id-ID', { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                  })}
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Main Component
+// Main Component - Bagian 2
 const PublikBukuTamu = () => {
   const [eventData, setEventData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [modal, setModal] = useState({ isOpen: false, type: 'default', title: '', message: '' });
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+  const [submissionData, setSubmissionData] = useState(null);
   
   // Form state
   const [formData, setFormData] = useState({
@@ -133,12 +226,84 @@ const PublikBukuTamu = () => {
 
   const qrToken = getQRTokenFromURL();
 
+  // Generate unique device ID
+  const getDeviceId = () => {
+    let deviceId = null;
+    
+    try {
+      // Try to get existing device ID from memory
+      if (window.deviceId) {
+        deviceId = window.deviceId;
+      } else {
+        // Generate new device ID and store in memory
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillText('Device fingerprint', 2, 2);
+        
+        const fingerprint = canvas.toDataURL();
+        const timestamp = Date.now();
+        const random = Math.random().toString(36).substring(2);
+        
+        deviceId = btoa(`${fingerprint}-${timestamp}-${random}`).substring(0, 32);
+        window.deviceId = deviceId;
+      }
+    } catch (error) {
+      // Fallback if canvas fingerprinting fails
+      deviceId = `fallback-${Date.now()}-${Math.random().toString(36).substring(2)}`;
+      window.deviceId = deviceId;
+    }
+    
+    return deviceId;
+  };
+
+  // Check if already submitted
+  const checkSubmissionStatus = () => {
+    const deviceId = getDeviceId();
+    const storageKey = `guestbook_${qrToken}_${deviceId}`;
+    
+    // Check if already submitted in memory
+    if (window.submissionStatus && window.submissionStatus[storageKey]) {
+      return window.submissionStatus[storageKey];
+    }
+    
+    return null;
+  };
+
+  // Mark as submitted
+  const markAsSubmitted = (data) => {
+    const deviceId = getDeviceId();
+    const storageKey = `guestbook_${qrToken}_${deviceId}`;
+    
+    const submissionInfo = {
+      submitted: true,
+      data: data,
+      timestamp: new Date().toISOString()
+    };
+    
+    // Store in memory
+    if (!window.submissionStatus) {
+      window.submissionStatus = {};
+    }
+    window.submissionStatus[storageKey] = submissionInfo;
+    
+    return submissionInfo;
+  };
+
   // Fetch event data
   const fetchEventData = async () => {
     if (!qrToken) {
       showModal('error', 'Token Tidak Valid', 'QR Code atau link yang Anda gunakan tidak valid.');
       setLoading(false);
       return;
+    }
+
+    // Check if already submitted
+    const submissionStatus = checkSubmissionStatus();
+    if (submissionStatus) {
+      setAlreadySubmitted(true);
+      setSubmissionData(submissionStatus.data);
     }
 
     try {
@@ -250,6 +415,15 @@ const PublikBukuTamu = () => {
 
   // Submit form
   const handleSubmit = async () => {
+    // Double check if already submitted
+    const submissionStatus = checkSubmissionStatus();
+    if (submissionStatus) {
+      showModal('warning', 'Sudah Terisi', 'Anda sudah mengisi buku tamu untuk acara ini sebelumnya.');
+      setAlreadySubmitted(true);
+      setSubmissionData(submissionStatus.data);
+      return;
+    }
+
     if (!formData.nama_lengkap.trim()) {
       showModal('error', 'Data Tidak Lengkap', 'Nama lengkap harus diisi.');
       return;
@@ -264,6 +438,9 @@ const PublikBukuTamu = () => {
       submitData.append('instansi', formData.instansi);
       submitData.append('jabatan', formData.jabatan);
       submitData.append('keperluan', formData.keperluan);
+
+      // Add device ID to prevent duplicate submissions
+      submitData.append('device_id', getDeviceId());
 
       selectedFiles.forEach(file => {
         submitData.append('photos', file);
@@ -285,20 +462,29 @@ const PublikBukuTamu = () => {
       clearInterval(progressInterval);
       setUploadProgress(100);
 
+      // Mark as submitted
+      const submissionInfo = {
+        nama_lengkap: formData.nama_lengkap,
+        instansi: formData.instansi,
+        jabatan: formData.jabatan,
+        keperluan: formData.keperluan,
+        submitted_at: new Date().toISOString(),
+        photo_count: selectedFiles.length
+      };
+
+      markAsSubmitted(submissionInfo);
+
       setTimeout(() => {
         showModal('success', 'Berhasil!', 
-          `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''}`
+          `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''} Form ini tidak dapat diisi ulang dari perangkat ini.`
         );
 
-        // Reset form
-        setFormData({
-          nama_lengkap: '',
-          instansi: '',
-          jabatan: '',
-          keperluan: ''
-        });
-        clearAllFiles();
-        setUploadProgress(0);
+        // Set to already submitted state
+        setTimeout(() => {
+          setAlreadySubmitted(true);
+          setSubmissionData(submissionInfo);
+        }, 2000);
+
       }, 500);
 
     } catch (error) {
@@ -318,8 +504,12 @@ const PublikBukuTamu = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
         <div className="text-center bg-white rounded-3xl p-8 shadow-xl">
-          <LoadingSpinner size="lg" />
-          <p className="mt-4 text-gray-600 text-lg">Memuat informasi acara...</p>
+          <div className="flex items-center justify-center gap-3">
+            <div className="w-8 h-8 animate-spin text-blue-600">
+              ⟳
+            </div>
+            {text && <span className="text-gray-600">Memuat informasi acara...</span>}
+          </div>
         </div>
       </div>
     );
@@ -330,12 +520,17 @@ const PublikBukuTamu = () => {
     return (
       <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
         <div className="text-center p-8 bg-white rounded-3xl shadow-xl">
-          <AlertCircle size={64} className="text-red-500 mx-auto mb-4" />
+          <div className="text-red-500 mx-auto mb-4 text-6xl">⚠</div>
           <h1 className="text-2xl font-bold text-red-800 mb-2">Acara Tidak Ditemukan</h1>
           <p className="text-red-600">QR Code atau link yang Anda gunakan tidak valid.</p>
         </div>
       </div>
     );
+  }
+
+  // Already submitted state
+  if (alreadySubmitted && submissionData) {
+    return <AlreadySubmitted eventData={eventData} submissionData={submissionData} />;
   }
 
   return (
@@ -345,10 +540,14 @@ const PublikBukuTamu = () => {
           {/* Header */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full mb-4">
-              <FileText className="text-white" size={32} />
+              <div className="text-white text-3xl">📝</div>
             </div>
             <h1 className="text-4xl font-bold text-gray-800 mb-2">Buku Tamu Digital</h1>
             <p className="text-gray-600">Silakan isi data kehadiran Anda dengan lengkap</p>
+            <div className="mt-2 inline-flex items-center gap-2 bg-yellow-100 text-yellow-800 px-4 py-2 rounded-full text-sm">
+              <div className="text-base">🔒</div>
+              <span>Form hanya dapat diisi sekali per perangkat</span>
+            </div>
           </div>
 
           {/* Event Info Card */}
@@ -359,7 +558,7 @@ const PublikBukuTamu = () => {
                 
                 <div className="grid md:grid-cols-3 gap-6 text-left">
                   <div className="flex items-start gap-3 p-4 bg-blue-50 rounded-xl">
-                    <Calendar className="text-blue-600 mt-1 flex-shrink-0" size={20} />
+                    <div className="text-blue-600 mt-1 flex-shrink-0 text-xl">📅</div>
                     <div>
                       <p className="font-semibold text-gray-800">Tanggal</p>
                       <p className="text-gray-600">
@@ -374,7 +573,7 @@ const PublikBukuTamu = () => {
                   </div>
                   
                   <div className="flex items-start gap-3 p-4 bg-red-50 rounded-xl">
-                    <MapPin className="text-red-600 mt-1 flex-shrink-0" size={20} />
+                    <div className="text-red-600 mt-1 flex-shrink-0 text-xl">📍</div>
                     <div>
                       <p className="font-semibold text-gray-800">Lokasi</p>
                       <p className="text-gray-600">{eventData.lokasi}</p>
@@ -383,7 +582,7 @@ const PublikBukuTamu = () => {
                   
                   {eventData.deskripsi && (
                     <div className="flex items-start gap-3 p-4 bg-green-50 rounded-xl">
-                      <FileText className="text-green-600 mt-1 flex-shrink-0" size={20} />
+                      <div className="text-green-600 mt-1 flex-shrink-0 text-xl">📄</div>
                       <div>
                         <p className="font-semibold text-gray-800">Deskripsi</p>
                         <p className="text-gray-600">{eventData.deskripsi}</p>
@@ -400,62 +599,85 @@ const PublikBukuTamu = () => {
             <div className="bg-white rounded-3xl shadow-xl p-8 border border-gray-100 backdrop-blur-sm">
               <div className="space-y-6">
                 {/* Form Fields */}
-                <InputField
-                  icon={User}
-                  label="Nama Lengkap"
-                  name="nama_lengkap"
-                  value={formData.nama_lengkap}
-                  onChange={handleInputChange}
-                  placeholder="Masukkan nama lengkap Anda"
-                  required={true}
-                  iconColor="text-blue-600"
-                />
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                    <div className="text-blue-600">👤</div>
+                    Nama Lengkap *
+                  </label>
+                  <input
+                    type="text"
+                    name="nama_lengkap"
+                    value={formData.nama_lengkap}
+                    onChange={handleInputChange}
+                    required
+                    disabled={submitting}
+                    className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    placeholder="Masukkan nama lengkap Anda"
+                  />
+                </div>
 
-                <InputField
-                  icon={Building}
-                  label="Instansi/Organisasi"
-                  name="instansi"
-                  value={formData.instansi}
-                  onChange={handleInputChange}
-                  placeholder="Nama instansi atau organisasi"
-                  iconColor="text-purple-600"
-                />
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                    <div className="text-purple-600">🏢</div>
+                    Instansi/Organisasi
+                  </label>
+                  <input
+                    type="text"
+                    name="instansi"
+                    value={formData.instansi}
+                    onChange={handleInputChange}
+                    disabled={submitting}
+                    className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    placeholder="Nama instansi atau organisasi"
+                  />
+                </div>
 
-                <InputField
-                  icon={Briefcase}
-                  label="Jabatan/Posisi"
-                  name="jabatan"
-                  value={formData.jabatan}
-                  onChange={handleInputChange}
-                  placeholder="Jabatan atau posisi Anda"
-                  iconColor="text-green-600"
-                />
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                    <div className="text-green-600">💼</div>
+                    Jabatan/Posisi
+                  </label>
+                  <input
+                    type="text"
+                    name="jabatan"
+                    value={formData.jabatan}
+                    onChange={handleInputChange}
+                    disabled={submitting}
+                    className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    placeholder="Jabatan atau posisi Anda"
+                  />
+                </div>
 
-                <InputField
-                  icon={MessageSquare}
-                  label="Keperluan/Tujuan"
-                  name="keperluan"
-                  value={formData.keperluan}
-                  onChange={handleInputChange}
-                  placeholder="Jelaskan keperluan atau tujuan kunjungan Anda"
-                  rows={3}
-                  iconColor="text-orange-600"
-                />
+                <div>
+                  <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
+                    <div className="text-orange-600">💬</div>
+                    Keperluan/Tujuan
+                  </label>
+                  <textarea
+                    name="keperluan"
+                    value={formData.keperluan}
+                    onChange={handleInputChange}
+                    rows={3}
+                    disabled={submitting}
+                    className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                    placeholder="Jelaskan keperluan atau tujuan kunjungan Anda"
+                  />
+                </div>
 
                 {/* Photo Upload */}
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                      <Camera size={18} className="text-pink-600" />
+                      <div className="text-pink-600">📷</div>
                       Foto (Opsional)
                     </label>
-                    {previewFiles.length > 0 && (
+                    {previewFiles.length > 0 && !submitting && (
                       <button
                         type="button"
                         onClick={clearAllFiles}
                         className="text-sm text-red-600 hover:text-red-800 flex items-center gap-1"
                       >
-                        <X size={16} />
+                        <div>❌</div>
                         Hapus Semua
                       </button>
                     )}
@@ -465,10 +687,10 @@ const PublikBukuTamu = () => {
                     <div className="flex items-center justify-center w-full">
                       <label
                         htmlFor="photo-upload"
-                        className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200 hover:border-blue-400"
+                        className={`flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200 hover:border-blue-400 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                       >
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <Upload className="w-8 h-8 mb-2 text-gray-400" />
+                          <div className="w-8 h-8 mb-2 text-gray-400 text-2xl">📤</div>
                           <p className="mb-2 text-sm text-gray-500">
                             <span className="font-semibold">Klik untuk upload</span> atau drag & drop
                           </p>
@@ -490,7 +712,31 @@ const PublikBukuTamu = () => {
                     </div>
 
                     {/* File Previews */}
-                    <FilePreview files={previewFiles} onRemove={removeFile} />
+                    {previewFiles.length > 0 && (
+                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                        {previewFiles.map((file, index) => (
+                          <div key={file.id} className="relative group">
+                            <img
+                              src={file.preview}
+                              alt={`Preview ${index + 1}`}
+                              className="w-full h-24 object-cover rounded-lg border-2 border-gray-200"
+                            />
+                            {!submitting && (
+                              <button
+                                type="button"
+                                onClick={() => removeFile(index)}
+                                className="absolute top-1 right-1 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                              >
+                                <div className="text-xs">❌</div>
+                              </button>
+                            )}
+                            <div className="absolute bottom-1 left-1 bg-black bg-opacity-50 text-white text-xs px-2 py-1 rounded">
+                              {(file.file.size / 1024 / 1024).toFixed(1)}MB
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -519,10 +765,13 @@ const PublikBukuTamu = () => {
                     className="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                   >
                     {submitting ? (
-                      <LoadingSpinner size="sm" text="Menyimpan data..." />
+                      <div className="flex items-center justify-center gap-3">
+                        <div className="w-4 h-4 animate-spin text-white">⟳</div>
+                        <span className="text-white">Menyimpan data...</span>
+                      </div>
                     ) : (
                       <>
-                        <CheckCircle size={20} />
+                        <div className="text-xl">✅</div>
                         Catat Kehadiran
                       </>
                     )}
@@ -532,6 +781,7 @@ const PublikBukuTamu = () => {
                 {/* Info Text */}
                 <div className="text-center text-sm text-gray-500 pt-2">
                   <p>Data yang Anda masukkan akan disimpan dengan aman dan hanya digunakan untuk keperluan acara ini.</p>
+                  <p className="mt-1 font-semibold text-yellow-600">⚠️ Form ini hanya dapat diisi sekali per perangkat</p>
                 </div>
               </div>
             </div>
@@ -540,33 +790,40 @@ const PublikBukuTamu = () => {
       </div>
 
       {/* Modal */}
-      <Modal
-        isOpen={modal.isOpen}
-        onClose={closeModal}
-        title={modal.title}
-        type={modal.type}
-      >
-        <p className="text-gray-700 leading-relaxed mb-4">{modal.message}</p>
-        <div className="flex justify-end gap-3">
-          <button
-            onClick={closeModal}
-            className="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors"
-          >
-            Tutup
-          </button>
-          {modal.type === 'success' && (
+      <div className={`fixed inset-0 ${modal.isOpen ? 'flex' : 'hidden'} bg-black bg-opacity-50 items-center justify-center z-50 p-4`}>
+        <div className={`w-full max-w-md rounded-2xl shadow-2xl border-2 transform transition-all duration-300 scale-100 ${
+          modal.type === 'success' ? 'border-green-500 bg-green-50' :
+          modal.type === 'error' ? 'border-red-500 bg-red-50' :
+          modal.type === 'warning' ? 'border-yellow-500 bg-yellow-50' :
+          'border-gray-200 bg-white'
+        }`}>
+          <div className="flex justify-between items-center p-6 border-b border-gray-200">
+            <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+              {modal.type === 'success' && <div className="text-green-600 text-2xl">✅</div>}
+              {modal.type === 'error' && <div className="text-red-600 text-2xl">⚠️</div>}
+              {modal.type === 'warning' && <div className="text-yellow-600 text-2xl">⚠️</div>}
+              {modal.title}
+            </h3>
             <button
-              onClick={() => {
-                closeModal();
-                window.location.reload();
-              }}
-              className="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+              onClick={closeModal}
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              Isi Lagi
+              <div className="text-xl">❌</div>
             </button>
-          )}
+          </div>
+          <div className="p-6">
+            <p className="text-gray-700 leading-relaxed mb-4">{modal.message}</p>
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={closeModal}
+                className="px-6 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg transition-colors"
+              >
+                Tutup
+              </button>
+            </div>
+          </div>
         </div>
-      </Modal>
+      </div>
     </>
   );
 };
