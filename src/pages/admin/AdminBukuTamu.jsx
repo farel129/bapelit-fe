@@ -21,11 +21,11 @@ import {
   Copy,
   ExternalLink
 } from 'lucide-react';
+import { api } from '../../utils/api';
+import * as bukuTamuService from '../../services/bukuTamuService'; // Sesuaikan path
 
-// Import custom hook
-import { useBukuTamu } from '../../hooks/useBukuTamu';
 
-// Modal Components (tetap sama seperti sebelumnya)
+// Custom Modal Component
 const Modal = ({ isOpen, onClose, title, children, type = 'info', maxWidth = 'max-w-md' }) => {
   if (!isOpen) return null;
 
@@ -62,6 +62,7 @@ const Modal = ({ isOpen, onClose, title, children, type = 'info', maxWidth = 'ma
   );
 };
 
+// Loading Spinner Component
 const LoadingSpinner = ({ size = 'default', text = 'Memuat...' }) => {
   const sizeClasses = {
     sm: 'w-4 h-4',
@@ -77,6 +78,7 @@ const LoadingSpinner = ({ size = 'default', text = 'Memuat...' }) => {
   );
 };
 
+// Confirmation Modal
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirmText = 'Konfirmasi', cancelText = 'Batal', type = 'warning' }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type={type}>
@@ -104,6 +106,7 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirm
   );
 };
 
+// Success Modal
 const SuccessModal = ({ isOpen, onClose, title, message }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type="success">
@@ -122,6 +125,7 @@ const SuccessModal = ({ isOpen, onClose, title, message }) => {
   );
 };
 
+// Error Modal
 const ErrorModal = ({ isOpen, onClose, title, message }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type="error">
@@ -141,24 +145,26 @@ const ErrorModal = ({ isOpen, onClose, title, message }) => {
 };
 
 const AdminBukuTamu = () => {
-  // Gunakan custom hook
-  const {
-    events,
-    guests,
-    currentEvent,
-    loading,
-    actionLoading,
-    eventsPagination,
-    guestsPagination,
-    loadEvents,
-    createEvent,
-    toggleEventStatus,
-    deleteEvent,
-    loadGuests,
-    deleteGuestPhoto
-  } = useBukuTamu();
-
+  const [events, setEvents] = useState([]);
+  const [guests, setGuests] = useState([]);
+  const [currentEvent, setCurrentEvent] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [view, setView] = useState('events');
+
+  // Loading states for individual actions
+  const [actionLoading, setActionLoading] = useState({});
+
+  // Pagination states
+  const [eventsPagination, setEventsPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    total_items: 0
+  });
+  const [guestsPagination, setGuestsPagination] = useState({
+    current_page: 1,
+    total_pages: 1,
+    total_items: 0
+  });
 
   // Search states
   const [eventSearch, setEventSearch] = useState('');
@@ -182,6 +188,11 @@ const AdminBukuTamu = () => {
   const [successModal, setSuccessModal] = useState({ isOpen: false, title: '', message: '' });
   const [errorModal, setErrorModal] = useState({ isOpen: false, title: '', message: '' });
 
+  // Helper function to set action loading
+  const setActionLoadingState = (action, isLoading) => {
+    setActionLoading(prev => ({ ...prev, [action]: isLoading }));
+  };
+
   // Show success modal
   const showSuccess = (title, message) => {
     setSuccessModal({ isOpen: true, title, message });
@@ -192,60 +203,108 @@ const AdminBukuTamu = () => {
     setErrorModal({ isOpen: true, title, message });
   };
 
-  // Handle create event
-  const handleCreateEvent = async (e) => {
-    e.preventDefault();
+  // Load events
+  const loadEvents = async (page = 1, search = '', status = '') => {
+    setLoading(true);
     try {
-      const data = await createEvent(formData);
+      const params = { page, limit: 10 };
+      if (search) params.search = search;
+      if (status) params.status = status;
+
+      const data = await bukuTamuService.fetchEvents(params);
+      setEvents(data.data);
+      setEventsPagination(data.pagination);
+    } catch (error) {
+      console.error('Error loading events:', error);
+      showError('Gagal Memuat Data', 'Tidak dapat memuat data buku tamu. Silakan coba lagi.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Load guests for specific event
+  const loadGuests = async (eventId, page = 1, search = '') => {
+    setLoading(true);
+    try {
+      const params = { page, limit: 10 };
+      if (search) params.search = search;
+
+      const data = await bukuTamuService.fetchGuests(eventId, params);
+      setGuests(data.data);
+      setCurrentEvent(data.buku_tamu);
+      setGuestsPagination(data.pagination);
+    } catch (error) {
+      console.error('Error loading guests:', error);
+      showError('Gagal Memuat Data Tamu', 'Tidak dapat memuat data tamu. Silakan coba lagi.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Create new event
+  const createEvent = async (e) => {
+    e.preventDefault();
+    setActionLoadingState('create', true);
+    try {
+      const data = await bukuTamuService.createEvent(formData);
       setQrCode(data.qr_code);
       setGuestUrl(data.guest_url);
       showSuccess('Berhasil!', 'Buku tamu berhasil dibuat dan QR code telah dihasilkan.');
       setFormData({ nama_acara: '', tanggal_acara: '', lokasi: '', deskripsi: '' });
+      loadEvents();
     } catch (error) {
-      showError('Gagal Membuat Acara', error.message);
+      console.error('Error creating event:', error);
+      showError('Gagal Membuat Acara', error.response?.data?.error || 'Tidak dapat membuat buku tamu. Silakan coba lagi.');
+    } finally {
+      setActionLoadingState('create', false);
     }
   };
 
-  // Handle toggle status
-  const handleToggleStatus = async (eventId, currentStatus) => {
+  // Toggle event status
+  const toggleEventStatus = async (eventId, currentStatus) => {
+    const newStatus = currentStatus === 'active' ? 'inactive' : 'active';
+    setActionLoadingState(`status-${eventId}`, true);
     try {
-      await toggleEventStatus(eventId, currentStatus);
-      const newStatus = currentStatus === 'active' ? 'tidak aktif' : 'aktif';
-      showSuccess('Status Berubah', `Status berhasil diubah menjadi ${newStatus}.`);
+      await bukuTamuService.updateEventStatus(eventId, newStatus);
+      showSuccess('Status Berubah', `Status berhasil diubah menjadi ${newStatus === 'active' ? 'aktif' : 'tidak aktif'}.`);
+      loadEvents(eventsPagination.current_page, eventSearch, statusFilter);
     } catch (error) {
-      showError('Gagal Mengubah Status', error.message);
+      console.error('Error toggling status:', error);
+      showError('Gagal Mengubah Status', 'Tidak dapat mengubah status acara. Silakan coba lagi.');
+    } finally {
+      setActionLoadingState(`status-${eventId}`, false);
     }
   };
 
-  // Handle delete event
-  const handleDeleteEvent = async (eventId) => {
+  // Delete event
+  const deleteEvent = async (eventId) => {
+    setActionLoadingState(`delete-${eventId}`, true);
     try {
-      await deleteEvent(eventId);
+      await bukuTamuService.deleteEvent(eventId);
       showSuccess('Berhasil Dihapus', 'Buku tamu dan semua data tamu telah berhasil dihapus.');
-      setConfirmModal({ isOpen: false, data: null });
+      loadEvents(eventsPagination.current_page, eventSearch, statusFilter);
     } catch (error) {
-      showError('Gagal Menghapus', error.message);
+      console.error('Error deleting event:', error);
+      showError('Gagal Menghapus', 'Tidak dapat menghapus buku tamu. Silakan coba lagi.');
+    } finally {
+      setActionLoadingState(`delete-${eventId}`, false);
+      setConfirmModal({ isOpen: false, data: null });
     }
   };
 
-  // Handle delete photo
-  const handleDeletePhoto = async (photoId) => {
+  // Delete guest photo
+  const deleteGuestPhoto = async (photoId) => {
+    setActionLoadingState(`photo-${photoId}`, true);
     try {
-      await deleteGuestPhoto(photoId);
+      await bukuTamuService.deleteGuestPhoto(photoId);
       showSuccess('Foto Dihapus', 'Foto tamu berhasil dihapus.');
+      loadGuests(currentEvent.id, guestsPagination.current_page, guestSearch);
+    } catch (error) {
+      console.error('Error deleting photo:', error);
+      showError('Gagal Menghapus Foto', 'Tidak dapat menghapus foto. Silakan coba lagi.');
+    } finally {
+      setActionLoadingState(`photo-${photoId}`, false);
       setConfirmModal({ isOpen: false, data: null });
-    } catch (error) {
-      showError('Gagal Menghapus Foto', error.message);
-    }
-  };
-
-  // Handle view guests
-  const handleViewGuests = async (eventId) => {
-    try {
-      await loadGuests(eventId);
-      setView('guests');
-    } catch (error) {
-      showError('Gagal Memuat Data Tamu', error.message);
     }
   };
 
@@ -285,38 +344,32 @@ const AdminBukuTamu = () => {
   };
 
   useEffect(() => {
-    loadEvents().catch(error => {
-      showError('Gagal Memuat Data', error.message);
-    });
+    loadEvents();
   }, []);
 
   // Event search effect
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       if (view === 'events') {
-        loadEvents(1, eventSearch, statusFilter).catch(error => {
-          showError('Gagal Memuat Data', error.message);
-        });
+        loadEvents(1, eventSearch, statusFilter);
       }
     }, 500);
     return () => clearTimeout(delaySearch);
-  }, [eventSearch, statusFilter, view, loadEvents]);
+  }, [eventSearch, statusFilter]);
 
   // Guest search effect
   useEffect(() => {
     const delaySearch = setTimeout(() => {
       if (view === 'guests' && currentEvent) {
-        loadGuests(currentEvent.id, 1, guestSearch).catch(error => {
-          showError('Gagal Memuat Data Tamu', error.message);
-        });
+        loadGuests(currentEvent.id, 1, guestSearch);
       }
     }, 500);
     return () => clearTimeout(delaySearch);
-  }, [guestSearch, view, currentEvent]);
+  }, [guestSearch]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Header sama seperti sebelumnya */}
+      {/* Modern Header */}
       <div className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-gray-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-8">
@@ -357,7 +410,7 @@ const AdminBukuTamu = () => {
         {/* Events View */}
         {view === 'events' && (
           <div className="space-y-8">
-            {/* Search and Filter */}
+            {/* Modern Search and Filter */}
             <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1">
@@ -384,7 +437,7 @@ const AdminBukuTamu = () => {
               </div>
             </div>
 
-            {/* Events Table */}
+            {/* Modern Events List */}
             <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden">
               {loading ? (
                 <div className="p-12 text-center">
@@ -467,14 +520,17 @@ const AdminBukuTamu = () => {
                           <td className="px-8 py-6">
                             <div className="flex space-x-2">
                               <button
-                                onClick={() => handleViewGuests(event.id)}
+                                onClick={() => {
+                                  loadGuests(event.id);
+                                  setView('guests');
+                                }}
                                 className="inline-flex items-center px-3 py-2 text-sm font-medium text-blue-700 bg-blue-50 hover:bg-blue-100 rounded-lg transition-colors duration-200 border border-blue-200"
                               >
                                 <Eye className="w-4 h-4 mr-1" />
                                 Lihat
                               </button>
                               <button
-                                onClick={() => handleToggleStatus(event.id, event.status)}
+                                onClick={() => toggleEventStatus(event.id, event.status)}
                                 disabled={actionLoading[`status-${event.id}`]}
                                 className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 border ${event.status === 'active'
                                     ? 'text-orange-700 bg-orange-50 hover:bg-orange-100 border-orange-200'
@@ -516,7 +572,7 @@ const AdminBukuTamu = () => {
                 </div>
               )}
 
-              {/* Pagination */}
+              {/* Modern Pagination */}
               {events.length > 0 && (
                 <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200">
                   <div className="flex items-center justify-between">
@@ -723,7 +779,7 @@ const AdminBukuTamu = () => {
                 </div>
               )}
 
-              {/* Guest Pagination */}
+              {/* Pagination */}
               {guests.length > 0 && (
                 <div className="px-8 py-6 bg-gradient-to-r from-gray-50 to-gray-100 border-t border-gray-200">
                   <div className="flex items-center justify-between">
@@ -768,7 +824,7 @@ const AdminBukuTamu = () => {
             <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">Buat Acara Baru</h2>
 
-              <form onSubmit={handleCreateEvent} className="space-y-8">
+              <form onSubmit={createEvent} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-3">
@@ -941,9 +997,9 @@ const AdminBukuTamu = () => {
         onClose={() => setConfirmModal({ isOpen: false, data: null })}
         onConfirm={() => {
           if (confirmModal.data?.type === 'delete-event') {
-            handleDeleteEvent(confirmModal.data.id);
+            deleteEvent(confirmModal.data.id);
           } else if (confirmModal.data?.type === 'delete-photo') {
-            handleDeletePhoto(confirmModal.data.id);
+            deleteGuestPhoto(confirmModal.data.id);
           }
         }}
         title={
