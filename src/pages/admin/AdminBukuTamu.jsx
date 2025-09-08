@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Plus, 
-  Search, 
-  Eye, 
-  Edit, 
-  Trash2, 
-  Download, 
-  QrCode, 
-  Users, 
-  Calendar, 
+import {
+  Plus,
+  Search,
+  Eye,
+  Edit,
+  Trash2,
+  Download,
+  QrCode,
+  Users,
+  Calendar,
   MapPin,
   Image,
   X,
@@ -91,11 +91,10 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirm
           </button>
           <button
             onClick={onConfirm}
-            className={`px-4 py-2 text-white rounded-xl transition-colors font-medium ${
-              type === 'error' 
-                ? 'bg-red-600 hover:bg-red-700' 
+            className={`px-4 py-2 text-white rounded-xl transition-colors font-medium ${type === 'error'
+                ? 'bg-red-600 hover:bg-red-700'
                 : 'bg-blue-600 hover:bg-blue-700'
-            }`}
+              }`}
           >
             {confirmText}
           </button>
@@ -160,12 +159,12 @@ const AdminBukuTamu = () => {
   } = useBukuTamu();
 
   const [view, setView] = useState('events');
-  
+
   // Search states
   const [eventSearch, setEventSearch] = useState('');
   const [guestSearch, setGuestSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-  
+
   // Form states
   const [formData, setFormData] = useState({
     nama_acara: '',
@@ -175,7 +174,7 @@ const AdminBukuTamu = () => {
   });
   const [qrCode, setQrCode] = useState('');
   const [guestUrl, setGuestUrl] = useState('');
-  
+
   // Modal states
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
@@ -313,7 +312,7 @@ const AdminBukuTamu = () => {
       }
     }, 500);
     return () => clearTimeout(delaySearch);
-  }, [guestSearch, view, currentEvent, loadGuests]);
+  }, [guestSearch, view, currentEvent]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
@@ -332,21 +331,19 @@ const AdminBukuTamu = () => {
             <div className="flex space-x-4">
               <button
                 onClick={() => setView('events')}
-                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${
-                  view === 'events'
+                className={`px-6 py-3 rounded-xl font-semibold transition-all duration-200 ${view === 'events'
                     ? 'bg-gradient-to-r from-blue-600 to-blue-700 text-white shadow-lg shadow-blue-200'
                     : 'bg-white text-gray-700 hover:bg-gray-50 shadow-md border border-gray-200'
-                }`}
+                  }`}
               >
                 Daftar Acara
               </button>
               <button
                 onClick={() => setView('create')}
-                className={`px-6 py-3 rounded-xl font-semibold inline-flex items-center transition-all duration-200 ${
-                  view === 'create'
+                className={`px-6 py-3 rounded-xl font-semibold inline-flex items-center transition-all duration-200 ${view === 'create'
                     ? 'bg-gradient-to-r from-green-600 to-green-700 text-white shadow-lg shadow-green-200'
                     : 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 shadow-md'
-                }`}
+                  }`}
               >
                 <Plus className="w-5 h-5 mr-2" />
                 Buat Acara Baru
@@ -452,11 +449,10 @@ const AdminBukuTamu = () => {
                             </div>
                           </td>
                           <td className="px-8 py-6">
-                            <span className={`inline-flex px-3 py-2 text-xs font-semibold rounded-full ${
-                              event.status === 'active' 
-                                ? 'bg-green-100 text-green-800 border border-green-200' 
+                            <span className={`inline-flex px-3 py-2 text-xs font-semibold rounded-full ${event.status === 'active'
+                                ? 'bg-green-100 text-green-800 border border-green-200'
                                 : 'bg-red-100 text-red-800 border border-red-200'
-                            }`}>
+                              }`}>
                               {event.status === 'active' ? 'Aktif' : 'Tidak Aktif'}
                             </span>
                           </td>
@@ -480,11 +476,10 @@ const AdminBukuTamu = () => {
                               <button
                                 onClick={() => handleToggleStatus(event.id, event.status)}
                                 disabled={actionLoading[`status-${event.id}`]}
-                                className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 border ${
-                                  event.status === 'active' 
-                                    ? 'text-orange-700 bg-orange-50 hover:bg-orange-100 border-orange-200' 
+                                className={`inline-flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 border ${event.status === 'active'
+                                    ? 'text-orange-700 bg-orange-50 hover:bg-orange-100 border-orange-200'
                                     : 'text-green-700 bg-green-50 hover:bg-green-100 border-green-200'
-                                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                  } disabled:opacity-50 disabled:cursor-not-allowed`}
                               >
                                 {actionLoading[`status-${event.id}`] ? (
                                   <Loader2 className="w-4 h-4 mr-1 animate-spin" />
@@ -772,7 +767,7 @@ const AdminBukuTamu = () => {
           <div className="space-y-8">
             <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-8">Buat Acara Baru</h2>
-              
+
               <form onSubmit={handleCreateEvent} className="space-y-8">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                   <div>
@@ -783,12 +778,12 @@ const AdminBukuTamu = () => {
                       type="text"
                       required
                       value={formData.nama_acara}
-                      onChange={(e) => setFormData({...formData, nama_acara: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, nama_acara: e.target.value })}
                       className="w-full px-4 py-4 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 text-gray-900"
                       placeholder="Masukkan nama acara"
                     />
                   </div>
-                  
+
                   <div>
                     <label className="block text-sm font-semibold text-gray-700 mb-3">
                       Tanggal Acara <span className="text-red-500">*</span>
@@ -797,12 +792,12 @@ const AdminBukuTamu = () => {
                       type="date"
                       required
                       value={formData.tanggal_acara}
-                      onChange={(e) => setFormData({...formData, tanggal_acara: e.target.value})}
+                      onChange={(e) => setFormData({ ...formData, tanggal_acara: e.target.value })}
                       className="w-full px-4 py-4 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 text-gray-900"
                     />
                   </div>
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Lokasi <span className="text-red-500">*</span>
@@ -811,25 +806,25 @@ const AdminBukuTamu = () => {
                     type="text"
                     required
                     value={formData.lokasi}
-                    onChange={(e) => setFormData({...formData, lokasi: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
                     className="w-full px-4 py-4 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 text-gray-900"
                     placeholder="Masukkan lokasi acara"
                   />
                 </div>
-                
+
                 <div>
                   <label className="block text-sm font-semibold text-gray-700 mb-3">
                     Deskripsi
                   </label>
                   <textarea
                     value={formData.deskripsi}
-                    onChange={(e) => setFormData({...formData, deskripsi: e.target.value})}
+                    onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
                     rows={4}
                     className="w-full px-4 py-4 bg-gray-50 border-0 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white transition-all duration-200 text-gray-900 resize-none"
                     placeholder="Masukkan deskripsi acara (opsional)"
                   />
                 </div>
-                
+
                 <div className="flex justify-end space-x-4 pt-4">
                   <button
                     type="button"
@@ -872,7 +867,7 @@ const AdminBukuTamu = () => {
                     <h3 className="text-2xl font-bold text-gray-900 mb-2">QR Code Berhasil Dibuat!</h3>
                     <p className="text-gray-600 text-lg">QR Code untuk acara "<span className="font-semibold">{formData.nama_acara}</span>" telah berhasil dibuat.</p>
                   </div>
-                  
+
                   <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 mb-8 border border-white/40">
                     <img
                       src={qrCode}
@@ -887,7 +882,7 @@ const AdminBukuTamu = () => {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="flex flex-col sm:flex-row justify-center gap-4">
                     <button
                       onClick={() => downloadQRCode(qrCode, formData.nama_acara)}
@@ -952,12 +947,12 @@ const AdminBukuTamu = () => {
           }
         }}
         title={
-          confirmModal.data?.type === 'delete-event' 
-            ? 'Hapus Buku Tamu' 
+          confirmModal.data?.type === 'delete-event'
+            ? 'Hapus Buku Tamu'
             : 'Hapus Foto Tamu'
         }
         message={
-          confirmModal.data?.type === 'delete-event' 
+          confirmModal.data?.type === 'delete-event'
             ? `Yakin ingin menghapus buku tamu "${confirmModal.data?.name}"? Semua data tamu akan ikut terhapus dan tidak dapat dikembalikan.`
             : 'Yakin ingin menghapus foto ini? Tindakan ini tidak dapat dibatalkan.'
         }
