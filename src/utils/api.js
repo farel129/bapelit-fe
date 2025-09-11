@@ -17,7 +17,7 @@ export const guestBookAPI = {
   // Get event info by QR token
   getEventInfo: async (qrToken) => {
     try {
-      const response = await api.get(`/v1/buku-tamu/${qrToken}`);
+      const response = await api.get(`/buku-tamu/${qrToken}`);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.error || 'Event not found');
@@ -27,7 +27,7 @@ export const guestBookAPI = {
   // 🆕 NEW: Check apakah device sudah pernah submit
   checkDeviceSubmission: async (qrToken, deviceId) => {
     try {
-      const response = await api.post(`/v1/buku-tamu/${qrToken}/check-device`, {
+      const response = await api.post(`/buku-tamu/${qrToken}/check-device`, {
         device_id: deviceId
       });
       return response.data;
@@ -39,7 +39,7 @@ export const guestBookAPI = {
   // Submit attendance with photos (UPDATED - sudah include device_id)
   submitAttendance: async (qrToken, formData) => {
     try {
-      const response = await api.post(`/v1/buku-tamu/${qrToken}`, formData, {
+      const response = await api.post(`/buku-tamu/${qrToken}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

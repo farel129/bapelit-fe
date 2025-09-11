@@ -275,7 +275,7 @@ const StatsSuratMasuk = () => {
                             {totalSurat > 0 ? (
                                 <div className="h-72">
                                     <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart data={monthlyData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                                        <BarChart data={monthlyData}>
                                             <CartesianGrid strokeDasharray="3 3" stroke="#e5e7eb" />
                                             <XAxis
                                                 dataKey="month"
