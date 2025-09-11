@@ -12,7 +12,7 @@ const AdminDaftarSuratKeluar = () => {
     try {
       setLoading(true);
       setError('');
-      const response = await api.get('/admin/surat-keluar/all');
+      const response = await api.get('/surat-keluar');
       setSuratList(response.data.data || []);
     } catch (err) {
       const errorMessage = 'Gagal memuat daftar surat keluar';
@@ -28,7 +28,7 @@ const AdminDaftarSuratKeluar = () => {
     if (!window.confirm('Apakah Anda yakin ingin menghapus surat ini?')) return;
     
     try {
-      await api.delete(`/api/admin/surat-keluar/${id}`);
+      await api.delete(`/surat-keluar/${id}`);
       toast.success('Surat berhasil dihapus');
       fetchSuratKeluar(); // Refresh data
     } catch (err) {

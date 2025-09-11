@@ -80,7 +80,7 @@ const DocumentationPage = () => {
             if (feedFilters.search) params.append('search', feedFilters.search);
             params.append('page', feedFilters.page);
             params.append('limit', '10');
-            const response = await api.get(`/dokumentasi/feed?${params}`);
+            const response = await api.get(`/dokumentasi/?${params}`);
             if (feedFilters.page === 1) {
                 setPosts(response.data.data);
             } else {
@@ -126,8 +126,8 @@ const DocumentationPage = () => {
 
         try {
             const [statsResponse, postsResponse] = await Promise.all([
-                api.get(`/dokumentasi/stats/${targetUserId}`),
-                api.get(`/dokumentasi/user/${targetUserId}?page=${page}&limit=12`)
+                api.get(`/dokumentasi/${targetUserId}/stats`),
+                api.get(`/dokumentasi/${targetUserId}/user?page=${page}&limit=12`)
             ]);
 
             setUserStats(statsResponse.data.data);
@@ -183,7 +183,7 @@ const performSearch = async () => {
         params.append('limit', '10');
         
         // Gunakan endpoint feed yang sudah include files
-        const response = await api.get(`/dokumentasi/feed?${params}`);
+        const response = await api.get(`/dokumentasi/?${params}`);
         
         console.log('Fixed search with files:', response.data.data[0]?.files);
         
@@ -214,7 +214,7 @@ const performSearch = async () => {
                 });
             }
 
-            await api.post('/dokumentasi/post', formData, {
+            await api.post('/dokumentasi', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' }
             });
 
@@ -347,7 +347,7 @@ const performSearch = async () => {
 
     const handleDeleteComment = async (commentId) => {
         try {
-            await api.delete(`/dokumentasi/comment/${commentId}`);
+            await api.delete(`/dokumentasi/${commentId}/comment`);
             if (selectedPost) {
                 setSelectedPost(prev => ({
                     ...prev,

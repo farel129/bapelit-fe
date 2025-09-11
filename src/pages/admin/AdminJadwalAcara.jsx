@@ -45,7 +45,7 @@ const AdminJadwalAcara = () => {
       if (filter.bulan) params.append('bulan', filter.bulan);
       params.append('tahun', filter.tahun);
 
-      const response = await api.get(`/admin/jadwal-acara?${params}`);
+      const response = await api.get(`/jadwal-acara?${params}`);
       
       setJadwalList(response.data?.data || []);
     } catch (error) {
@@ -93,7 +93,7 @@ const AdminJadwalAcara = () => {
 
     try {
       // Gunakan endpoint backend kita
-      const response = await api.get(`/lokasi-rekomendasi?q=${encodeURIComponent(query)}`);
+      const response = await api.get(`/jadwal-acara/rekomendasi-lokasi?q=${encodeURIComponent(query)}`);
       
       if (response.data.local_results && response.data.local_results.length > 0) {
         setRecommendations(response.data.local_results);
@@ -142,7 +142,7 @@ const AdminJadwalAcara = () => {
     
     try {
       // Gunakan endpoint backend kita
-      const response = await api.get(`/lokasi-rekomendasi?q=${encodeURIComponent(query)}`);
+      const response = await api.get(`/jadwal-acara/rekomendasi-lokasi?q=${encodeURIComponent(query)}`);
       
       if (response.data.local_results && response.data.local_results.length > 0) {
         // Ambil hasil pertama
@@ -194,10 +194,10 @@ const AdminJadwalAcara = () => {
 
     try {
       if (editingId) {
-        await api.put(`/admin/jadwal-acara/${editingId}/update`, formData);
+        await api.put(`/jadwal-acara/${editingId}`, formData);
         alert('Jadwal acara berhasil diupdate!');
       } else {
-        await api.post('/admin/jadwal-acara/buat', formData);
+        await api.post('/jadwal-acara', formData);
         alert('Jadwal acara berhasil dibuat!');
       }
       
@@ -272,7 +272,7 @@ const AdminJadwalAcara = () => {
     
     setLoading(true);
     try {
-      await api.delete(`/admin/jadwal-acara/${id}/delete`);
+      await api.delete(`/jadwal-acara/${id}`);
       alert('Jadwal acara berhasil dihapus!');
       fetchJadwal();
     } catch (error) {
@@ -293,7 +293,7 @@ const AdminJadwalAcara = () => {
   const handleStatusChange = async (id, newStatus) => {
     setLoading(true);
     try {
-      await api.patch(`/admin/jadwal-acara/${id}/status`, { status: newStatus });
+      await api.patch(`/jadwal-acara/${id}`, { status: newStatus });
       alert(`Status berhasil diubah ke ${newStatus}!`);
       fetchJadwal();
     } catch (error) {

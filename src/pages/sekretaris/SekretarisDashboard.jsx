@@ -19,6 +19,7 @@ import { api } from '../../utils/api';
 import { useAuth } from '../../contexts/AuthContext';
 import Avatar from '../../assets/img/adminrobot.png'
 import toast from 'react-hot-toast';
+import { atasanDisposisiService } from '../../services/atasanDisposisiService';
 
 const SekretarisDashboard = () => {
   const navigate = useNavigate();
@@ -78,13 +79,8 @@ const SekretarisDashboard = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log('Fetching disposisi...');
-
-      const response = await api.get('/atasan/disposisi/saya');
+      const response = await atasanDisposisiService.getAtasanDisposisi()
       const result = response.data;
-
-      console.log('Data dari backend:', result);
-
       let allData = [];
       if (result && Array.isArray(result.data)) {
         allData = result.data;
@@ -132,7 +128,7 @@ const SekretarisDashboard = () => {
   const viewDetail = async (item) => {
     if (item.status === 'belum dibaca' && item.status_dari_sekretaris === 'belum dibaca') {
       try {
-        await api.put(`/sekretaris/disposisi/${item.id}/baca`, {});
+        await api.put(`/disposisi/sekretaris/baca/${item.id}`, {});
 
         // Refresh data after marking as read
         await fetchDisposisi();

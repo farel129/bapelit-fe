@@ -29,8 +29,8 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
   const fetchUsers = async () => {
     try {
       setLoadingUsers(true);
-      const response = await api.get('/bawahan');
-      setUsers(response.data.data || []);
+      const bawahanResponse = await api.get('/disposisi/atasan/list-bawahan');
+      setUsers(bawahanResponse.data.data || []);
     } catch (error) {
       console.error('Error fetching users:', error);
       alert('Gagal memuat daftar user');
@@ -52,7 +52,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
 
     try {
       setLoading(true);
-      const response = await api.post(`/${user.role}/disposisi/teruskan/${disposisi.id}`, {
+      const response = await api.post(`/disposisi/atasan/${user.role}/teruskan/${disposisi.id}`, {
         diteruskan_kepada_user_id: selectedUserId,
         catatan_atasan: catatan
       });

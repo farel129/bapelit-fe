@@ -36,11 +36,11 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
       setLoadingData(true);
       
       // Fetch bawahan (hanya untuk user spesifik)
-      const bawahanResponse = await api.get('/bawahan');
+      const bawahanResponse = await api.get('/disposisi/atasan/list-bawahan');
       setBawahanList(bawahanResponse.data.data || []);
       
       // Fetch jabatan list
-      const jabatanResponse = await api.get('/jabatan/list');
+      const jabatanResponse = await api.get('/disposisi/atasan/list-jabatan');
       setJabatanList(jabatanResponse.data || []);
       
     } catch (error) {
@@ -81,7 +81,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
         payload.diteruskan_kepada_user_id = selectedUserId;
       }
 
-      const response = await api.post(`/${user.role}/disposisi/teruskan/${disposisi.id}`, payload);
+      const response = await api.post(`/disposisi/atasan/${user.role}/teruskan/${disposisi.id}`, payload);
 
       alert(response.data.message || 'Disposisi berhasil diteruskan');
       onSuccess();

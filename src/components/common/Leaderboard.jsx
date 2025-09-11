@@ -18,7 +18,7 @@ const Leaderboard = () => {
     try {
       setLoading(true);
       setError(null);
-      const response = await api.get(`/leaderboard/${activeTab}`);
+      const response = await api.get(`/disposisi/leaderboard/${activeTab}`);
       setLeaderboardData(response.data);
     } catch (err) {
       setError('Gagal memuat data leaderboard');

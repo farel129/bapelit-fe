@@ -26,7 +26,7 @@ const SuratMasukList = () => {
   const fetchSuratMasuk = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/kepala/surat-masuk');
+      const response = await api.get('/surat-masuk/kepala');
       setSuratMasuk(response.data.data || []);
     } catch (error) {
       console.error('Error fetching surat masuk:', error);
@@ -38,7 +38,7 @@ const SuratMasukList = () => {
 
   const markAsRead = async (suratId) => {
     try {
-      await api.put(`/kepala/surat-masuk/${suratId}/baca`);
+      await api.put(`/surat-masuk/kepala/${suratId}`);
       fetchSuratMasuk(); // Refresh list
     } catch (error) {
       console.error('Error marking as read:', error);

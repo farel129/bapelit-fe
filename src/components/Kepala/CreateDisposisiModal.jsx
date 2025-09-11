@@ -50,7 +50,7 @@ const CreateDisposisiModal = ({ surat, onClose, onSuccess }) => {
     setLoading(true);
 
     try {
-      await api.post(`/kepala/disposisi/buat/${surat.id}`, formData);
+      await api.post(`/disposisi/${surat.id}`, formData);
       toast.success('Disposisi berhasil dibuat!');
       onSuccess();
     } catch (error) {

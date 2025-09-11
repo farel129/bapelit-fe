@@ -40,7 +40,7 @@ const AdminBuatSuratKeluar = () => {
         formDataToSend.append('lampiran', file);
       });
 
-      const response = await api.post('/admin/surat-keluar/buat', formDataToSend, {
+      const response = await api.post('/surat-keluar', formDataToSend, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

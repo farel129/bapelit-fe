@@ -228,7 +228,7 @@ function AdminDaftarUser() {
     const fetchUsers = async () => {
         try {
             setLoading(true);
-            const res = await api.get('/admin/akun');
+            const res = await api.get('/users/admin/daftar-user');
             if (Array.isArray(res.data.data)) {
                 setUsers(res.data.data);
             } else {
@@ -251,7 +251,7 @@ function AdminDaftarUser() {
 
     const handleDeleteConfirm = async () => {
         try {
-            await api.delete(`/admin/akun/${deleteModal.user.id}/delete`);
+            await api.delete(`/users/${deleteModal.user.id}`);
             setUsers(users.filter(user => user.id !== deleteModal.user.id));
             toast.success('User berhasil dihapus');
         } catch (err) {
@@ -268,7 +268,7 @@ function AdminDaftarUser() {
 
     const handleResetPasswordConfirm = async (newPassword) => {
         try {
-            await api.put(`/admin/akun/${resetPasswordModal.user.id}/reset`, { newPassword });
+            await api.put(`/users/${resetPasswordModal.user.id}`, { newPassword });
             toast.success('Password berhasil direset');
         } catch (err) {
             const errorMsg = err?.response?.data?.error || 'Gagal mereset password';

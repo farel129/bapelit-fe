@@ -12,7 +12,7 @@ const KepalaStatistikDisposisi = () => {
     const fetchStatistik = async () => {
         try {
             setLoading(true);
-            const response = await api.get('/kepala/statistik/disposisi');
+            const response = await api.get('/disposisi/statistik');
             setStats(response.data.data);
             setError(null);
         } catch (err) {

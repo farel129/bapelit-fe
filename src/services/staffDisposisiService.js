@@ -4,7 +4,7 @@ export const staffDisposisiService = {
   // Terima disposisi
   terimaDisposisi: async (disposisiId) => {
     try {
-      const response = await api.put(`/staff/disposisi/terima/${disposisiId}`);
+      const response = await api.put(`/disposisi/bawahan/terima/${disposisiId}`);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.error || 'Gagal menerima disposisi');
@@ -14,7 +14,7 @@ export const staffDisposisiService = {
   // Dapatkan detail disposisi
   getDisposisiDetail: async (disposisiId) => {
     try {
-      const response = await api.get(`/staff/disposisi/${disposisiId}`);
+      const response = await api.get(`/disposisi/bawahan/${disposisiId}`);
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.error || 'Gagal mengambil detail disposisi');
@@ -24,7 +24,7 @@ export const staffDisposisiService = {
   // Dapatkan daftar disposisi
   getDaftarDisposisi: async (params = {}) => {
     try {
-      const response = await api.get('/staff/disposisi', { params });
+      const response = await api.get('/disposisi/bawahan', { params });
       return response.data;
     } catch (error) {
       throw new Error(error.response?.data?.error || 'Gagal mengambil daftar disposisi');
@@ -34,7 +34,7 @@ export const staffDisposisiService = {
   // Kirim feedback untuk disposisi
   submitFeedback: async (disposisiId, formData) => {
     try {
-      const response = await api.post(`/bawahan/disposisi/${disposisiId}/feedback`, formData, {
+      const response = await api.post(`/feedback-disposisi/bawahan/${disposisiId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -51,13 +51,9 @@ export const staffDisposisiService = {
   // Dapatkan daftar feedback saya
  getMyFeedback: async (params = {}) => {
     try {
-      console.log('🔍 Calling getMyFeedback:', '/bawahan/feedback/saya'); // ← Debug log
-      const response = await api.get('/bawahan/feedback/saya', { params });
-      console.log('✅ getMyFeedback success:', response.data); // ← Debug log
+      const response = await api.get('/feedback-disposisi/bawahan', { params });
       return response.data;
     } catch (error) {
-      console.error('❌ getMyFeedback error:', error.response); // ← Debug log
-      console.error('❌ Full error object:', error); // ← Debug log
       throw new Error(
         error.response?.data?.error || 
         'Gagal mengambil daftar feedback'
@@ -68,7 +64,7 @@ export const staffDisposisiService = {
   // Dapatkan detail feedback untuk edit
   getFeedbackForEdit: async (feedbackId) => {
     try {
-      const response = await api.get(`/bawahan/feedback/${feedbackId}/edit`);
+      const response = await api.get(`/feedback-disposisi/bawahan/edit-view/${feedbackId}`);
       return response.data;
     } catch (error) {
       throw new Error(
@@ -81,7 +77,7 @@ export const staffDisposisiService = {
   // Update feedback
   updateFeedback: async (feedbackId, formData) => {
     try {
-      const response = await api.put(`/bawahan/feedback/${feedbackId}`, formData, {
+      const response = await api.put(`/feedback-disposisi/bawahan/edit/${feedbackId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

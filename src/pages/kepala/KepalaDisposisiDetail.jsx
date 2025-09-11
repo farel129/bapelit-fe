@@ -38,7 +38,7 @@ const KepalaDisposisiDetail = () => {
         try {
             setLoading(true);
             setError(null);
-            const response = await api.get(`/kepala/disposisi/${id}`);
+            const response = await api.get(`/disposisi/kepala/${id}`);
             setDisposisi(response.data.data);
         } catch (err) {
             console.error('Error fetching disposisi detail:', err);
@@ -52,7 +52,7 @@ const KepalaDisposisiDetail = () => {
         try {
             setLoadingLogs(true);
             setLogsError(null);
-            const response = await api.get(`/disposisi/${id}/logs`);
+            const response = await api.get(`/disposisi/logs/${id}`);
             setStatusLogs(response.data.data || []);
         } catch (err) {
             console.error('Error fetching status logs:', err);
@@ -67,7 +67,7 @@ const KepalaDisposisiDetail = () => {
         try {
             setLoadingFeedback(true);
             setFeedbackError(null);
-            const response = await api.get('/kepala/feedback/all');
+            const response = await api.get('/feedback-disposisi/kepala');
 
             const relatedFeedback = response.data.data.filter(feedback => {
                 return feedback.disposisi_id === id || feedback.disposisi_id === parseInt(id);

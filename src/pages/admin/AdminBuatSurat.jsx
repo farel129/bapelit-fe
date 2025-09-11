@@ -166,7 +166,7 @@ const AdminBuatSurat = () => {
       // Tambahkan tujuan_jabatan secara otomatis
       submitData.append('tujuan_jabatan', 'Kepala Bapelitbangda')
       selectedFiles.forEach(file => submitData.append('photos', file))
-      await api.post('/admin/surat-masuk/buat', submitData)
+      await api.post('/surat-masuk', submitData)
       toast.success('Surat & disposisi berhasil dibuat!')
       navigate('/admin')
     } catch (error) {

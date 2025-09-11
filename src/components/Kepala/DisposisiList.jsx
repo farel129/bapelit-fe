@@ -21,7 +21,7 @@ const DisposisiList = () => {
   const fetchDisposisi = async () => {
     try {
       setLoading(true);
-      const response = await api.get('/kepala/disposisi/all');
+      const response = await api.get('/disposisi/kepala');
       setDisposisi(response.data.data || []);
     } catch (err) {
       console.error('Error fetching disposisi:', err);
@@ -35,7 +35,7 @@ const DisposisiList = () => {
   const handleDelete = async (id) => {
     try {
       setDeleteLoading(id);
-      const response = await api.delete(`/kepala/disposisi/${id}`);
+      const response = await api.delete(`/disposisi/kepala/${id}`);
       
       // Update state untuk menghapus item dari list
       setDisposisi(prevDisposisi => prevDisposisi.filter(item => item.id !== id));

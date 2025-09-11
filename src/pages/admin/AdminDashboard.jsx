@@ -22,7 +22,7 @@ const AdminDashboard = () => {
         try {
             setLoading(true);
             setError('');
-            const suratResponse = await api.get('/admin/surat-masuk/all');
+            const suratResponse = await api.get('/surat-masuk');
             setSuratData(suratResponse.data?.data || []);
         } catch (err) {
             console.error('Error fetching data:', err);

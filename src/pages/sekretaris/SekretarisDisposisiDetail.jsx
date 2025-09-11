@@ -87,7 +87,7 @@ const SekretarisDisposisiDetail = () => {
   const fetchFeedbackForDisposisi = async (role = 'sekretaris') => {
     try {
       setFeedbackLoading(true);
-      const response = await api.get(`/${role}/feedback/saya`);
+      const response = await atasanDisposisiService.getMyFeedback(role);
       const result = response.data;
       let feedbacks = [];
       if (result && Array.isArray(result.data)) {
@@ -114,17 +114,20 @@ const SekretarisDisposisiDetail = () => {
       setSubordinateFeedback(null);
       return;
     }
+
     try {
       setSubFeedbackLoading(true);
       setSubFeedbackError(null);
-      const response = await api.get(`/${role}/disposisi/${id}/feedback-bawahan`);
-      const feedbackData = response.data;
+
+      const feedbackData = await atasanDisposisiService.getFeedbackDariBawahan(role, id);
       setSubordinateFeedback(feedbackData);
+
     } catch (err) {
       console.error('Error fetching subordinate feedback:', err);
+
       // Jika 404, itu berarti belum ada feedback
-      if (err.response && err.response.status !== 404) {
-        setSubFeedbackError('Gagal memuat feedback dari bawahan: ' + (err.response?.data?.error || err.message));
+      if (err.status !== 404) {
+        setSubFeedbackError('Gagal memuat feedback dari bawahan: ' + err.message);
         toast.error('Gagal memuat feedback dari bawahan');
       } else {
         setSubordinateFeedback(null);
@@ -132,13 +135,13 @@ const SekretarisDisposisiDetail = () => {
     } finally {
       setSubFeedbackLoading(false);
     }
-  }, [disposisi?.diteruskan_kepada_user_id, id]); // Ubah dependency
+  }, [disposisi?.diteruskan_kepada_user_id, id]);
   // Handle terima disposisi
   const handleAcceptDisposisi = async () => {
     try {
       setAcceptLoading(true);
       setAcceptError(null);
-      const response = await api.put(`/sekretaris/disposisi/${id}/terima`);
+      const response = await atasanDisposisiService.acceptDisposisiSekretaris(id);
       if (response.data) {
         // Update disposisi state dengan data yang baru
         const updatedData = response.data.data || response.data;
@@ -162,15 +165,12 @@ const SekretarisDisposisiDetail = () => {
 
     setDownloadLoading(true);
     setDownloadError(null);
+
     try {
-      // Pastikan `api` dikonfigurasi untuk menangani blob response
-      // Misalnya dengan menambahkan `responseType: 'blob'` jika menggunakan axios
-      const response = await api.get(`/disposisi/${disposisi.id}/pdf`, {
-        responseType: 'blob', // Sangat penting untuk mendapatkan file
-      });
+      const blobData = await atasanDisposisiService.downloadPDF(disposisi.id);
 
       // Buat URL objek dari blob
-      const blob = new Blob([response.data], { type: 'application/pdf' });
+      const blob = new Blob([blobData], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
 
       // Buat elemen <a> sementara untuk trigger download
@@ -191,7 +191,7 @@ const SekretarisDisposisiDetail = () => {
       toast.success('PDF berhasil diunduh!');
     } catch (err) {
       console.error('Gagal mengunduh PDF:', err);
-      setDownloadError('Gagal mengunduh PDF. Silakan coba lagi.');
+      setDownloadError(err.message);
       toast.error('Gagal mengunduh PDF.');
     } finally {
       setDownloadLoading(false);
@@ -224,11 +224,13 @@ const SekretarisDisposisiDetail = () => {
       files: files.slice(0, 5) // Maksimal 5 file
     }));
   };
+
   const handleFeedbackSubmit = async (e, role = 'sekretaris') => {
     e.preventDefault();
     try {
       setFeedbackLoading(true);
       setFeedbackError(null);
+
       const formData = new FormData();
       formData.append('notes', feedbackData.notes);
       formData.append('status', feedbackData.status);
@@ -237,7 +239,9 @@ const SekretarisDisposisiDetail = () => {
       feedbackData.files.forEach(file => {
         formData.append('feedback_files', file);
       });
-      const response = await api.post(`/${role}/disposisi/${id}/feedback`, formData);
+
+      const response = await atasanDisposisiService.createFeedback(role, id, formData);
+
       setFeedbackSuccess(true);
       setShowFeedbackForm(false);
       setFeedbackData({ notes: '', status: 'diproses', files: [] });
@@ -252,6 +256,7 @@ const SekretarisDisposisiDetail = () => {
       setFeedbackLoading(false);
     }
   };
+
   // Handler untuk edit feedback
   const handleEditFeedbackChange = (e) => {
     const { name, value } = e.target;
@@ -279,19 +284,24 @@ const SekretarisDisposisiDetail = () => {
     try {
       setEditLoading(true);
       setFeedbackError(null);
+
       const formData = new FormData();
       formData.append('notes', editFeedbackData.notes);
       formData.append('status', editFeedbackData.status);
       formData.append('status_dari_sekretaris', editFeedbackData.status);
+
       // Tambahkan file baru
       editFeedbackData.newFiles.forEach(file => {
         formData.append('new_feedback_files', file);
       });
+
       // Tambahkan ID file yang akan dihapus
       editFeedbackData.removeFileIds.forEach(fileId => {
         formData.append('remove_file_ids', fileId);
       });
-      const response = await api.put(`/${role}/feedback/${editingFeedbackId}`, formData);
+
+      const response = await atasanDisposisiService.updateFeedback(role, editingFeedbackId, formData);
+
       setEditingFeedbackId(null);
       setEditFeedbackData({
         notes: '',
@@ -300,6 +310,7 @@ const SekretarisDisposisiDetail = () => {
         removeFileIds: [],
         existingFiles: []
       });
+
       // Refresh feedback data
       fetchDisposisiDetail();
       fetchFeedbackForDisposisi();
@@ -311,6 +322,7 @@ const SekretarisDisposisiDetail = () => {
       setEditLoading(false);
     }
   };
+
   const cancelEditFeedback = () => {
     setEditingFeedbackId(null);
     setEditFeedbackData({
@@ -322,12 +334,15 @@ const SekretarisDisposisiDetail = () => {
     });
     setFeedbackError(null);
   };
+
   // Fungsi untuk mengambil detail feedback untuk edit
   const fetchFeedbackForEdit = async (feedbackId, role = 'sekretaris') => {
     try {
       setEditLoading(true);
-      const response = await api.get(`/${role}/feedback/${feedbackId}/edit`);
-      const feedback = response.data.data;
+
+      const response = await atasanDisposisiService.getFeedbackForEdit(role, feedbackId);
+      const feedback = response.data;
+
       setEditFeedbackData({
         notes: feedback.notes || '',
         status: feedback.disposisi?.status || 'diproses',
@@ -342,6 +357,7 @@ const SekretarisDisposisiDetail = () => {
       setEditLoading(false);
     }
   };
+
   const openImageModal = (imageUrl) => {
     window.open(imageUrl, '_blank');
   };

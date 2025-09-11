@@ -21,6 +21,7 @@ import { api } from '../../utils/api';
 import { useAuth } from '../../contexts/AuthContext';
 import Avatar from '../../assets/img/adminrobot.png'
 import toast from 'react-hot-toast';
+import { atasanDisposisiService } from '../../services/atasanDisposisiService';
 
 const KabidDashboard = () => {
   const navigate = useNavigate();
@@ -80,12 +81,10 @@ const KabidDashboard = () => {
     try {
       setLoading(true);
       setError(null);
-      console.log('Fetching disposisi...');
 
-      const response = await api.get('/atasan/disposisi/saya');
+      const response = await atasanDisposisiService.getAtasanDisposisi();
       const result = response.data;
 
-      console.log('Data dari backend:', result);
 
       let allData = [];
       if (result && Array.isArray(result.data)) {
@@ -134,7 +133,7 @@ const KabidDashboard = () => {
   const viewDetail = async (item) => {
     if (item.status === 'belum dibaca' && item.status_dari_kabid === 'belum dibaca') {
       try {
-        await api.put(`/kabid/disposisi/${item.id}/baca`, {});
+        await api.put(`/disposisi/kabid/baca/${item.id}`, {});
 
         // Refresh data after marking as read
         await fetchDisposisi();

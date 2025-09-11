@@ -58,7 +58,7 @@ function AdminTambahUser() {
     setSuccess(false);
 
     try {
-      const response = await api.post('/admin/akun/buat', form);
+      const response = await api.post('/users', form);
 
       if (response.status === 200 || response.status === 201) {
         setSuccess(true);

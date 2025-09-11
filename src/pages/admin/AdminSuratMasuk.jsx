@@ -49,10 +49,10 @@ const AdminSuratMasuk = () => {
             setLoading(true);
             setError('');
             // Fetch semua surat masuk menggunakan axios
-            const suratResponse = await api.get('/admin/surat-masuk/all');
+            const suratResponse = await api.get('/surat-masuk');
             
             // Fetch mapping disposisi untuk mendapatkan disposisi_id
-            const disposisiResponse = await api.get('/kepala/disposisi/all');
+            const disposisiResponse = await api.get('/disposisi/kepala');
             
             // Buat mapping surat_id -> disposisi_id
             const disposisiMapping = {};
@@ -124,7 +124,7 @@ const AdminSuratMasuk = () => {
                 return;
             }
             
-            const response = await api.get(`/disposisi/${disposisiId}/pdf`, {
+            const response = await api.get(`/disposisi/download-pdf/${disposisiId}`, {
                 responseType: 'blob',
                 onDownloadProgress: (progressEvent) => {
                     const total = progressEvent.total;
@@ -179,7 +179,7 @@ const AdminSuratMasuk = () => {
 
     const handleConfirmDelete = async (id) => {
         try {
-            await api.delete(`/admin/surat-masuk/${id}`)
+            await api.delete(`/surat-masuk/${id}`)
             toast.success('Surat berhasil dihapus')
             closeDeleteModal() // Tutup modal terlebih dahulu
             fetchAllData() // Refresh data surat

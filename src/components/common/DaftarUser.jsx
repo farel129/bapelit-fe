@@ -20,7 +20,7 @@ const DaftarUser = () => {
         toast.loading('Memuat data user...');
       }
 
-      const response = await api.get('/daftar-user');
+      const response = await api.get('/users/daftar-user');
       const data = response.data;
       setUsers(data.data || []);
 
