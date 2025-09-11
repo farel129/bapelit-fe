@@ -4,7 +4,7 @@ import { FileText, X, CheckCircle, Download, Calendar, User, Building2, MessageS
 import toast from 'react-hot-toast';
 import { api } from '../../utils/api';
 
-const AdminDaftarSuratMasuk = () => {
+const SuratMasukTerbaru = () => {
     const [suratData, setSuratData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -544,4 +544,4 @@ const AdminDaftarSuratMasuk = () => {
     );
 };
 
-export default AdminDaftarSuratMasuk;
+export default SuratMasukTerbaru;

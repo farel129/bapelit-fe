@@ -6,7 +6,6 @@ import KepalaLayout from './components/Layout/KepalaLayout';
 import KepalaDashboard from './pages/kepala/KepalaDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminLayout from './components/Layout/AdminLayout';
-import AdminBuatSurat from './pages/admin/AdminBuatSurat';
 import AdminDaftarUser from './pages/admin/AdminDaftarUser';
 import AdminTambahUser from './pages/admin/AdminTambahUser';
 import AdminSuratMasuk from './pages/admin/AdminSuratMasuk';
@@ -101,7 +100,7 @@ function App() {
         <Route path="/admin-surat-masuk" element={
           <PrivateRoute role="admin">
             <AdminLayout>
-              <AdminBuatSurat />
+              <AdminSuratMasuk />
             </AdminLayout>
           </PrivateRoute>
         } />
@@ -154,7 +153,7 @@ function App() {
             </AdminLayout>
           </PrivateRoute>
         } />
-        <Route path="/admin-profile" element={
+        <Route path="/admin-dokumentasi" element={
           <PrivateRoute role='admin'>
             <AdminLayout>
               <DocumentationPage />
