@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, TrendingUp, Plus } from 'lucide-react';
+import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, TrendingUp, Plus, UserCircle2 } from 'lucide-react';
 import { guestBookAPI } from '../../utils/api';
 
 // Modal Component
@@ -12,7 +12,7 @@ const Modal = ({ isOpen, onClose, children, title, type = 'default' }) => {
         default: 'border-gray-200 bg-white'
     };
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
             <div className={`w-full max-w-md rounded-2xl shadow-2xl ${modalTypes[type]} border-2 transform transition-all duration-300 scale-100`}>
                 <div className="flex justify-between items-center p-6 border-b border-gray-200">
                     <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
@@ -132,18 +132,18 @@ const FilePreview = ({ files, onRemove, disabled = false }) => {
 // Already Submitted Component
 const AlreadySubmitted = ({ eventData, submissionData }) => {
     return (
-        <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-white">
-            <div className="container mx-auto px-4 py-8">
+        <div className="min-h-screen bg-gradient-to-bl from-gray-100 via-white to-gray-100">
+            <div className="container mx-auto px-2 py-10">
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-pink-500 to-pink-600 rounded-full mb-4">
+                    <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full mb-4">
                         <CheckCircle className="text-white" size={32} />
                     </div>
-                    <h1 className="text-4xl font-bold text-black mb-2">Buku Tamu Digital</h1>
+                    <h1 className="md:text-4xl text-3xl font-bold text-black mb-2">Buku Tamu Digital</h1>
                     <p className="text-gray-600">Kehadiran Anda sudah tercatat</p>
                 </div>
                 <div className="max-w-2xl mx-auto">
-                    <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
-                        <div className="text-center mb-6">
+                    <div className="bg-white rounded-xl shadow-lg md:p-8 p-4 border border-gray-200">
+                        <div className="text-center">
                             <div className="inline-flex items-center justify-center w-16 h-16 bg-pink-100 rounded-full mb-4">
                                 <Lock className="text-pink-500" size={24} />
                             </div>
@@ -186,7 +186,7 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
                                     </div>
                                 </div>
                             </div>
-                            <div className="mt-6 p-4 bg-pink-100 rounded-xl">
+                            <div className="mt-6 p-4 bg-gray-100 rounded-xl">
                                 <h4 className="font-semibold text-black mb-2">Informasi Acara</h4>
                                 <p className="text-lg font-bold text-pink-600">{eventData.nama_acara}</p>
                                 <p className="text-gray-600">{eventData.lokasi}</p>
@@ -242,9 +242,9 @@ const PublikBukuTamu = () => {
     const [alreadySubmitted, setAlreadySubmitted] = useState(false);
     const [submissionData, setSubmissionData] = useState(null);
     const [deviceId, setDeviceId] = useState(null);
-    
+
     const { checkSubmission, markSubmitted } = useDeviceSubmission();
-    
+
     const [formData, setFormData] = useState({
         nama_lengkap: '',
         instansi: '',
@@ -254,22 +254,22 @@ const PublikBukuTamu = () => {
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [previewFiles, setPreviewFiles] = useState([]);
     const [uploadProgress, setUploadProgress] = useState(0);
-    
+
     const getQRTokenFromURL = () => {
         const path = window.location.pathname;
         const matches = path.match(/\/guest\/([^\/]+)/);
         return matches ? matches[1] : 'sample-qr-token';
     };
-    
+
     const qrToken = getQRTokenFromURL();
-    
+
     const generateDeviceId = () => {
         try {
             let deviceId = localStorage.getItem('guest_device_id');
             if (deviceId) {
                 return deviceId;
             }
-            
+
             const screen = window.screen;
             const navigator = window.navigator;
             const fingerprint = [
@@ -282,18 +282,18 @@ const PublikBukuTamu = () => {
                 navigator.hardwareConcurrency || 'unknown',
                 navigator.platform
             ].join('|');
-            
+
             let hash = 0;
             for (let i = 0; i < fingerprint.length; i++) {
                 const char = fingerprint.charCodeAt(i);
                 hash = ((hash << 5) - hash) + char;
                 hash = hash & hash;
             }
-            
+
             const today = new Date().toISOString().split('T')[0];
             const todayHash = today.split('-').join('');
             deviceId = `device_${Math.abs(hash).toString(36)}_${todayHash}`;
-            
+
             localStorage.setItem('guest_device_id', deviceId);
             return deviceId;
         } catch (error) {
@@ -305,12 +305,12 @@ const PublikBukuTamu = () => {
             return deviceId;
         }
     };
-    
+
     useEffect(() => {
         const id = generateDeviceId();
         setDeviceId(id);
     }, []);
-    
+
     const fetchEventData = async () => {
         if (!qrToken || !deviceId) {
             if (!qrToken) {
@@ -338,21 +338,21 @@ const PublikBukuTamu = () => {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         if (deviceId) {
             fetchEventData();
         }
     }, [deviceId]);
-    
+
     const showModal = (type, title, message) => {
         setModal({ isOpen: true, type, title, message });
     };
-    
+
     const closeModal = () => {
         setModal({ isOpen: false, type: 'default', title: '', message: '' });
     };
-    
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({
@@ -360,7 +360,7 @@ const PublikBukuTamu = () => {
             [name]: value
         }));
     };
-    
+
     const validateFile = (file) => {
         const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         const maxSize = 5 * 1024 * 1024;
@@ -372,7 +372,7 @@ const PublikBukuTamu = () => {
         }
         return { valid: true };
     };
-    
+
     const handleFileSelect = (e) => {
         const files = Array.from(e.target.files);
         if (files.length > 5) {
@@ -405,19 +405,19 @@ const PublikBukuTamu = () => {
         });
         setSelectedFiles(prev => [...prev, ...validFiles]);
     };
-    
+
     const removeFile = (index) => {
         setSelectedFiles(prev => prev.filter((_, i) => i !== index));
         setPreviewFiles(prev => prev.filter((_, i) => i !== index));
     };
-    
+
     const clearAllFiles = () => {
         setSelectedFiles([]);
         setPreviewFiles([]);
         const fileInput = document.getElementById('photo-upload');
         if (fileInput) fileInput.value = '';
     };
-    
+
     const handleSubmit = async () => {
         if (!formData.nama_lengkap.trim()) {
             showModal('error', 'Data Tidak Lengkap', 'Nama lengkap harus diisi.');
@@ -439,14 +439,14 @@ const PublikBukuTamu = () => {
             selectedFiles.forEach(file => {
                 submitData.append('photos', file);
             });
-            
+
             const progressInterval = setInterval(() => {
                 setUploadProgress(prev => prev >= 90 ? 90 : prev + 10);
             }, 200);
             const response = await guestBookAPI.submitAttendance(qrToken, submitData);
             clearInterval(progressInterval);
             setUploadProgress(100);
-            
+
             const submissionInfo = {
                 nama_lengkap: formData.nama_lengkap,
                 instansi: formData.instansi,
@@ -455,7 +455,7 @@ const PublikBukuTamu = () => {
                 submitted_at: new Date().toISOString(),
                 photo_count: selectedFiles.length
             };
-            
+
             setTimeout(() => {
                 showModal('success', 'Berhasil!',
                     `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''}`
@@ -492,94 +492,56 @@ const PublikBukuTamu = () => {
             }, 1000);
         }
     };
-    
+
     if (loading) {
         return (
-            <div className="flex items-center justify-center py-16 bg-gray-50">
+            <div className="flex items-center justify-center py-16 bg-gradient-to-bl from-gray-100 via-white to-gray-100 h-screen">
                 <div className="flex flex-col items-center gap-6">
                     <div className="relative">
-                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200"></div>
-                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-500 border-t-transparent absolute inset-0"></div>
+                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-black"></div>
+                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-pink-500 border-t-transparent absolute inset-0"></div>
                     </div>
-                    <p className="text-black font-semibold text-lg">Memuat informasi acara...</p>
+                    <p className="text-black font-semibold text-base">Memuat informasi acara...</p>
                 </div>
             </div>
         );
     }
-    
+
     if (!eventData) {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
+            <div className="min-h-screen bg-gradient-to-bl from-gray-100 via-white to-gray-100 flex items-center justify-center p-4">
                 <div className="text-center p-8 bg-white rounded-xl shadow-lg">
-                    <AlertCircle className="text-red-500 mx-auto mb-4" size={64} />
-                    <h1 className="text-2xl font-bold text-red-800 mb-2">Acara Tidak Ditemukan</h1>
-                    <p className="text-red-600">QR Code atau link yang Anda gunakan tidak valid.</p>
+                    <AlertCircle className="text-pink-500 mx-auto mb-4" size={64} />
+                    <h1 className="text-lg font-bold text-black mb-2">Acara Tidak Ditemukan</h1>
+                    <p className="text-black">QR Code atau link yang Anda gunakan tidak valid.</p>
                 </div>
             </div>
         );
     }
-    
+
     if (alreadySubmitted && submissionData) {
         return <AlreadySubmitted eventData={eventData} submissionData={submissionData} />;
     }
-    
+
     return (
         <>
-            <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-white">
-                <div className="container mx-auto px-4 py-8">
-                    {/* Header */}
-                    <div className='flex flex-row gap-x-2 items-center mb-5 w-full'>
-                        <div>
-                            <div className='w-1 h-5 bg-slate-300 rounded-full'></div>
-                        </div>
-                        <p className='text-sm text-slate-300 font-bold whitespace-nowrap uppercase'>Buku Tamu Digital</p>
-                    </div>
-                    
-                    {/* Stats Overview - Contoh Statistik */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-2 mb-8">
-                        <StatCard
-                            title="Total Pengunjung"
-                            count="125"
-                            icon={User}
-                            subtitle="Hari ini"
-                            trend="12.5"
-                        />
-                        <StatCard
-                            title="Belum Check-in"
-                            count="25"
-                            icon={AlertCircle}
-                            subtitle="Memerlukan perhatian"
-                            bgIcon='bg-white'
-                            iconColor='text-black'
-                        />
-                        <StatCard
-                            title="Sudah Check-in"
-                            count="100"
-                            icon={CheckCircle}
-                            subtitle="Telah diproses"
-                            borderColor='border-pink-200'
-                        />
-                        <StatCard
-                            title="Tingkat Partisipasi"
-                            count="80%"
-                            icon={TrendingUp}
-                            bgColor='bg-black'
-                            titleColor='text-white'
-                            countColor='text-white'
-                            bgIcon='bg-white'
-                            iconColor='text-pink-500'
-                            trend="15"
-                            borderColor='border-black'
-                        />
-                    </div>
-                    
+            <div className="min-h-screen bg-gradient-to-bl from-gray-100 via-white to-gray-100">
+                <div className="container mx-auto px-2 py-10">
                     {/* Event Info Card */}
-                    <div className="max-w-4xl mx-auto mb-8">
-                        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                    <div className="max-w-2xl mx-auto mb-4">
+                        <div className='flex flex-col space-y-4 justify-center items-center mb-8'>
+                            <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full mb-4">
+                                <UserCircle2 className="text-white" size={32} />
+                            </div>
+
+                            <h1 className="md:text-4xl text-3xl text-center font-bold text-black mb-2">Form Kehadiran Tamu</h1>
+                            <p className="text-gray-600 text-center">Silahkan isi form untuk pencatatan kehadiran tamu</p>
+                        </div>
+                        <div className="bg-white rounded-xl shadow-lg md:p-8 p-4 border border-gray-200">
                             <div className="text-center mb-6">
-                                <h2 className="text-3xl font-bold text-black mb-4">{eventData.nama_acara}</h2>
-                                <div className="grid md:grid-cols-3 gap-6 text-left">
-                                    <div className="flex items-start gap-3 p-4 bg-pink-50 rounded-xl">
+                                <h2 className="text-xl font-bold text-black mb-4">{eventData.nama_acara}</h2>
+                                <div className="grid md:grid-cols-3 gap-2 md:gap-6 text-left">
+                                    <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
                                         <Calendar className="text-pink-500 mt-1 flex-shrink-0" size={20} />
                                         <div>
                                             <p className="font-semibold text-black">Tanggal</p>
@@ -593,7 +555,7 @@ const PublikBukuTamu = () => {
                                             </p>
                                         </div>
                                     </div>
-                                    <div className="flex items-start gap-3 p-4 bg-pink-50 rounded-xl">
+                                    <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
                                         <MapPin className="text-pink-500 mt-1 flex-shrink-0" size={20} />
                                         <div>
                                             <p className="font-semibold text-black">Lokasi</p>
@@ -601,7 +563,7 @@ const PublikBukuTamu = () => {
                                         </div>
                                     </div>
                                     {eventData.deskripsi && (
-                                        <div className="flex items-start gap-3 p-4 bg-pink-50 rounded-xl">
+                                        <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
                                             <FileText className="text-pink-500 mt-1 flex-shrink-0" size={20} />
                                             <div>
                                                 <p className="font-semibold text-black">Deskripsi</p>
@@ -613,10 +575,10 @@ const PublikBukuTamu = () => {
                             </div>
                         </div>
                     </div>
-                    
+
                     {/* Form */}
                     <div className="max-w-2xl mx-auto">
-                        <div className="bg-white rounded-xl shadow-lg p-8 border border-gray-200">
+                        <div className="bg-white rounded-xl shadow-lg p-4 md:p-8 border border-gray-200">
                             <div className="space-y-6">
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
@@ -679,7 +641,7 @@ const PublikBukuTamu = () => {
                                         placeholder="Jelaskan keperluan atau tujuan kunjungan Anda"
                                     />
                                 </div>
-                                
+
                                 <div>
                                     <div className="flex items-center justify-between mb-2">
                                         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
@@ -731,7 +693,7 @@ const PublikBukuTamu = () => {
                                         />
                                     </div>
                                 </div>
-                                
+
                                 {submitting && uploadProgress > 0 && (
                                     <div className="space-y-2">
                                         <div className="flex justify-between text-sm text-gray-600">
@@ -746,13 +708,13 @@ const PublikBukuTamu = () => {
                                         </div>
                                     </div>
                                 )}
-                                
+
                                 <div className="pt-4">
                                     <button
                                         type="button"
                                         onClick={handleSubmit}
                                         disabled={submitting || !formData.nama_lengkap.trim()}
-                                        className="w-full bg-gradient-to-r from-pink-500 to-pink-600 text-white font-semibold py-4 px-6 rounded-xl hover:from-pink-600 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                                        className="w-full bg-black text-white font-semibold py-4 px-6 rounded-xl hover:opacity-90 cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-500 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                                     >
                                         {submitting ? (
                                             <LoadingSpinner size="sm" text="Menyimpan data..." />
@@ -764,7 +726,7 @@ const PublikBukuTamu = () => {
                                         )}
                                     </button>
                                 </div>
-                                
+
                                 <div className="text-center text-sm text-gray-500 pt-2">
                                     <p>Data yang Anda masukkan akan disimpan dengan aman dan hanya digunakan untuk keperluan acara ini.</p>
                                     <p className="mt-1 font-semibold text-pink-600 flex items-center justify-center gap-1">
@@ -777,7 +739,7 @@ const PublikBukuTamu = () => {
                     </div>
                 </div>
             </div>
-            
+
             <Modal
                 isOpen={modal.isOpen}
                 onClose={closeModal}
