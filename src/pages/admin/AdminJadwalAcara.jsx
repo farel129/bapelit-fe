@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Calendar, MapPin, User, Clock, Filter } from 'lucide-react';
+import { Plus, Edit, Trash2, Calendar, MapPin, User, Clock, Filter, Search, X } from 'lucide-react';
 import { api } from '../../utils/api';
+import toast from 'react-hot-toast'; // Gunakan toast untuk feedback lebih elegan
 
 const AdminJadwalAcara = () => {
   const [jadwalList, setJadwalList] = useState([]);
@@ -46,17 +47,16 @@ const AdminJadwalAcara = () => {
       params.append('tahun', filter.tahun);
 
       const response = await api.get(`/jadwal-acara?${params}`);
-      
       setJadwalList(response.data?.data || []);
     } catch (error) {
       console.error('Error fetching data:', error);
       if (error.response) {
         const errorMessage = error.response.data?.error || error.response.data?.message || `Server error: ${error.response.status}`;
-        alert(errorMessage);
+        toast.error(errorMessage);
       } else if (error.request) {
-        alert('Tidak ada respon dari server. Pastikan server backend berjalan.');
+        toast.error('Tidak ada respon dari server. Pastikan server backend berjalan.');
       } else {
-        alert('Terjadi kesalahan saat mengambil data');
+        toast.error('Terjadi kesalahan saat mengambil data');
       }
     } finally {
       setLoading(false);
@@ -83,7 +83,6 @@ const AdminJadwalAcara = () => {
     };
   }, [formData.lokasi]);
 
-  // Fungsi untuk mencari rekomendasi lokasi
   const searchRecommendations = async (query) => {
     if (!query.trim() || query.length < 3) {
       setRecommendations([]);
@@ -92,7 +91,6 @@ const AdminJadwalAcara = () => {
     }
 
     try {
-      // Gunakan endpoint backend kita
       const response = await api.get(`/jadwal-acara/rekomendasi-lokasi?q=${encodeURIComponent(query)}`);
       
       if (response.data.local_results && response.data.local_results.length > 0) {
@@ -104,15 +102,11 @@ const AdminJadwalAcara = () => {
       }
     } catch (error) {
       console.error('Error searching recommendations:', error);
-      if (error.response) {
-        console.error('Response error:', error.response.data);
-      }
       setRecommendations([]);
       setShowRecommendations(false);
     }
   };
 
-  // Fungsi untuk memilih rekomendasi
   const selectRecommendation = (recommendation) => {
     let locationString = recommendation.title;
     if (recommendation.address) {
@@ -131,24 +125,20 @@ const AdminJadwalAcara = () => {
     setShowRecommendations(false);
   };
 
-  // Fungsi untuk mencari lokasi berdasarkan input
   const searchLocation = async (query) => {
     if (!query.trim()) {
-      alert('Masukkan nama lokasi atau alamat');
+      toast.error('Masukkan nama lokasi atau alamat');
       return;
     }
 
     setLoading(true);
     
     try {
-      // Gunakan endpoint backend kita
       const response = await api.get(`/jadwal-acara/rekomendasi-lokasi?q=${encodeURIComponent(query)}`);
       
       if (response.data.local_results && response.data.local_results.length > 0) {
-        // Ambil hasil pertama
         const firstResult = response.data.local_results[0];
         
-        // Format lokasi untuk ditampilkan
         let locationString = firstResult.title;
         if (firstResult.address) {
           locationString += `, ${firstResult.address}`;
@@ -163,26 +153,21 @@ const AdminJadwalAcara = () => {
           }
         }));
         
-        alert(`Lokasi ditemukan: ${locationString}`);
+        toast.success(`Lokasi ditemukan: ${locationString}`);
       } else {
-        // Jika tidak ditemukan, fallback ke input manual
         setFormData(prev => ({
           ...prev,
           lokasi: query.trim()
         }));
-        alert('Lokasi tidak ditemukan di database, menampilkan berdasarkan input Anda');
+        toast.info('Lokasi tidak ditemukan di database, menampilkan berdasarkan input Anda');
       }
     } catch (error) {
       console.error('Error searching with location service:', error);
-      if (error.response) {
-        console.error('Response error:', error.response.data);
-      }
-      // Fallback jika error
       setFormData(prev => ({
         ...prev,
         lokasi: query.trim()
       }));
-      alert('Gagal mencari lokasi, menampilkan berdasarkan input Anda');
+      toast.error('Gagal mencari lokasi, menampilkan berdasarkan input Anda');
     } finally {
       setLoading(false);
     }
@@ -195,10 +180,10 @@ const AdminJadwalAcara = () => {
     try {
       if (editingId) {
         await api.put(`/jadwal-acara/${editingId}`, formData);
-        alert('Jadwal acara berhasil diupdate!');
+        toast.success('Jadwal acara berhasil diupdate!');
       } else {
         await api.post('/jadwal-acara', formData);
-        alert('Jadwal acara berhasil dibuat!');
+        toast.success('Jadwal acara berhasil dibuat!');
       }
       
       resetForm();
@@ -207,18 +192,17 @@ const AdminJadwalAcara = () => {
       console.error('Error saving data:', error);
       if (error.response) {
         const errorMessage = error.response.data?.error || error.response.data?.message || `Server error: ${error.response.status}`;
-        alert(errorMessage);
+        toast.error(errorMessage);
       } else if (error.request) {
-        alert('Tidak ada respon dari server. Pastikan server backend berjalan.');
+        toast.error('Tidak ada respon dari server. Pastikan server backend berjalan.');
       } else {
-        alert('Terjadi kesalahan saat menyimpan data');
+        toast.error('Terjadi kesalahan saat menyimpan data');
       }
     } finally {
       setLoading(false);
     }
   };
 
-  // Reset form
   const resetForm = () => {
     setFormData({
       nama_acara: '',
@@ -261,29 +245,27 @@ const AdminJadwalAcara = () => {
     });
     setEditingId(jadwal.id);
     setShowForm(true);
-    
-    // Clear rekomendasi saat edit
     setRecommendations([]);
     setShowRecommendations(false);
   };
 
   const handleDelete = async (id, nama) => {
-    if (!confirm(`Hapus jadwal acara "${nama}"?`)) return;
+    if (!window.confirm(`Hapus jadwal acara "${nama}"? Tindakan ini tidak dapat dibatalkan.`)) return;
     
     setLoading(true);
     try {
       await api.delete(`/jadwal-acara/${id}`);
-      alert('Jadwal acara berhasil dihapus!');
+      toast.success('Jadwal acara berhasil dihapus!');
       fetchJadwal();
     } catch (error) {
       console.error('Error deleting data:', error);
       if (error.response) {
         const errorMessage = error.response.data?.error || error.response.data?.message || `Server error: ${error.response.status}`;
-        alert(errorMessage);
+        toast.error(errorMessage);
       } else if (error.request) {
-        alert('Tidak ada respon dari server. Pastikan server backend berjalan.');
+        toast.error('Tidak ada respon dari server. Pastikan server backend berjalan.');
       } else {
-        alert('Terjadi kesalahan saat menghapus data');
+        toast.error('Terjadi kesalahan saat menghapus data');
       }
     } finally {
       setLoading(false);
@@ -294,39 +276,46 @@ const AdminJadwalAcara = () => {
     setLoading(true);
     try {
       await api.patch(`/jadwal-acara/${id}`, { status: newStatus });
-      alert(`Status berhasil diubah ke ${newStatus}!`);
+      toast.success(`Status berhasil diubah ke ${newStatus}!`);
       fetchJadwal();
     } catch (error) {
       console.error('Error updating status:', error);
       if (error.response) {
         const errorMessage = error.response.data?.error || error.response.data?.message || `Server error: ${error.response.status}`;
-        alert(errorMessage);
+        toast.error(errorMessage);
       } else if (error.request) {
-        alert('Tidak ada respon dari server. Pastikan server backend berjalan.');
+        toast.error('Tidak ada respon dari server. Pastikan server backend berjalan.');
       } else {
-        alert('Terjadi kesalahan saat mengubah status');
+        toast.error('Terjadi kesalahan saat mengubah status');
       }
     } finally {
       setLoading(false);
     }
   };
 
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'aktif': return 'bg-green-100 text-green-800 border-green-300';
-      case 'selesai': return 'bg-blue-100 text-blue-800 border-blue-300';
-      case 'dibatalkan': return 'bg-red-100 text-red-800 border-red-300';
-      case 'ditunda': return 'bg-yellow-100 text-yellow-800 border-yellow-300';
-      default: return 'bg-gray-100 text-gray-800 border-gray-300';
-    }
+  const getStatusBadge = (status) => {
+    const styles = {
+      'aktif': 'bg-green-50 text-green-800 border border-green-200',
+      'selesai': 'bg-blue-50 text-blue-800 border border-blue-200',
+      'dibatalkan': 'bg-red-50 text-red-800 border border-red-200',
+      'ditunda': 'bg-yellow-50 text-yellow-800 border border-yellow-200'
+    };
+    return (
+      <span className={`px-2 py-1 rounded-lg text-xs font-medium ${styles[status] || 'bg-gray-100 text-gray-800 border border-gray-200'}`}>
+        {status === 'aktif' ? 'Aktif' : 
+         status === 'selesai' ? 'Selesai' : 
+         status === 'dibatalkan' ? 'Dibatalkan' : 
+         status === 'ditunda' ? 'Ditunda' : status}
+      </span>
+    );
   };
 
   const getPriorityColor = (priority) => {
     switch (priority) {
       case 'sangat penting': return 'text-red-600';
       case 'penting': return 'text-orange-600';
-      case 'biasa': return 'text-gray-600';
-      default: return 'text-gray-600';
+      case 'biasa': return 'text-[#6b7280]';
+      default: return 'text-[#6b7280]';
     }
   };
 
@@ -345,27 +334,36 @@ const AdminJadwalAcara = () => {
   }, [showRecommendations]);
 
   return (
-    <div className="max-w-7xl mx-auto p-6 bg-gray-50 min-h-screen">
-      <div className="bg-white rounded-lg shadow-sm p-6 mb-6">
+    <div className="min-h-screen">
+      {/* Header Section */}
+      <div className="bg-white rounded-2xl shadow-sm border-2 border-[#e5e7eb] p-6 mb-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Jadwal Acara</h1>
+          <div className="flex items-center gap-3">
+            <div className="p-3 bg-white rounded-2xl shadow-lg">
+              <Calendar className="h-6 w-6 text-pink-500" />
+            </div>
+            <div>
+              <h1 className="text-lg font-bold text-[#000000]">Jadwal Acara</h1>
+              <p className="text-sm font-medium text-[#6b7280]">Kelola jadwal acara instansi dengan efisien</p>
+            </div>
+          </div>
           <button
             onClick={() => setShowForm(true)}
-            className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg flex items-center gap-2 transition-colors"
+            className="bg-black hover:opacity-90 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-2"
           >
-            <Plus size={20} />
+            <Plus className="w-4 h-4" />
             Tambah Jadwal
           </button>
         </div>
 
-        {/* Filter */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-4 bg-gray-50 rounded-lg">
+        {/* Filter Section */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6 p-4 bg-[#f9f9f9] rounded-xl border border-[#e5e7eb]">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label className="block text-sm font-medium text-[#000000] mb-1">Status</label>
             <select
               value={filter.status}
               onChange={(e) => setFilter({...filter, status: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
             >
               <option value="">Semua Status</option>
               <option value="aktif">Aktif</option>
@@ -374,12 +372,13 @@ const AdminJadwalAcara = () => {
               <option value="ditunda">Ditunda</option>
             </select>
           </div>
+          
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Kategori</label>
+            <label className="block text-sm font-medium text-[#000000] mb-1">Kategori</label>
             <select
               value={filter.kategori}
               onChange={(e) => setFilter({...filter, kategori: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
             >
               <option value="">Semua Kategori</option>
               <option value="rapat">Rapat</option>
@@ -388,12 +387,13 @@ const AdminJadwalAcara = () => {
               <option value="umum">Umum</option>
             </select>
           </div>
+          
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Bulan</label>
+            <label className="block text-sm font-medium text-[#000000] mb-1">Bulan</label>
             <select
               value={filter.bulan}
               onChange={(e) => setFilter({...filter, bulan: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
             >
               <option value="">Semua Bulan</option>
               <option value="1">Januari</option>
@@ -410,13 +410,14 @@ const AdminJadwalAcara = () => {
               <option value="12">Desember</option>
             </select>
           </div>
+          
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Tahun</label>
+            <label className="block text-sm font-medium text-[#000000] mb-1">Tahun</label>
             <input
               type="number"
               value={filter.tahun}
               onChange={(e) => setFilter({...filter, tahun: e.target.value})}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
               min="2020"
               max="2030"
             />
@@ -425,390 +426,425 @@ const AdminJadwalAcara = () => {
 
         {/* Jadwal List */}
         {loading && !showForm ? (
-          <div className="text-center py-8">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-            <p className="mt-2 text-gray-600">Memuat jadwal acara...</p>
+          <div className="flex items-center justify-center py-12">
+            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f6339a]"></div>
+            <span className="ml-2 text-[#000000]">Memuat jadwal acara...</span>
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <>
             {jadwalList.length === 0 ? (
-              <div className="col-span-full text-center py-8 text-gray-500">
-                <Calendar size={48} className="mx-auto mb-4 opacity-50" />
-                <p>Belum ada jadwal acara</p>
+              <div className="text-center py-16 bg-white rounded-2xl border-2 border-[#e5e7eb] shadow-sm">
+                <Calendar className="h-16 w-16 text-[#6b7280] mx-auto mb-4 opacity-70" />
+                <p className="text-[#000000] text-lg font-semibold mb-1">Belum ada jadwal acara</p>
+                <p className="text-[#6b7280] text-sm">Tambahkan jadwal acara pertama Anda.</p>
               </div>
             ) : (
-              jadwalList.map((jadwal) => (
-                <div key={jadwal.id} className="bg-white border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow">
-                  <div className="flex justify-between items-start mb-3">
-                    <h3 className="font-semibold text-lg text-gray-900 leading-tight">{jadwal.nama_acara}</h3>
-                    <div className="flex gap-1">
-                      <button
-                        onClick={() => handleEdit(jadwal)}
-                        className="text-blue-600 hover:text-blue-800 p-1"
-                        title="Edit"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        onClick={() => handleDelete(jadwal.id, jadwal.nama_acara)}
-                        className="text-red-600 hover:text-red-800 p-1"
-                        title="Hapus"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2 text-sm text-gray-600 mb-3">
-                    <div className="flex items-center gap-2">
-                      <Calendar size={14} />
-                      <span>
-                        {jadwal.tanggal_mulai}
-                        {jadwal.tanggal_selesai && jadwal.tanggal_selesai !== jadwal.tanggal_mulai && 
-                          ` - ${jadwal.tanggal_selesai}`}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <Clock size={14} />
-                      <span>
-                        {jadwal.waktu_mulai}
-                        {jadwal.waktu_selesai && ` - ${jadwal.waktu_selesai}`}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <MapPin size={14} />
-                      <span>
-                        {jadwal.lokasi}
-                        <a 
-                          href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(jadwal.lokasi)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="ml-2 text-blue-600 hover:underline text-xs"
-                        >
-                          (Lihat di Maps)
-                        </a>
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <User size={14} />
-                      <span>{jadwal.pic_nama}</span>
-                    </div>
-                  </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                {jadwalList.map((jadwal) => (
+                  <div
+                    key={jadwal.id}
+                    className="bg-white rounded-2xl border-2 border-[#e5e7eb] shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-1"
+                  >
+                    <div className="p-6">
+                      {/* Header */}
+                      <div className="flex justify-between items-start mb-4">
+                        <div className="flex items-center gap-3">
+                          <div className="p-2 bg-white shadow-lg rounded-xl">
+                            <Calendar className="h-5 w-5 text-[#f6339a]" />
+                          </div>
+                          <div>
+                            <h3 className="font-bold text-[#000000] truncate max-w-[180px]">{jadwal.nama_acara}</h3>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                          <button
+                            onClick={() => handleEdit(jadwal)}
+                            className="p-1.5 hover:bg-gray-50 rounded-lg transition-colors border border-transparent hover:border-[#e5e7eb]"
+                            aria-label="Edit"
+                          >
+                            <Edit className="w-4 h-4 text-[#6b7280]" />
+                          </button>
+                          <button
+                            onClick={() => handleDelete(jadwal.id, jadwal.nama_acara)}
+                            className="p-1.5 hover:bg-red-50 rounded-lg transition-colors border border-transparent hover:border-red-200"
+                            aria-label="Hapus"
+                          >
+                            <Trash2 className="w-4 h-4 text-red-600" />
+                          </button>
+                        </div>
+                      </div>
 
-                  {jadwal.deskripsi && (
-                    <p className="text-sm text-gray-600 mb-3 line-clamp-2">{jadwal.deskripsi}</p>
-                  )}
-                  
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <span className={`px-2 py-1 rounded-full text-xs border ${getStatusColor(jadwal.status)}`}>
-                        {jadwal.status}
-                      </span>
-                      <span className={`text-xs font-medium ${getPriorityColor(jadwal.prioritas)}`}>
-                        {jadwal.prioritas}
-                      </span>
+                      {/* Metadata */}
+                      <div className="space-y-2 mb-4">
+                        <div className="flex items-center text-sm text-[#6b7280]">
+                          <Calendar className="h-4 w-4 mr-2" />
+                          <span>
+                            {jadwal.tanggal_mulai}
+                            {jadwal.tanggal_selesai && jadwal.tanggal_selesai !== jadwal.tanggal_mulai && 
+                              ` - ${jadwal.tanggal_selesai}`}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center text-sm text-[#6b7280]">
+                          <Clock className="h-4 w-4 mr-2" />
+                          <span>
+                            {jadwal.waktu_mulai}
+                            {jadwal.waktu_selesai && ` - ${jadwal.waktu_selesai}`}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center text-sm text-[#6b7280]">
+                          <MapPin className="h-4 w-4 mr-2" />
+                          <span className="truncate max-w-[180px]">
+                            {jadwal.lokasi}
+                          </span>
+                        </div>
+                        
+                        <div className="flex items-center text-sm text-[#6b7280]">
+                          <User className="h-4 w-4 mr-2" />
+                          <span>{jadwal.pic_nama}</span>
+                        </div>
+                      </div>
+
+                      {jadwal.deskripsi && (
+                        <p className="text-sm text-[#6b7280] mb-4 line-clamp-2">
+                          {jadwal.deskripsi}
+                        </p>
+                      )}
+
+                      {/* Badges */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          {getStatusBadge(jadwal.status)}
+                          <span className={`text-xs font-medium ${getPriorityColor(jadwal.prioritas)}`}>
+                            {jadwal.prioritas}
+                          </span>
+                        </div>
+                        
+                        <select
+                          value={jadwal.status}
+                          onChange={(e) => handleStatusChange(jadwal.id, e.target.value)}
+                          className="text-xs border border-[#e5e7eb] rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#f6339a] bg-white"
+                          disabled={loading}
+                        >
+                          <option value="aktif">Aktif</option>
+                          <option value="selesai">Selesai</option>
+                          <option value="dibatalkan">Dibatalkan</option>
+                          <option value="ditunda">Ditunda</option>
+                        </select>
+                      </div>
                     </div>
-                    
-                    <select
-                      value={jadwal.status}
-                      onChange={(e) => handleStatusChange(jadwal.id, e.target.value)}
-                      className="text-xs border border-gray-300 rounded px-2 py-1 focus:outline-none focus:ring-1 focus:ring-blue-500"
-                      disabled={loading}
-                    >
-                      <option value="aktif">Aktif</option>
-                      <option value="selesai">Selesai</option>
-                      <option value="dibatalkan">Dibatalkan</option>
-                      <option value="ditunda">Ditunda</option>
-                    </select>
                   </div>
-                </div>
-              ))
+                ))}
+              </div>
             )}
-          </div>
+          </>
         )}
       </div>
 
-      {/* Form Modal */}
+      {/* Form Modal — Glassmorphism & Consistent Style */}
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="p-6">
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-xl font-bold text-gray-900">
-                  {editingId ? 'Edit Jadwal Acara' : 'Tambah Jadwal Acara'}
-                </h2>
-                <button
-                  onClick={resetForm}
-                  className="text-gray-500 hover:text-gray-700"
-                >
-                  ✕
-                </button>
+        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+          <div className="relative w-full max-w-3xl h-[90vh] overflow-y-auto">
+            {/* Background glassmorphism */}
+            <div className="absolute inset-0 bg-white backdrop-blur-xl rounded-2xl shadow-2xl border-2 border-[#e5e7eb]"></div>
+            {/* Content */}
+            <div className="relative h-full overflow-y-auto rounded-2xl">
+              {/* Header */}
+              <div className="sticky top-0 bg-white backdrop-blur-sm border-b border-[#e5e7eb] px-8 py-6 z-50">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-3 bg-white rounded-xl shadow-lg">
+                      <Calendar className="h-6 w-6 text-pink-500" />
+                    </div>
+                    <div>
+                      <h2 className="text-xl font-bold text-[#000000]">
+                        {editingId ? 'Edit Jadwal Acara' : 'Tambah Jadwal Acara'}
+                      </h2>
+                      <p className="text-sm font-medium text-[#6b7280]">Isi detail jadwal acara dengan lengkap</p>
+                    </div>
+                  </div>
+                  <button
+                    onClick={resetForm}
+                    className="p-2 hover:bg-gray-50 rounded-xl transition-all duration-200 group border border-[#e5e7eb]"
+                    aria-label="Tutup form"
+                  >
+                    <X className="h-5 w-5 text-[#000000] group-hover:text-[#6b7280]" />
+                  </button>
+                </div>
               </div>
 
-              <form onSubmit={handleSubmit} className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Nama Acara *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.nama_acara}
-                      onChange={(e) => setFormData({...formData, nama_acara: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+              {/* Form Body */}
+              <div className="px-8 py-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Nama Acara *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.nama_acara}
+                        onChange={(e) => setFormData({...formData, nama_acara: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        placeholder="Contoh: Rapat Koordinasi Bulanan"
+                      />
+                    </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Deskripsi
-                    </label>
-                    <textarea
-                      value={formData.deskripsi}
-                      onChange={(e) => setFormData({...formData, deskripsi: e.target.value})}
-                      rows={3}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Deskripsi
+                      </label>
+                      <textarea
+                        value={formData.deskripsi}
+                        onChange={(e) => setFormData({...formData, deskripsi: e.target.value})}
+                        rows={3}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        placeholder="Tulis deskripsi singkat tentang acara ini..."
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Tanggal Mulai *
-                    </label>
-                    <input
-                      type="date"
-                      required
-                      value={formData.tanggal_mulai}
-                      onChange={(e) => setFormData({...formData, tanggal_mulai: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Tanggal Mulai *
+                      </label>
+                      <input
+                        type="date"
+                        required
+                        value={formData.tanggal_mulai}
+                        onChange={(e) => setFormData({...formData, tanggal_mulai: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Tanggal Selesai
-                    </label>
-                    <input
-                      type="date"
-                      value={formData.tanggal_selesai}
-                      onChange={(e) => setFormData({...formData, tanggal_selesai: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Tanggal Selesai
+                      </label>
+                      <input
+                        type="date"
+                        value={formData.tanggal_selesai}
+                        onChange={(e) => setFormData({...formData, tanggal_selesai: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Waktu Mulai *
-                    </label>
-                    <input
-                      type="time"
-                      required
-                      value={formData.waktu_mulai}
-                      onChange={(e) => setFormData({...formData, waktu_mulai: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Waktu Mulai *
+                      </label>
+                      <input
+                        type="time"
+                        required
+                        value={formData.waktu_mulai}
+                        onChange={(e) => setFormData({...formData, waktu_mulai: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                      />
+                    </div>
 
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Waktu Selesai
-                    </label>
-                    <input
-                      type="time"
-                      value={formData.waktu_selesai}
-                      onChange={(e) => setFormData({...formData, waktu_selesai: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Waktu Selesai
+                      </label>
+                      <input
+                        type="time"
+                        value={formData.waktu_selesai}
+                        onChange={(e) => setFormData({...formData, waktu_selesai: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                      />
+                    </div>
 
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Lokasi *
-                    </label>
-                    <div className="relative location-input-container">
-                      <div className="flex gap-2">
-                        <input
-                          type="text"
-                          required
-                          value={formData.lokasi}
-                          onChange={(e) => {
-                            setFormData({...formData, lokasi: e.target.value});
-                          }}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                          placeholder="Masukkan alamat atau nama lokasi"
-                        />
-                        <button
-                          type="button"
-                          onClick={() => searchLocation(formData.lokasi)}
-                          disabled={loading}
-                          className="px-3 py-2 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors text-sm disabled:opacity-50"
-                        >
-                          {loading ? 'Mencari...' : 'Cari'}
-                        </button>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Lokasi *
+                      </label>
+                      <div className="relative location-input-container">
+                        <div className="flex gap-3">
+                          <input
+                            type="text"
+                            required
+                            value={formData.lokasi}
+                            onChange={(e) => {
+                              setFormData({...formData, lokasi: e.target.value});
+                            }}
+                            className="flex-1 px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                            placeholder="Masukkan alamat atau nama lokasi"
+                          />
+                          <button
+                            type="button"
+                            onClick={() => searchLocation(formData.lokasi)}
+                            disabled={loading || !formData.lokasi.trim()}
+                            className="px-5 py-3 bg-white border border-[#e5e7eb] rounded-xl text-sm font-medium text-[#000000] hover:bg-gray-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                          >
+                            {loading ? 'Mencari...' : 'Cari'}
+                          </button>
+                        </div>
+
+                        {/* Dropdown Rekomendasi */}
+                        {showRecommendations && recommendations.length > 0 && (
+                          <div className="absolute z-20 w-full mt-1 bg-white border border-[#e5e7eb] rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                            {recommendations.map((rec, index) => (
+                              <div
+                                key={index}
+                                onClick={() => selectRecommendation(rec)}
+                                className="px-4 py-3 hover:bg-gray-50 cursor-pointer border-b border-[#e5e7eb] last:border-b-0"
+                              >
+                                <div className="font-medium text-[#000000]">{rec.title}</div>
+                                {rec.address && (
+                                  <div className="text-sm text-[#6b7280] mt-1">{rec.address}</div>
+                                )}
+                                {rec.rating && (
+                                  <div className="text-xs text-[#6b7280] mt-1">
+                                    ⭐ {rec.rating} ({rec.reviews || 0} ulasan)
+                                  </div>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
+                    </div>
 
-                      {/* Dropdown Rekomendasi */}
-                      {showRecommendations && recommendations.length > 0 && (
-                        <div className="absolute z-20 w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
-                          {recommendations.map((rec, index) => (
-                            <div
-                              key={index}
-                              onClick={() => selectRecommendation(rec)}
-                              className="px-4 py-3 hover:bg-blue-50 cursor-pointer border-b border-gray-100 last:border-b-0"
-                            >
-                              <div className="font-medium text-gray-900">{rec.title}</div>
-                              {rec.address && (
-                                <div className="text-sm text-gray-600 mt-1">{rec.address}</div>
-                              )}
-                              {rec.rating && (
-                                <div className="text-xs text-gray-500 mt-1">
-                                  ⭐ {rec.rating} ({rec.reviews || 0} reviews)
-                                </div>
-                              )}
-                            </div>
-                          ))}
-                        </div>
-                      )}
+                    {/* Google Maps Embed */}
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Peta Lokasi
+                      </label>
+                      <div className="h-64 w-full border border-[#e5e7eb] rounded-xl overflow-hidden">
+                        {formData.lokasi ? (
+                          <iframe
+                            width="100%"
+                            height="100%"
+                            frameBorder="0"
+                            style={{ border: 0 }}
+                            src={`https://www.google.com/maps?q=${encodeURIComponent(formData.lokasi)}&output=embed`}
+                            allowFullScreen
+                            title="Lokasi Acara"
+                            className="w-full h-full"
+                          />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center bg-gray-50 text-[#6b7280]">
+                            Masukkan lokasi dan klik "Cari" untuk melihat peta
+                          </div>
+                        )}
+                      </div>
+                      <p className="text-xs text-[#6b7280] mt-1">
+                        {formData.serp_data ? 
+                          "Lokasi ditemukan melalui pencarian otomatis" : 
+                          "Menampilkan peta berdasarkan input manual"
+                        }
+                      </p>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        PIC Nama *
+                      </label>
+                      <input
+                        type="text"
+                        required
+                        value={formData.pic_nama}
+                        onChange={(e) => setFormData({...formData, pic_nama: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        placeholder="Nama petugas penanggung jawab"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        PIC Kontak
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.pic_kontak}
+                        onChange={(e) => setFormData({...formData, pic_kontak: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        placeholder="Nomor HP / Email"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Kategori
+                      </label>
+                      <select
+                        value={formData.kategori}
+                        onChange={(e) => setFormData({...formData, kategori: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                      >
+                        <option value="umum">Umum</option>
+                        <option value="rapat">Rapat</option>
+                        <option value="pelatihan">Pelatihan</option>
+                        <option value="seminar">Seminar</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Prioritas
+                      </label>
+                      <select
+                        value={formData.prioritas}
+                        onChange={(e) => setFormData({...formData, prioritas: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                      >
+                        <option value="biasa">Biasa</option>
+                        <option value="penting">Penting</option>
+                        <option value="sangat penting">Sangat Penting</option>
+                      </select>
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Target Peserta
+                      </label>
+                      <input
+                        type="number"
+                        value={formData.peserta_target}
+                        onChange={(e) => setFormData({...formData, peserta_target: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        min="1"
+                        placeholder="Jumlah peserta yang diharapkan"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-semibold text-[#000000] mb-2">
+                        Status
+                      </label>
+                      <select
+                        value={formData.status}
+                        onChange={(e) => setFormData({...formData, status: e.target.value})}
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                      >
+                        <option value="aktif">Aktif</option>
+                        <option value="selesai">Selesai</option>
+                        <option value="dibatalkan">Dibatalkan</option>
+                        <option value="ditunda">Ditunda</option>
+                      </select>
                     </div>
                   </div>
 
-                  {/* Map Picker - Google Maps Embed dengan hasil */}
-                  <div className="md:col-span-2">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Peta Lokasi
-                    </label>
-                    <div className="h-64 w-full border border-gray-300 rounded-md overflow-hidden">
-                      {formData.lokasi ? (
-                        <iframe
-                          width="100%"
-                          height="100%"
-                          frameBorder="0"
-                          style={{ border: 0 }}
-                          src={`https://www.google.com/maps?q=${encodeURIComponent(formData.lokasi)}&output=embed`}
-                          allowFullScreen
-                          title="Lokasi Acara"
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-500">
-                          Masukkan lokasi dan klik "Cari" untuk melihat peta
-                        </div>
-                      )}
-                    </div>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {formData.serp_data ? 
-                        "Lokasi ditemukan melalui pencarian" : 
-                        "Menampilkan peta berdasarkan input manual"
-                      }
-                    </p>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      PIC Nama *
-                    </label>
-                    <input
-                      type="text"
-                      required
-                      value={formData.pic_nama}
-                      onChange={(e) => setFormData({...formData, pic_nama: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      PIC Kontak
-                    </label>
-                    <input
-                      type="text"
-                      value={formData.pic_kontak}
-                      onChange={(e) => setFormData({...formData, pic_kontak: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Kategori
-                    </label>
-                    <select
-                      value={formData.kategori}
-                      onChange={(e) => setFormData({...formData, kategori: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  {/* Footer Actions */}
+                  <div className="flex justify-end gap-4 pt-6 border-t border-[#e5e7eb]">
+                    <button
+                      type="button"
+                      onClick={resetForm}
+                      className="px-6 py-3 text-[#000000] bg-white border border-[#e5e7eb] rounded-xl font-medium hover:bg-gray-50 transition-all duration-200 shadow-sm hover:shadow-md"
                     >
-                      <option value="umum">Umum</option>
-                      <option value="rapat">Rapat</option>
-                      <option value="pelatihan">Pelatihan</option>
-                      <option value="seminar">Seminar</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Prioritas
-                    </label>
-                    <select
-                      value={formData.prioritas}
-                      onChange={(e) => setFormData({...formData, prioritas: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      Batal
+                    </button>
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="px-6 py-3 bg-black hover:opacity-90 text-white rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
                     >
-                      <option value="biasa">Biasa</option>
-                      <option value="penting">Penting</option>
-                      <option value="sangat penting">Sangat Penting</option>
-                    </select>
+                      {loading ? 'Menyimpan...' : editingId ? 'Perbarui' : 'Simpan'}
+                    </button>
                   </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Target Peserta
-                    </label>
-                    <input
-                      type="number"
-                      value={formData.peserta_target}
-                      onChange={(e) => setFormData({...formData, peserta_target: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      min="1"
-                    />
-                  </div>
-
-                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                      Status
-                    </label>
-                    <select
-                      value={formData.status}
-                      onChange={(e) => setFormData({...formData, status: e.target.value})}
-                      className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                      <option value="aktif">Aktif</option>
-                      <option value="selesai">Selesai</option>
-                      <option value="dibatalkan">Dibatalkan</option>
-                      <option value="ditunda">Ditunda</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="flex justify-end gap-3 pt-4">
-                  <button
-                    type="button"
-                    onClick={resetForm}
-                    className="px-4 py-2 text-gray-700 bg-gray-200 hover:bg-gray-300 rounded-md transition-colors"
-                  >
-                    Batal
-                  </button>
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors disabled:opacity-50"
-                  >
-                    {loading ? 'Menyimpan...' : editingId ? 'Update' : 'Simpan'}
-                  </button>
-                </div>
-              </form>
+                </form>
+              </div>
             </div>
           </div>
         </div>

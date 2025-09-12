@@ -48,7 +48,7 @@ const AdminLayout = ({ children }) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-bl from-gray-100 via-gray-50 to-white">
-      <header className='flex-1 h-17 z-20 fixed inset-0 bg-transparent backdrop-blur-2xl text-black flex justify-between items-center p-4'>
+      <header className='hidden flex-1 h-17 z-20 fixed inset-0 bg-transparent backdrop-blur-2xl text-black lg:flex justify-between items-center p-4'>
         <div className='flex items-center gap-x-1'>
           <img src={img} alt="" className='w-5' />
           <h1 className='text-black font-black text-xl'>

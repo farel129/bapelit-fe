@@ -1,9 +1,18 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Users, Shield, User, X, Plus, Check, Loader, CheckCircle } from 'lucide-react';
+import {
+  Users,
+  Shield,
+  User,
+  X,
+  Plus,
+  Check,
+  Loader2,
+  CheckCircle,
+} from 'lucide-react';
 import { api } from '../../utils/api';
-import Admin from '../../assets/img/adminrobot.png';
 import toast from 'react-hot-toast';
+import Img from '../../assets/img/adminrobot.png'
 
 function AdminTambahUser() {
   const navigate = useNavigate();
@@ -68,11 +77,9 @@ function AdminTambahUser() {
           closeModal();
           navigate('/admin-daftar-user');
         }, 1500);
-
       } else {
         throw new Error('Unexpected response status: ' + response.status);
       }
-
     } catch (err) {
       console.error('Error creating user:', err);
 
@@ -144,15 +151,15 @@ function AdminTambahUser() {
   const getRoleIcon = (role) => {
     switch (role) {
       case 'kepala':
-        return <Shield className="w-6 h-6" />;
+        return <Shield className="w-6 h-6 text-[#f6339a]" />;
       case 'sekretaris':
-        return <Shield className="w-6 h-6" />;
+        return <Shield className="w-6 h-6 text-[#f6339a]" />;
       case 'user':
-        return <Users className="w-6 h-6" />;
+        return <Users className="w-6 h-6 text-[#f6339a]" />;
       case 'staff':
-        return <User className="w-6 h-6" />;
+        return <User className="w-6 h-6 text-[#f6339a]" />;
       default:
-        return <User className="w-6 h-6" />;
+        return <User className="w-6 h-6 text-[#f6339a]" />;
     }
   };
 
@@ -189,20 +196,19 @@ function AdminTambahUser() {
   const roleOptions = getRoleOptions();
 
   return (
-    <div className="min-h-screen mb-5 flex justify-center items-center p-4 md:p-6 rounded-2xl" style={{backgroundColor: '#FDFCFB'}}>
-      <div className="">
+    <div className="min-h-screen mb-5 flex justify-center items-center p-4 md:p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="max-w-6xl w-full">
 
-
-        <div className='flex flex-col lg:flex-row gap-8 p-8 bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-[#EDE6E3]'>
-          <div className="bg-white rounded-2xl shadow-sm border-2 border-[#EDE6E3] p-6 hover:shadow-lg transition-all duration-300">
+        <div className="flex flex-col lg:flex-row gap-8 p-8 bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200">
+          <div className="flex-1 bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300">
             <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-4 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-2xl shadow-md">
-                <User className="w-6 h-6 text-white" />
+              <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
+                <User className="w-6 h-6 text-[#f6339a]" />
               </div>
               <div>
-                <h3 className="text-lg font-bold text-[#2E2A27] mb-2">Staff</h3>
-                <p className="text-[#6D4C41] text-sm mb-4">Staff operasional di berbagai bidang</p>
-                <div className="text-xs text-[#6D4C41] mb-4">
+                <h3 className="text-lg font-semibold text-[#000000] mb-2">Staff</h3>
+                <p className="text-[#6b7280] text-sm mb-4">Staff operasional di berbagai bidang</p>
+                <div className="text-xs text-[#6b7280] mb-4">
                   <div className="font-semibold mb-1">Bidang:</div>
                   <div>• Semua bidang tersedia</div>
                   <div>• Jabatan dapat disesuaikan</div>
@@ -210,7 +216,7 @@ function AdminTambahUser() {
               </div>
               <button
                 onClick={() => openModal('staff')}
-                className="flex items-center gap-x-2 justify-center w-full py-3 px-6 font-semibold border border-[#EDE6E3] shadow-sm cursor-pointer transition-all duration-300 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white rounded-2xl hover:from-[#6D4C41] hover:to-[#2E2A27] hover:-translate-y-0.5 hover:shadow-md"
+                className="flex items-center gap-x-2 justify-center w-full py-3 px-6 font-semibold border border-[#e5e7eb] cursor-pointer transition-all duration-200 bg-black text-white rounded-2xl hover:opacity-90 hover:-translate-y-0.5 shadow-md"
               >
                 <Plus className='w-4 h-4' />
                 Buat Akun Staff
@@ -218,46 +224,49 @@ function AdminTambahUser() {
             </div>
           </div>
 
-          <img src={Admin} alt="" className='h-72 mx-auto lg:mx-0' />
+          <div className="flex-shrink-0 w-full lg:w-1/3 flex justify-center">
+            <img src={Img} alt="Admin Robot" className="h-64 object-contain" />
+          </div>
         </div>
 
+        {/* Modal Form — Disesuaikan dengan style AdminJadwalAcara */}
         {showModal && (
-          <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-2xl shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border-2 border-[#EDE6E3]">
-              <div className="flex items-center justify-between p-6 border-b border-[#EDE6E3]">
+          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto border border-gray-200">
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
                 <div className="flex items-center gap-3">
-                  <div className="p-3 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-2xl shadow-md">
+                  <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
                     {getRoleIcon(selectedRole)}
                   </div>
                   <div>
-                    <h2 className="text-xl font-bold text-[#2E2A27]">
+                    <h2 className="text-xl font-bold text-[#000000]">
                       Buat Akun {getRoleLabel(selectedRole)}
                     </h2>
-                    <p className="text-sm font-medium text-[#6D4C41]">{getRoleDescription(selectedRole)}</p>
+                    <p className="text-sm font-medium text-[#6b7280]">{getRoleDescription(selectedRole)}</p>
                   </div>
                 </div>
                 <button
                   onClick={closeModal}
                   aria-label="Tutup modal"
                   disabled={loading}
-                  className="p-2 hover:bg-[#FDFCFB] rounded-2xl transition-colors duration-200 disabled:cursor-not-allowed border border-[#EDE6E3]"
+                  className="p-2 hover:bg-gray-50 rounded-xl transition-colors duration-200 disabled:cursor-not-allowed border border-gray-200"
                 >
-                  <X className="w-5 h-5 text-[#6D4C41]" aria-hidden="true" />
+                  <X className="w-5 h-5 text-[#000000]" aria-hidden="true" />
                 </button>
               </div>
 
               <div className="p-6">
                 <form onSubmit={handleSubmit} className="space-y-6">
                   {success && (
-                    <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-2xl text-sm flex items-center gap-2">
-                      <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" aria-hidden="true" />
+                    <div className="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-2xl text-sm flex items-center gap-2">
+                      <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0" aria-hidden="true" />
                       <span>Akun berhasil dibuat! Mengalihkan ke daftar user...</span>
                     </div>
                   )}
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label htmlFor="name" className="block text-sm font-semibold text-[#6D4C41]">
+                      <label htmlFor="name" className="block text-sm font-semibold text-[#000000]">
                         Nama Lengkap
                       </label>
                       <input
@@ -269,11 +278,11 @@ function AdminTambahUser() {
                         onChange={handleChange}
                         required
                         disabled={loading || success}
-                        className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-2xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] outline-none transition-all duration-200 text-[#2E2A27] placeholder-[#6D4C41] shadow-sm disabled:bg-[#FDFCFB] disabled:cursor-not-allowed"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                       />
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="email" className="block text-sm font-semibold text-[#6D4C41]">
+                      <label htmlFor="email" className="block text-sm font-semibold text-[#000000]">
                         Email
                       </label>
                       <input
@@ -285,13 +294,13 @@ function AdminTambahUser() {
                         onChange={handleChange}
                         required
                         disabled={loading || success}
-                        className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-2xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] outline-none transition-all duration-200 text-[#2E2A27] placeholder-[#6D4C41] shadow-sm disabled:bg-[#FDFCFB] disabled:cursor-not-allowed"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                       />
                     </div>
                   </div>
 
                   <div className="space-y-2">
-                    <label htmlFor="password" className="block text-sm font-semibold text-[#6D4C41]">
+                    <label htmlFor="password" className="block text-sm font-semibold text-[#000000]">
                       Password
                     </label>
                     <input
@@ -303,13 +312,13 @@ function AdminTambahUser() {
                       onChange={handleChange}
                       required
                       disabled={loading || success}
-                      className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-2xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] outline-none transition-all duration-200 text-[#2E2A27] placeholder-[#6D4C41] shadow-sm disabled:bg-[#FDFCFB] disabled:cursor-not-allowed"
+                      className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                     />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <label htmlFor="bidang" className="block text-sm font-semibold text-[#6D4C41]">
+                      <label htmlFor="bidang" className="block text-sm font-semibold text-[#000000]">
                         Bidang
                       </label>
                       <select
@@ -319,20 +328,20 @@ function AdminTambahUser() {
                         onChange={handleChange}
                         required
                         disabled={loading || success}
-                        className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-2xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] outline-none transition-all duration-200 text-[#2E2A27] shadow-sm disabled:bg-[#FDFCFB] disabled:cursor-not-allowed appearance-none"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed appearance-none"
                       >
-                        <option value="" className="text-[#6D4C41]">
+                        <option value="" className="text-[#6b7280]">
                           Pilih Bidang
                         </option>
                         {roleOptions.bidang.map((bidang) => (
-                          <option key={bidang} value={bidang} className="bg-white">
+                          <option key={bidang} value={bidang}>
                             {bidang}
                           </option>
                         ))}
                       </select>
                     </div>
                     <div className="space-y-2">
-                      <label htmlFor="jabatan" className="block text-sm font-semibold text-[#6D4C41]">
+                      <label htmlFor="jabatan" className="block text-sm font-semibold text-[#000000]">
                         Jabatan
                       </label>
                       {selectedRole === 'staff' ? (
@@ -345,7 +354,7 @@ function AdminTambahUser() {
                           onChange={handleChange}
                           required
                           disabled={loading || success}
-                          className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-2xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] outline-none transition-all duration-200 text-[#2E2A27] placeholder-[#6D4C41] shadow-sm disabled:bg-[#FDFCFB] disabled:cursor-not-allowed"
+                          className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                         />
                       ) : (
                         <select
@@ -355,13 +364,13 @@ function AdminTambahUser() {
                           onChange={handleChange}
                           required
                           disabled={loading || success}
-                          className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-2xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] outline-none transition-all duration-200 text-[#2E2A27] shadow-sm disabled:bg-[#FDFCFB] disabled:cursor-not-allowed appearance-none"
+                          className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed appearance-none"
                         >
-                          <option value="" className="text-[#6D4C41]">
+                          <option value="" className="text-[#6b7280]">
                             Pilih Jabatan
                           </option>
                           {roleOptions.jabatan.map((jabatan) => (
-                            <option key={jabatan} value={jabatan} className="bg-white">
+                            <option key={jabatan} value={jabatan}>
                               {jabatan}
                             </option>
                           ))}
@@ -375,22 +384,22 @@ function AdminTambahUser() {
                       type="button"
                       onClick={closeModal}
                       disabled={loading}
-                      className="flex-1 py-3 px-6 bg-white text-[#2E2A27] border border-[#EDE6E3] rounded-2xl font-semibold transition-colors duration-200 disabled:bg-[#FDFCFB] disabled:cursor-not-allowed shadow-sm hover:bg-[#FDFCFB]"
+                      className="flex-1 py-3 px-6 bg-white text-[#000000] border border-[#e5e7eb] rounded-xl font-medium transition-colors duration-200 hover:bg-gray-50 shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                     >
                       Batal
                     </button>
                     <button
                       type="submit"
                       disabled={loading || success}
-                      className={`flex-1 py-3 px-6 rounded-2xl shadow-md border border-[#EDE6E3] cursor-pointer font-semibold transition-all duration-200 flex items-center justify-center ${
+                      className={`flex-1 py-3 px-6 rounded-xl font-medium transition-all duration-200 flex items-center justify-center ${
                         loading || success
-                          ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white cursor-not-allowed opacity-75'
-                          : 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white hover:from-[#6D4C41] hover:to-[#2E2A27] hover:-translate-y-0.5 hover:shadow-lg'
+                          ? 'bg-black text-white cursor-not-allowed opacity-75'
+                          : 'bg-black text-white hover:opacity-90 shadow-md hover:-translate-y-0.5'
                       }`}
                     >
                       {loading ? (
                         <>
-                          <Loader className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
                           Menyimpan...
                         </>
                       ) : success ? (

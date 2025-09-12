@@ -313,19 +313,19 @@ const StatsSuratMasuk = () => {
                                             />
                                             <Bar
                                                 dataKey="total"
-                                                fill="#dc2626"
+                                                fill="#f6339a"
                                                 name="total"
                                                 radius={[4, 4, 0, 0]}
                                             />
                                             <Bar
                                                 dataKey="belumDibaca"
-                                                fill="#ef4444"
+                                                fill="#000000"
                                                 name="belumDibaca"
                                                 radius={[4, 4, 0, 0]}
                                             />
                                             <Bar
                                                 dataKey="sudahDibaca"
-                                                fill="#b91c1c"
+                                                fill="#f6339a"
                                                 name="sudahDibaca"
                                                 radius={[4, 4, 0, 0]}
                                             />
@@ -372,7 +372,7 @@ const StatsSuratMasuk = () => {
                         </div>
                     </div>
 
-                    <div className='flex w-full gap-x-2'>
+                    <div className='flex lg:flex-row flex-col w-full gap-2'>
                         <div className="">
                             {/* Quick Actions */}
                             <div className="bg-pink-500 hover:bg-pink-600 transition-colors duration-200 rounded-xl shadow-lg p-5">
@@ -390,9 +390,7 @@ const StatsSuratMasuk = () => {
                         </div>
 
                         {/* Surat List Section */}
-                        <div className="">
                             <SuratMasukTerbaru />
-                        </div>
                     </div>
 
                 </div>
