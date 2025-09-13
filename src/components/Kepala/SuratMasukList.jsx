@@ -253,7 +253,7 @@ const SuratMasukList = () => {
           icon={Mail}
           bgColor="bg-white"
           textColor="text-black"
-          iconBg="bg-pink-500"
+          iconBg="bg-pink-400"
           iconColor='text-white'
           borderColor="border-slate-200"
         />
@@ -273,7 +273,7 @@ const SuratMasukList = () => {
           bgColor="bg-black"
           textColor="text-white"
           iconBg="bg-white"
-          iconColor='text-pink-500'
+          iconColor='text-pink-400'
           borderColor="border-slate-200"
         />
       </div>
@@ -378,7 +378,7 @@ const SuratMasukList = () => {
                       <div className="flex flex-col gap-2">
                         <button
                           onClick={() => handleViewDetail(surat)}
-                          className="flex items-center justify-center gap-x-1 text-pink-500 hover:text-pink-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
+                          className="flex items-center justify-center gap-x-1 text-pink-400 hover:text-pink-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
                         >
                           <Eye className="w-4 h-4" /> Lihat
                         </button>

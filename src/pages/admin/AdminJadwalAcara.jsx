@@ -341,7 +341,7 @@ const AdminJadwalAcara = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-white rounded-2xl shadow-lg">
-              <Calendar className="h-6 w-6 text-pink-500" />
+              <Calendar className="h-6 w-6 text-pink-400" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-[#000000]">Jadwal Acara</h1>
@@ -598,7 +598,7 @@ const AdminJadwalAcara = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-white rounded-xl shadow-lg">
-                      <Calendar className="h-6 w-6 text-pink-500" />
+                      <Calendar className="h-6 w-6 text-pink-400" />
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-[#000000]">

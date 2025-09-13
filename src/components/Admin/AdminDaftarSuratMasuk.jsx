@@ -218,7 +218,7 @@ const AdminDaftarSuratMasuk = () => {
                 <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-white shadow-lg rounded-xl">
-                            <FileText className="h-5 w-5 text-pink-500" />
+                            <FileText className="h-5 w-5 text-pink-400" />
                         </div>
                         <div>
                             <h3 className="font-bold text-[#000000] truncate max-w-[200px]">{surat.asal_instansi}</h3>

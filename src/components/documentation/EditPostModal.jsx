@@ -51,7 +51,7 @@ const EditPostModal = ({
                     <div className="flex space-x-3">
                         <button
                             onClick={() => setEditingPost(null)}
-                            className="flex-1 py-2 border border-slate-200 border border-slate-200-gray-300 rounded-lg hover:bg-gray-50"
+                            className="flex-1 py-2 border border-slate-200 border-slate-200-gray-300 rounded-lg hover:bg-gray-50"
                         >
                             Batal
                         </button>

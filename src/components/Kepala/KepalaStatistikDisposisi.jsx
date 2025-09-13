@@ -40,7 +40,7 @@ const KepalaStatistikDisposisi = () => {
     const statusConfig = {
         belum_dibaca: {
             color: colorPalette[0],
-            gradient: 'from-pink-500 to-pink-600',
+            gradient: 'from-pink-400 to-pink-600',
             bgGradient: 'from-pink-50 to-pink-100',
             icon: AlertCircle,
             label: 'Belum Dibaca'
@@ -116,7 +116,7 @@ const KepalaStatistikDisposisi = () => {
                 <p className="text-black text-sm mb-6">{error}</p>
                 <button
                     onClick={fetchStatistik}
-                    className="bg-gradient-to-br from-pink-500 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg border border-[#EDE6E3]"
+                    className="bg-gradient-to-br from-pink-400 to-pink-600 hover:from-pink-600 hover:to-pink-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg border border-[#EDE6E3]"
                 >
                     Coba Lagi
                 </button>
@@ -158,7 +158,7 @@ const KepalaStatistikDisposisi = () => {
                     icon={Archive}
                     bgColor="bg-white"
                     textColor="text-black"
-                    iconBg="bg-pink-500"
+                    iconBg="bg-pink-400"
                     borderColor="border-slate-200"
                     iconColor='text-white'
                 />
@@ -190,7 +190,7 @@ const KepalaStatistikDisposisi = () => {
                     textColor="text-white"
                     iconBg="bg-white"
                     borderColor="border-slate-200"
-                    iconColor="text-pink-500"
+                    iconColor="text-pink-400"
                 />
             </div>
 

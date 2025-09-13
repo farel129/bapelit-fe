@@ -68,7 +68,7 @@ const AdminBuatSuratKeluar = () => {
     <div className="p-6 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
       <div className="flex items-center gap-x-3 mb-6">
         <div className="p-2.5 bg-white rounded-xl shadow-md">
-          <FileText className="h-5 w-5 text-pink-500" />
+          <FileText className="h-5 w-5 text-pink-400" />
         </div>
         <div>
           <h2 className="text-xl font-bold text-black">Buat Surat Keluar</h2>

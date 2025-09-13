@@ -90,14 +90,14 @@ const StatsSuratMasuk = () => {
 
     const monthlyData = getMonthlyData()
 
-    const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-pink-500', iconColor = 'text-white' }) => (
+    const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-pink-400', iconColor = 'text-white' }) => (
         <div className={`${bgColor} p-4 rounded-xl shadow-lg border-2 ${borderColor}`}>
             <div className="flex items-start justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                         <p className={`text-sm font-semibold ${titleColor}`}>{title}</p>
                         {trend && (
-                            <div className="flex items-center gap-1 text-pink-500">
+                            <div className="flex items-center gap-1 text-pink-400">
                                 <TrendingUp className="w-3 h-3" />
                                 <span className="text-xs font-medium">+{trend}%</span>
                             </div>
@@ -192,7 +192,7 @@ const StatsSuratMasuk = () => {
 
                 {/* Quick Action + Surat List Placeholder */}
                 <div className="flex lg:flex-row flex-col gap-4">
-                    <div className="bg-pink-500 rounded-xl shadow-lg p-5 h-32"></div>
+                    <div className="bg-pink-400 rounded-xl shadow-lg p-5 h-32"></div>
                     <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 h-64"></div>
                 </div>
             </div>
@@ -240,7 +240,7 @@ const StatsSuratMasuk = () => {
                             titleColor='text-white'
                             countColor='text-white'
                             bgIcon='bg-white'
-                            iconColor='text-pink-500'
+                            iconColor='text-pink-400'
                             trend={persentaseBaca > 50 ? "12.5" : null}
                             borderColor='border-black'
                         />
@@ -261,7 +261,7 @@ const StatsSuratMasuk = () => {
                                         <span className="text-xs text-gray-400 font-medium">Belum</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 bg-pink-500 rounded-full"></div>
+                                        <div className="w-4 h-4 bg-pink-400 rounded-full"></div>
                                         <span className="text-xs text-gray-400 font-medium">Sudah</span>
                                     </div>
                                 </div>
@@ -335,7 +335,7 @@ const StatsSuratMasuk = () => {
                                     <p className="text-sm text-gray-400 mt-1">Distribusi surat masuk tahun {new Date().getFullYear()}</p>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <Calendar className="w-5 h-5 text-pink-500" />
+                                    <Calendar className="w-5 h-5 text-pink-400" />
                                 </div>
                             </div>
 
@@ -419,17 +419,17 @@ const StatsSuratMasuk = () => {
                                         <div key={index} className="text-center p-2 flex items-center justify-between bg-gray-50 rounded-xl border border-gray-200">
                                             <div>
                                                 <h4 className="font-semibold text-black text-lg">{month.month}</h4>
-                                                <p className="text-lg font-semibold text-pink-500 mt-1">{month.total}</p>
+                                                <p className="text-lg font-semibold text-pink-400 mt-1">{month.total}</p>
                                             </div>
 
                                             <div className="text-xs text-gray-400 space-y-2">
                                                 <div className="flex justify-between items-center">
                                                     <span>Belum:</span>
-                                                    <span className="text-pink-500 font-semibold bg-pink-50 px-2 py-1 rounded-full">{month.belumDibaca}</span>
+                                                    <span className="text-pink-400 font-semibold bg-pink-50 px-2 py-1 rounded-full">{month.belumDibaca}</span>
                                                 </div>
                                                 <div className="flex justify-between items-center">
                                                     <span>Dibaca:</span>
-                                                    <span className="text-pink-500 font-semibold bg-pink-100 px-2 py-1 rounded-full">{month.sudahDibaca}</span>
+                                                    <span className="text-pink-400 font-semibold bg-pink-100 px-2 py-1 rounded-full">{month.sudahDibaca}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -447,7 +447,7 @@ const StatsSuratMasuk = () => {
                                     <Link to="/admin-surat-masuk">
                                         <div className='text-black flex flex-col space-y-4 items-center justify-center'>
                                             <p className='text-center'>Tambah Surat Masuk</p>
-                                            <div className='border border-pink-500 flex justify-center items-center p-4 rounded-full'>
+                                            <div className='border border-pink-400 flex justify-center items-center p-4 rounded-full'>
                                                 <Plus className='w-7 h-7' />
                                             </div>
                                         </div>

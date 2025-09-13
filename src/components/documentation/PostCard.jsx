@@ -164,7 +164,7 @@ const PostCard = ({
                         className="relative"
                         disabled={isLoadingProfile}
                     >
-                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-full p-0.5">
+                        <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-pink-400 to-orange-400 rounded-full p-0.5">
                             <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                                 {isLoadingProfile ? (
                                     <LoadingSpinner />
@@ -473,7 +473,7 @@ const PostCard = ({
 
                 {/* Add Comment */}
                 <div className="flex items-start space-x-3 pt-2 border-t border-gray-100">
-                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-full p-0.5 flex-shrink-0 mt-1">
+                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 via-pink-400 to-orange-400 rounded-full p-0.5 flex-shrink-0 mt-1">
                         <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                             <span className="text-xs font-semibold text-gray-700">
                                 {user?.name?.charAt(0).toUpperCase() || 'U'}

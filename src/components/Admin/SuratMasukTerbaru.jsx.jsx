@@ -240,7 +240,7 @@ const SuratMasukTerbaru = () => {
                                             {/* Detail Button - Pink Brand */}
                                             <button
                                                 onClick={() => setSelectedSurat(surat)}
-                                                className="inline-flex cursor-pointer hover:-translate-y-0.5 duration-300 items-center px-3 py-2 gap-x-1 text-sm font-semibold text-pink-500 bg-white rounded-xl shadow-lg transition-all"
+                                                className="inline-flex cursor-pointer hover:-translate-y-0.5 duration-300 items-center px-3 py-2 gap-x-1 text-sm font-semibold text-pink-400 bg-white rounded-xl shadow-lg transition-all"
                                                 title="Lihat Detail"
                                             >
                                                 <FileText className="h-3 w-3" />
@@ -479,7 +479,7 @@ const SuratMasukTerbaru = () => {
                                 {selectedSurat.processed_at && (
                                     <div className="mb-8 p-6 bg-gradient-to-r from-pink-50 to-gray-50 rounded-xl border-2 border-pink-200 shadow-md">
                                         <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                            <CheckCircle className="h-5 w-5 text-pink-500" />
+                                            <CheckCircle className="h-5 w-5 text-pink-400" />
                                             Informasi Pemrosesan
                                         </h4>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

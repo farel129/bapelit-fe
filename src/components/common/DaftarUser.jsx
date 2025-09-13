@@ -93,7 +93,7 @@ const DaftarUser = () => {
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="bg-white hover:bg-gray-50 border border-gray-200 gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-pink-500"
+          className="bg-white hover:bg-gray-50 border border-gray-200 gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-pink-400"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
         </button>
@@ -108,7 +108,7 @@ const DaftarUser = () => {
               <p className="text-lg font-bold text-black mt-2">{users.length}</p>
             </div>
             <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
-              <Users className="w-6 h-6 text-pink-500" />
+              <Users className="w-6 h-6 text-pink-400" />
             </div>
           </div>
         </div>
@@ -120,7 +120,7 @@ const DaftarUser = () => {
               <p className="text-lg font-bold text-black mt-2">{uniqueBidang.length}</p>
             </div>
             <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
-              <Building className="w-6 h-6 text-pink-500" />
+              <Building className="w-6 h-6 text-pink-400" />
             </div>
           </div>
         </div>
@@ -132,7 +132,7 @@ const DaftarUser = () => {
               <p className="text-lg font-bold text-black mt-2">{filteredUsers.length}</p>
             </div>
             <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
-              <Filter className="w-6 h-6 text-pink-500" />
+              <Filter className="w-6 h-6 text-pink-400" />
             </div>
           </div>
         </div>
@@ -148,7 +148,7 @@ const DaftarUser = () => {
               placeholder="Cari nama atau email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200 text-sm shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 text-sm shadow-sm"
             />
           </div>
 
@@ -157,7 +157,7 @@ const DaftarUser = () => {
             <select
               value={filterBidang}
               onChange={(e) => setFilterBidang(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200 text-sm appearance-none cursor-pointer shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 text-sm appearance-none cursor-pointer shadow-sm"
             >
               <option value="" className="text-gray-600">Semua Bidang</option>
               {uniqueBidang.map(bidang => (

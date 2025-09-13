@@ -202,7 +202,7 @@ const AdminBuatSuratMasuk = () => {
         <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-md hover:shadow-lg transition-all duration-300">
           <h2 className="text-lg font-bold mb-6 flex items-center">
             <div className="p-2.5 bg-white rounded-xl shadow-md mr-3">
-              <Building2 className="w-5 h-5 text-pink-500" />
+              <Building2 className="w-5 h-5 text-pink-400" />
             </div>
             Data Surat Masuk
           </h2>
@@ -219,8 +219,8 @@ const AdminBuatSuratMasuk = () => {
                 onFocus={() => setFocusedField('asal_instansi')}
                 onBlur={() => setFocusedField(null)}
                 className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300 bg-[#FDFCFB] ${focusedField === 'asal_instansi'
-                  ? 'border-pink-500 shadow-lg ring-4 ring-pink-500/20'
-                  : 'border-[#EDE6E3] hover:border-pink-500'}`}
+                  ? 'border-pink-400 shadow-lg ring-4 ring-pink-400/20'
+                  : 'border-[#EDE6E3] hover:border-pink-400'}`}
                 style={{ color: '#2E2A27' }}
                 placeholder="Contoh: Dinas Pendidikan Kota Tasikmalaya"
                 required
@@ -235,7 +235,7 @@ const AdminBuatSuratMasuk = () => {
                 name="nomor_surat"
                 value={formData.nomor_surat}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20 hover:border-pink-500 transition-all duration-300"
+                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-400 focus:shadow-lg focus:ring-4 focus:ring-pink-400/20 hover:border-pink-400 transition-all duration-300"
                 style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 123/ABC/2024"
                 required
@@ -250,7 +250,7 @@ const AdminBuatSuratMasuk = () => {
                 name="tanggal_surat"
                 value={formData.tanggal_surat}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20 hover:border-pink-500 transition-all duration-300"
+                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-400 focus:shadow-lg focus:ring-4 focus:ring-pink-400/20 hover:border-pink-400 transition-all duration-300"
                 style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 1 Januari 2025"
                 required
@@ -267,7 +267,7 @@ const AdminBuatSuratMasuk = () => {
                 name="diterima_tanggal"
                 value={formData.diterima_tanggal}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20 hover:border-pink-500 transition-all duration-300"
+                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-400 focus:shadow-lg focus:ring-4 focus:ring-pink-400/20 hover:border-pink-400 transition-all duration-300"
                 style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 1 Januari 2025"
                 required
@@ -282,7 +282,7 @@ const AdminBuatSuratMasuk = () => {
                 name="nomor_agenda"
                 value={formData.nomor_agenda}
                 onChange={handleChange}
-                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20 hover:border-pink-500 transition-all duration-300"
+                className="w-full px-4 py-3 rounded-xl border-2 outline-none bg-[#FDFCFB] border-[#EDE6E3] focus:border-pink-400 focus:shadow-lg focus:ring-4 focus:ring-pink-400/20 hover:border-pink-400 transition-all duration-300"
                 style={{ color: '#2E2A27' }}
                 placeholder="Contoh: 1212"
                 required
@@ -298,7 +298,7 @@ const AdminBuatSuratMasuk = () => {
               value={formData.keterangan}
               onChange={handleChange}
               rows={4}
-              className="w-full px-4 py-3 rounded-xl outline-none border-2 bg-[#FDFCFB] border-[#EDE6E3] resize-none focus:border-pink-500 focus:shadow-lg focus:ring-4 focus:ring-pink-500/20 hover:border-pink-500 transition-all duration-300"
+              className="w-full px-4 py-3 rounded-xl outline-none border-2 bg-[#FDFCFB] border-[#EDE6E3] resize-none focus:border-pink-400 focus:shadow-lg focus:ring-4 focus:ring-pink-400/20 hover:border-pink-400 transition-all duration-300"
               style={{ color: '#2E2A27' }}
               placeholder="Jelaskan isi surat secara singkat..."
               required
@@ -310,7 +310,7 @@ const AdminBuatSuratMasuk = () => {
         <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-md hover:shadow-lg transition-all duration-300">
           <h2 className="text-lg font-bold mb-6 flex items-center" style={{ color: '#2E2A27' }}>
             <div className="p-2.5 bg-white rounded-xl shadow-md mr-3">
-              <Camera className="w-5 h-5 text-pink-500" />
+              <Camera className="w-5 h-5 text-pink-400" />
             </div>
             Upload File Surat <span className="text-red-500 text-sm ml-1">*</span>
           </h2>
@@ -324,7 +324,7 @@ const AdminBuatSuratMasuk = () => {
           />
 
           {selectedFiles.length === 0 ? (
-            <label htmlFor="photos" className="block text-center p-12 border-2 border-dashed border-[#EDE6E3] rounded-xl cursor-pointer hover:bg-[#FDFCFB] hover:border-pink-500 transition-all duration-300">
+            <label htmlFor="photos" className="block text-center p-12 border-2 border-dashed border-[#EDE6E3] rounded-xl cursor-pointer hover:bg-[#FDFCFB] hover:border-pink-400 transition-all duration-300">
               <Upload className="w-10 h-10 mx-auto mb-4" style={{ color: '#6D4C41' }} />
               <p className="font-bold" style={{ color: '#2E2A27' }}>Klik untuk upload file</p>
               <p className="text-sm" style={{ color: '#6D4C41' }}>JPEG, PNG, GIF, WEBP, PDF (maks 5MB)</p>
@@ -337,7 +337,7 @@ const AdminBuatSuratMasuk = () => {
                     {file.type === 'application/pdf' ? (
                       // Tampilan untuk PDF
                       <div
-                        className="w-full h-24 bg-[#FDFCFB] rounded-lg flex flex-col items-center justify-center cursor-pointer border-2 border-[#EDE6E3] hover:border-pink-500 transition-all duration-300"
+                        className="w-full h-24 bg-[#FDFCFB] rounded-lg flex flex-col items-center justify-center cursor-pointer border-2 border-[#EDE6E3] hover:border-pink-400 transition-all duration-300"
                         onClick={() => openPreviewModal(null, index)}
                       >
                         <FileIcon className="w-8 h-8 text-red-500 mb-1" />
@@ -350,7 +350,7 @@ const AdminBuatSuratMasuk = () => {
                       <img
                         src={previewUrls[index]}
                         alt=""
-                        className="w-full h-24 object-cover rounded-lg cursor-pointer border-2 border-[#EDE6E3] hover:border-pink-500 transition-all duration-300"
+                        className="w-full h-24 object-cover rounded-lg cursor-pointer border-2 border-[#EDE6E3] hover:border-pink-400 transition-all duration-300"
                         onClick={() => openPreviewModal(previewUrls[index], index)}
                       />
                     )}
@@ -382,7 +382,7 @@ const AdminBuatSuratMasuk = () => {
                 {selectedFiles.length < MAX_FILES && (
                   <label
                     htmlFor="photos"
-                    className="flex flex-col items-center justify-center border-2 border-dashed border-[#EDE6E3] rounded-lg h-24 cursor-pointer hover:bg-[#FDFCFB] hover:border-pink-500 transition-all duration-300"
+                    className="flex flex-col items-center justify-center border-2 border-dashed border-[#EDE6E3] rounded-lg h-24 cursor-pointer hover:bg-[#FDFCFB] hover:border-pink-400 transition-all duration-300"
                   >
                     <Plus className="w-5 h-5" style={{ color: '#6D4C41' }} />
                     <span className="text-xs" style={{ color: '#6D4C41' }}>Tambah</span>
@@ -465,7 +465,7 @@ const AdminBuatSuratMasuk = () => {
             <div className="relative flex items-center justify-between p-5 pb-4">
               <div className="flex items-center space-x-3">
                 <div className="relative">
-                  <div className="w-10 h-10 bg-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <div className="w-10 h-10 bg-pink-400 rounded-2xl flex items-center justify-center shadow-lg">
                     <Sparkles className="w-6 h-6 text-white" />
                   </div>
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
@@ -495,7 +495,7 @@ const AdminBuatSuratMasuk = () => {
               </div>
               <div className="w-full bg-[#EDE6E3] rounded-full h-1 overflow-hidden">
                 <div
-                  className="h-full bg-gradient-to-r from-pink-500 to-[#6D4C41] rounded-full transition-all duration-500 ease-out"
+                  className="h-full bg-gradient-to-r from-pink-400 to-[#6D4C41] rounded-full transition-all duration-500 ease-out"
                   style={{ width: `${((currentStep + 1) / steps.length) * 100}%` }}
                 ></div>
               </div>
@@ -504,7 +504,7 @@ const AdminBuatSuratMasuk = () => {
               <div className="relative">
                 <div className="text-center space-y-6 animate-in mt-6 fade-in slide-in-from-right-4 duration-500" key={currentStep}>
                   <div className="flex justify-center">
-                    <div className="w-12 h-12 bg-gradient-to-br from-pink-500 to-black rounded-3xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-200">
+                    <div className="w-12 h-12 bg-gradient-to-br from-pink-400 to-black rounded-3xl flex items-center justify-center shadow-lg transform hover:scale-105 transition-transform duration-200">
                       <div className="text-white">
                         {steps[currentStep].icon}
                       </div>
@@ -525,7 +525,7 @@ const AdminBuatSuratMasuk = () => {
                       <div
                         key={index}
                         className={`w-2 h-2 rounded-full transition-all duration-300 ${index === currentStep
-                          ? 'bg-pink-500 scale-125'
+                          ? 'bg-pink-400 scale-125'
                           : index < currentStep
                             ? 'bg-green-400 scale-110'
                             : 'bg-[#EDE6E3]'
@@ -542,7 +542,7 @@ const AdminBuatSuratMasuk = () => {
                 disabled={currentStep === 0}
                 className={`px-6 py-3 rounded-2xl font-medium transition-all duration-200 ${currentStep === 0
                   ? 'text-[#6D4C41] cursor-not-allowed bg-[#FDFCFB] border border-[#EDE6E3]'
-                  : 'text-[#2E2A27] hover:bg-[#FDFCFB] cursor-pointer hover:-translate-y-0.5 bg-white border border-[#EDE6E3] hover:border-pink-500'
+                  : 'text-[#2E2A27] hover:bg-[#FDFCFB] cursor-pointer hover:-translate-y-0.5 bg-white border border-[#EDE6E3] hover:border-pink-400'
                   }`}
               >
                 Sebelumnya
@@ -551,7 +551,7 @@ const AdminBuatSuratMasuk = () => {
                 {currentStep < steps.length - 1 ? (
                   <button
                     onClick={nextStep}
-                    className="px-6 py-3 shadow-lg hover:-translate-y-0.5 border border-[#EDE6E3] bg-gradient-to-r from-pink-500 to-black text-sm text-white cursor-pointer rounded-2xl font-medium hover:shadow-lg flex items-center space-x-2 group hover:from-[#6D4C41] hover:to-[#2E2A27] transition-all duration-300"
+                    className="px-6 py-3 shadow-lg hover:-translate-y-0.5 border border-[#EDE6E3] bg-gradient-to-r from-pink-400 to-black text-sm text-white cursor-pointer rounded-2xl font-medium hover:shadow-lg flex items-center space-x-2 group hover:from-[#6D4C41] hover:to-[#2E2A27] transition-all duration-300"
                   >
                     <span>Selanjutnya</span>
                     <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />

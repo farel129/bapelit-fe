@@ -85,7 +85,7 @@ const Leaderboard = () => {
           <div className="relative z-10">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4 shadow-lg transform hover:scale-110 transition-all duration-300 bg-white"
               style={{ border: '2px solid #e5e7eb' }}>
-              <BarChart3 className="w-8 h-8 text-pink-500" />
+              <BarChart3 className="w-8 h-8 text-pink-400" />
             </div>
             <h1 className="text-xl md:text-2xl font-bold mb-1 text-black">
               Papan Disposisi
