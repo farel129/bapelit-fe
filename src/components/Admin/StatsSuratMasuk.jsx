@@ -8,90 +8,87 @@ import { Link } from 'react-router-dom'
 import SuratMasukTerbaru from './SuratMasukTerbaru.jsx'
 
 const StatsSuratMasuk = () => {
-    const [loading, setLoading] = useState(true);
-
-    const [suratData, setSuratData] = useState([]);
-    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(true)
+    const [suratData, setSuratData] = useState([])
+    const [error, setError] = useState('')
 
     // Fetch data dari API
     useEffect(() => {
-        fetchAllData();
-    }, []);
+        fetchAllData()
+    }, [])
 
     const fetchAllData = async () => {
         try {
-            setLoading(true);
-            setError('');
-            const suratResponse = await api.get('/surat-masuk');
-            setSuratData(suratResponse.data?.data || []);
+            setLoading(true)
+            setError('')
+            const suratResponse = await api.get('/surat-masuk')
+            setSuratData(suratResponse.data?.data || [])
         } catch (err) {
-            console.error('Error fetching data:', err);
+            console.error('Error fetching data:', err)
             if (err.response) {
-                const errorMessage = err.response.data?.error || err.response.data?.message || `Server error: ${err.response.status}`;
-                setError(errorMessage);
-                toast.error(errorMessage);
+                const errorMessage = err.response.data?.error || err.response.data?.message || `Server error: ${err.response.status}`
+                setError(errorMessage)
+                toast.error(errorMessage)
             } else if (err.request) {
-                setError('Tidak ada respon dari server. Pastikan server backend berjalan.');
-                toast.error('Tidak ada respon dari server');
+                setError('Tidak ada respon dari server. Pastikan server backend berjalan.')
+                toast.error('Tidak ada respon dari server')
             } else {
-                setError('Terjadi kesalahan saat mengambil data');
-                toast.error('Terjadi kesalahan saat mengambil data');
+                setError('Terjadi kesalahan saat mengambil data')
+                toast.error('Terjadi kesalahan saat mengambil data')
             }
         } finally {
-            setLoading(false);
+            setLoading(false)
         }
-    };
+    }
 
     // Calculate statistics
-    const totalSurat = suratData.length;
-    const belumDibaca = suratData.filter(surat => surat.status === 'belum dibaca').length;
-    const sudahDibaca = suratData.filter(surat => surat.status === 'sudah dibaca').length;
-    const persentaseBaca = totalSurat > 0 ? ((sudahDibaca / totalSurat) * 100).toFixed(1) : 0;
+    const totalSurat = suratData.length
+    const belumDibaca = suratData.filter(surat => surat.status === 'belum dibaca').length
+    const sudahDibaca = suratData.filter(surat => surat.status === 'sudah dibaca').length
+    const persentaseBaca = totalSurat > 0 ? ((sudahDibaca / totalSurat) * 100).toFixed(1) : 0
 
     // pink color palette for charts
     const pieData = [
-        { name: 'Belum Dibaca', value: belumDibaca, color: '#000000' }, // pink-500
-        { name: 'Sudah Dibaca', value: sudahDibaca, color: '#f6339a' }   // pink-500
-    ];
+        { name: 'Belum Dibaca', value: belumDibaca, color: '#000000' },
+        { name: 'Sudah Dibaca', value: sudahDibaca, color: '#f6339a' }
+    ]
 
     // Calculate monthly data for bar chart
     const getMonthlyData = () => {
         const months = [
             'Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun',
             'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'
-        ];
+        ]
 
-        const currentYear = new Date().getFullYear();
-        const monthlyCount = {};
+        const currentYear = new Date().getFullYear()
+        const monthlyCount = {}
 
-        // Initialize all months with 0
         months.forEach((month, index) => {
             monthlyCount[index] = {
                 month: month,
                 total: 0,
                 belumDibaca: 0,
                 sudahDibaca: 0
-            };
-        });
+            }
+        })
 
-        // Count surat by month
         suratData.forEach(surat => {
-            const suratDate = new Date(surat.created_at);
+            const suratDate = new Date(surat.created_at)
             if (suratDate.getFullYear() === currentYear) {
-                const monthIndex = suratDate.getMonth();
-                monthlyCount[monthIndex].total++;
+                const monthIndex = suratDate.getMonth()
+                monthlyCount[monthIndex].total++
                 if (surat.status === 'belum dibaca') {
-                    monthlyCount[monthIndex].belumDibaca++;
+                    monthlyCount[monthIndex].belumDibaca++
                 } else {
-                    monthlyCount[monthIndex].sudahDibaca++;
+                    monthlyCount[monthIndex].sudahDibaca++
                 }
             }
-        });
+        })
 
-        return Object.values(monthlyCount);
-    };
+        return Object.values(monthlyCount)
+    }
 
-    const monthlyData = getMonthlyData();
+    const monthlyData = getMonthlyData()
 
     const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-pink-500', iconColor = 'text-white' }) => (
         <div className={`${bgColor} p-4 rounded-xl shadow-lg border-2 ${borderColor} hover:shadow-xl transition-all duration-300`}>
@@ -116,20 +113,90 @@ const StatsSuratMasuk = () => {
                 </div>
             </div>
         </div>
-    );
+    )
 
+    // SHIMMER SKELETON COMPONENT (ANIMATED GRADIENT)
+    const Skeleton = ({ width = '100%', height, radius = 'lg' }) => (
+        <div
+            className={`bg-gradient-to-r from-gray-200 via-gray-300 to-gray-200 animate-shimmer rounded-${radius}`}
+            style={{
+                backgroundSize: '200% 100%',
+                width,
+                height,
+            }}
+        />
+    )
+
+    // WIREFRAME LOADING COMPONENT WITH SHIMMER EFFECT
     if (loading) {
         return (
-            <div className="flex items-center justify-center py-16 bg-gray-50">
-                <div className="flex flex-col items-center gap-6">
-                    <div className="relative">
-                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-gray-200"></div>
-                        <div className="animate-spin rounded-full h-16 w-16 border-4 border-pink-500 border-t-transparent absolute inset-0"></div>
+            <div className="p-6 bg-gray-50 space-y-6">
+                {/* Header Section */}
+                <div className="flex flex-row gap-x-2 items-center mb-5 w-full">
+                    <div className="w-1 h-5 bg-gray-300 rounded-full"></div>
+                    <Skeleton width="100px" height="16px" radius="full" />
+                </div>
+
+                {/* Stats Cards */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                    {[...Array(4)].map((_, i) => (
+                        <div key={i} className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                            <div className="space-y-4">
+                                <Skeleton width="80px" height="16px" radius="full" />
+                                <Skeleton width="60px" height="32px" radius="md" />
+                                <Skeleton width="100px" height="14px" radius="full" />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+                {/* Charts Section */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+                    {/* Pie Chart Skeleton */}
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                        <div className="space-y-4">
+                            <Skeleton width="70px" height="18px" radius="full" />
+                            <Skeleton width="120px" height="14px" radius="full" />
+                            <Skeleton width="100%" height="280px" radius="xl" />
+                        </div>
                     </div>
-                    <p className="text-black font-semibold text-lg">Memuat dashboard...</p>
+
+                    {/* Bar Chart Skeleton */}
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                        <div className="space-y-4">
+                            <Skeleton width="100px" height="18px" radius="full" />
+                            <Skeleton width="140px" height="14px" radius="full" />
+                            <Skeleton width="100%" height="280px" radius="xl" />
+                        </div>
+                    </div>
+
+                    {/* Monthly Summary Skeleton */}
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6">
+                        <div className="space-y-4">
+                            <Skeleton width="90px" height="18px" radius="full" />
+                            <div className="grid grid-cols-2 gap-3 mt-4">
+                                {[...Array(8)].map((_, i) => (
+                                    <div key={i} className="bg-gray-100 rounded-xl p-4">
+                                        <Skeleton width="50px" height="16px" radius="full" />
+                                        <Skeleton width="40px" height="20px" radius="md" className="mt-2" />
+                                        <div className="flex flex-col gap-1 mt-3">
+                                            <Skeleton width="40px" height="12px" radius="full" />
+                                            <Skeleton width="30px" height="12px" radius="full" />
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Quick Action + Surat List Placeholder */}
+                <div className="flex lg:flex-row flex-col gap-4">
+                    <div className="bg-pink-500 rounded-xl shadow-lg p-5 h-32"></div>
+                    <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 h-64"></div>
                 </div>
             </div>
-        );
+        )
     }
 
     return (
@@ -390,7 +457,7 @@ const StatsSuratMasuk = () => {
                         </div>
 
                         {/* Surat List Section */}
-                            <SuratMasukTerbaru />
+                        <SuratMasukTerbaru />
                     </div>
 
                 </div>

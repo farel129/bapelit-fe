@@ -11,6 +11,7 @@ import {
   X,
 } from 'lucide-react';
 import { api } from '../../utils/api';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const Leaderboard = () => {
   const [activeTab, setActiveTab] = useState('atasan');
@@ -50,12 +51,7 @@ const Leaderboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-8 w-full max-w-md text-center">
-          <div className="flex flex-col items-center space-y-4">
-            <Loader2 className="animate-spin w-12 h-12 text-blue-600" />
-            <p className="text-lg font-semibold text-[#000000]">Memuat data leaderboard...</p>
-          </div>
-        </div>
+        <LoadingSpinner text='Memuat peringkat' />
       </div>
     );
   }
@@ -68,7 +64,7 @@ const Leaderboard = () => {
             <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-red-50 shadow-lg">
               <BarChart3 className="w-8 h-8 text-red-600" />
             </div>
-            <p className="text-lg font-semibold text-[#000000]">{error}</p>
+            <p className="text-sm font-semibold text-[#000000]">{error}</p>
             <button
               onClick={fetchLeaderboardData}
               className="px-8 py-3 bg-black hover:opacity-90 text-white rounded-xl font-medium transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50"
@@ -82,19 +78,16 @@ const Leaderboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
+    <div className="min-h-screen">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Header with Consistent Style */}
         <div className="text-center mb-8 relative">
-          <div className="absolute inset-0 flex items-center justify-center opacity-10">
-            <BarChart3 className="w-32 h-32 text-[#f6339a]" />
-          </div>
           <div className="relative z-10">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4 shadow-lg transform hover:scale-110 transition-all duration-300 bg-white"
-                 style={{ border: '2px solid #e5e7eb' }}>
-              <BarChart3 className="w-8 h-8 text-[#f6339a]" />
+              style={{ border: '2px solid #e5e7eb' }}>
+              <BarChart3 className="w-8 h-8 text-pink-500" />
             </div>
-            <h1 className="text-xl md:text-2xl font-bold mb-1 text-[#000000]">
+            <h1 className="text-xl md:text-2xl font-bold mb-1 text-black">
               Papan Disposisi
             </h1>
             <p className="text-base max-w-3xl mx-auto font-medium leading-relaxed text-[#6b7280]">
@@ -104,26 +97,24 @@ const Leaderboard = () => {
         </div>
 
         {/* Enhanced Tabs — Match AdminJadwalAcara Style */}
-        <div className="flex justify-center mb-8">
+        <div className="flex justify-center mb-4">
           <div className="rounded-2xl shadow-lg border border-gray-200 p-2 flex backdrop-blur-sm bg-white/80">
             <button
               onClick={() => setActiveTab('atasan')}
-              className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
-                activeTab === 'atasan'
-                  ? 'bg-[#f6339a] text-white shadow-lg scale-105'
+              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 flex items-center space-x-2 ${activeTab === 'atasan'
+                  ? 'bg-black text-white shadow-lg scale-105'
                   : 'text-[#000000] hover:bg-gray-50 hover:shadow-md'
-              }`}
+                }`}
             >
               <Users className="w-5 h-5" />
               <span>Kepala Bidang</span>
             </button>
             <button
               onClick={() => setActiveTab('bawahan')}
-              className={`px-8 py-3 rounded-xl font-medium transition-all duration-300 flex items-center space-x-2 ${
-                activeTab === 'bawahan'
-                  ? 'bg-[#f6339a] text-white shadow-lg scale-105'
+              className={`px-4 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 flex items-center space-x-2 ${activeTab === 'bawahan'
+                  ? 'bg-black text-white shadow-lg scale-105'
                   : 'text-[#000000] hover:bg-gray-50 hover:shadow-md'
-              }`}
+                }`}
             >
               <TrendingUp className="w-5 h-5" />
               <span>Bawahan</span>
@@ -138,7 +129,7 @@ const Leaderboard = () => {
               <div className="w-20 h-20 rounded-xl flex items-center justify-center mx-auto mb-6 bg-gray-50 shadow-sm">
                 <BarChart3 className="w-10 h-10 text-[#6b7280]" />
               </div>
-              <p className="text-lg font-semibold text-[#000000] mb-1">Belum ada data disposisi</p>
+              <p className="text-sm font-semibold text-[#000000] mb-1">Belum ada data disposisi</p>
               <p className="text-sm text-[#6b7280]">Data akan muncul setelah ada aktivitas disposisi</p>
             </div>
           ) : (
@@ -153,9 +144,8 @@ const Leaderboard = () => {
                 return (
                   <div
                     key={index}
-                    className={`p-6 transition-all duration-500 hover:shadow-lg ${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                    }`}
+                    className={`p-6 transition-all duration-500 hover:shadow-lg ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                      }`}
                   >
                     <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
                       {/* Rank Badge */}
@@ -168,18 +158,18 @@ const Leaderboard = () => {
                             )}
                           </>
                         ) : (
-                          <span className="text-lg font-bold text-[#000000]">{index + 1}</span>
+                          <span className="text-sm font-bold text-[#000000]">{index + 1}</span>
                         )}
                       </div>
 
                       {/* Info Section */}
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-[#000000] mb-1 text-lg">
+                        <h3 className="font-bold text-[#000000] mb-1 text-sm">
                           {item[fieldName]}
                         </h3>
                         <div className="flex items-center gap-2 mb-3">
                           <div className="px-3 py-1 rounded-full text-xs font-medium border border-gray-200 bg-white"
-                               style={{ color: '#6b7280' }}>
+                            style={{ color: '#6b7280' }}>
                             {item.bidang}
                           </div>
                         </div>
@@ -208,7 +198,7 @@ const Leaderboard = () => {
 
                       {/* Count */}
                       <div className="text-center sm:text-right flex-shrink-0">
-                        <span className="text-2xl font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent">
+                        <span className="text-xl font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent">
                           {item.jumlah_disposisi}
                         </span>
                         <div className="text-xs uppercase tracking-wider font-medium text-[#6b7280] mt-1">
@@ -242,27 +232,27 @@ const Leaderboard = () => {
 
         {/* Enhanced Footer Stats — Match AdminJadwalAcara Style */}
         {leaderboardData.length > 0 && (
-          <div className="mt-8 bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-6">
+          <div className="mt-8 bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-6 max-w-2xl mx-auto">
             <h3 className="text-xl font-bold text-center mb-6 text-[#000000]">
               Statistik Keseluruhan
             </h3>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
               <div className="text-center p-6 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent mb-2">
+                <div className="text-lg font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent mb-2">
                   {leaderboardData.reduce((sum, item) => sum + item.jumlah_disposisi, 0)}
                 </div>
                 <div className="text-sm font-medium text-[#6b7280]">Total Disposisi</div>
                 <div className="text-xs text-[#6b7280] mt-1">Keseluruhan sistem</div>
               </div>
               <div className="text-center p-6 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent mb-2">
+                <div className="text-lg font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent mb-2">
                   {Math.round(leaderboardData.reduce((sum, item) => sum + item.jumlah_disposisi, 0) / leaderboardData.length)}
                 </div>
                 <div className="text-sm font-medium text-[#6b7280]">Rata-rata per Orang</div>
                 <div className="text-xs text-[#6b7280] mt-1">Distribusi kerja</div>
               </div>
               <div className="text-center p-6 rounded-xl border border-gray-200 bg-white shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-3xl font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent mb-2">
+                <div className="text-lg font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent mb-2">
                   {leaderboardData.length}
                 </div>
                 <div className="text-sm font-medium text-[#6b7280]">Total Partisipan</div>

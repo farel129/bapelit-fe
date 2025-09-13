@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { api } from '../../utils/api';
 import { useAuth } from '../../contexts/AuthContext';
-import { Camera } from 'lucide-react';
+import { Camera, LayoutDashboard } from 'lucide-react';
 import PostCard from '../documentation/PostCard';
 import TrendingView from '../documentation/TrendingView';
 import ProfileView from '../documentation/ProfileView';
@@ -13,6 +13,7 @@ import DeleteConfirmModal from '../documentation/DeleteConfirmModal';
 import PostDetailModal from '../documentation/PostDetailModal';
 import Navbar from '../documentation/Navbar';
 import SearchBar from '../documentation/SearchBar';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const DocumentationPage = () => {
     const { user, loading: authLoading } = useAuth();
@@ -172,31 +173,31 @@ const DocumentationPage = () => {
 
 
     // Ganti function performSearch di App.js (sekitar baris 97)
-const performSearch = async () => {
-    if (!feedFilters.search.trim()) return;
-    setSearchLoading(true);
-    try {
-        const params = new URLSearchParams();
-        params.append('search', feedFilters.search); // Pakai 'search' bukan 'q'
-        if (feedFilters.kategori) params.append('kategori', feedFilters.kategori);
-        params.append('page', feedFilters.page);
-        params.append('limit', '10');
-        
-        // Gunakan endpoint feed yang sudah include files
-        const response = await api.get(`/dokumentasi/?${params}`);
-        
-        console.log('Fixed search with files:', response.data.data[0]?.files);
-        
-        if (feedFilters.page === 1) {
-            setSearchResults(response.data.data);
-        } else {
-            setSearchResults(prev => [...prev, ...response.data.data]);
+    const performSearch = async () => {
+        if (!feedFilters.search.trim()) return;
+        setSearchLoading(true);
+        try {
+            const params = new URLSearchParams();
+            params.append('search', feedFilters.search); // Pakai 'search' bukan 'q'
+            if (feedFilters.kategori) params.append('kategori', feedFilters.kategori);
+            params.append('page', feedFilters.page);
+            params.append('limit', '10');
+
+            // Gunakan endpoint feed yang sudah include files
+            const response = await api.get(`/dokumentasi/?${params}`);
+
+            console.log('Fixed search with files:', response.data.data[0]?.files);
+
+            if (feedFilters.page === 1) {
+                setSearchResults(response.data.data);
+            } else {
+                setSearchResults(prev => [...prev, ...response.data.data]);
+            }
+        } catch (error) {
+            console.error('Error searching:', error);
         }
-    } catch (error) {
-        console.error('Error searching:', error);
-    }
-    setSearchLoading(false);
-};
+        setSearchLoading(false);
+    };
 
     // Updated handleCreatePost - sekarang menerima data sebagai parameter
     const handleCreatePost = async (postData) => {
@@ -383,10 +384,7 @@ const performSearch = async () => {
     if (authLoading) {
         return (
             <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <p className="text-gray-600">Memuat aplikasi...</p>
-                </div>
+                <LoadingSpinner />
             </div>
         );
     }
@@ -410,7 +408,7 @@ const performSearch = async () => {
     }
 
     return (
-        <div className="min-h-screen">
+        <div className="min-h-screen lg:p-5 p-2">
             <Navbar
                 user={user}
                 currentPage={currentPage}
@@ -422,7 +420,23 @@ const performSearch = async () => {
 
             {/* Main Content */}
             <main className="">
+
+                {currentPage == 'feed' && (
+                    <div className="mb-6">
+                        <div className="flex items-center justify-center mb-4">
+                            <div className="bg-black p-3 rounded-full">
+                                <LayoutDashboard className="w-6 h-6 text-white" />
+                            </div>
+                        </div>
+                        <div className="text-center">
+                            <h1 className="text-2xl font-bold text-gray-900 mb-2">Time line</h1>
+                            <p className="text-gray-500 text-sm">Dokumentasi dari seluruh pegawai</p>
+                        </div>
+                    </div>
+                )}
+
                 {(currentPage === 'feed' || currentPage === 'search') && (
+
                     <SearchBar
                         feedFilters={feedFilters}
                         categories={categories}
@@ -434,8 +448,7 @@ const performSearch = async () => {
                     <>
                         {loading && posts.length === 0 ? (
                             <div className="text-center py-12">
-                                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-                                <p className="mt-4 text-gray-600">Memuat feed...</p>
+                                <LoadingSpinner />
                             </div>
                         ) : posts.length === 0 ? (
                             <div className="text-center py-12">
@@ -559,14 +572,6 @@ const performSearch = async () => {
                 setEditingPost={setEditingPost}
                 setShowDeleteConfirm={setShowDeleteConfirm}
             />
-
-            {/* Loading Overlay */}
-            {loading && (posts.length > 0 || currentPage === 'trending' || currentPage === 'profile') && (
-                <div className="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-2 rounded-lg shadow-lg">
-                    Memuat...
-                </div>
-            )}
-
         </div>
     );
 };

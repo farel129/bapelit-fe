@@ -11,7 +11,9 @@ import {
   Music,
   File,
   Plus,
+  Loader,
 } from 'lucide-react';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const ProfileView = ({
   user,
@@ -205,10 +207,7 @@ const ProfileView = ({
         <div className="p-4 md:p-6">
           {loading ? (
             <div className="flex justify-center items-center py-16">
-              <div className="flex flex-col items-center">
-                <Loader2 className="w-8 h-8 animate-spin text-blue-600 mb-2" />
-                <span className="text-[#6b7280] text-sm">Memuat postingan...</span>
-              </div>
+              <LoadingSpinner />
             </div>
           ) : userPosts.length > 0 ? (
             <>
@@ -256,10 +255,7 @@ const ProfileView = ({
                       {/* Loading Overlay for specific post */}
                       {loadingPostId === post.id && (
                         <div className="absolute inset-0 bg-white bg-opacity-80 flex items-center justify-center z-10 backdrop-blur-sm">
-                          <div className="flex flex-col items-center">
-                            <Loader2 className="w-5 h-5 animate-spin text-blue-600 mb-1" />
-                            <span className="text-xs text-[#6b7280]">Memuat...</span>
-                          </div>
+                          <LoadingSpinner />
                         </div>
                       )}
                       
@@ -295,8 +291,7 @@ const ProfileView = ({
                   >
                     {loadingMore ? (
                       <>
-                        <Loader2 className="w-5 h-5 animate-spin text-blue-600" />
-                        <span>Memuat...</span>
+                        <LoadingSpinner />
                       </>
                     ) : (
                       <>
@@ -333,7 +328,7 @@ const ProfileView = ({
                 >
                   {isCreatingPost ? (
                     <>
-                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <Loader className="w-4 h-4 animate-spin" />
                       Memuat...
                     </>
                   ) : (

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Camera, Heart, MessageCircle, Send, MoreHorizontal, Edit3, Trash2, Bookmark, Loader2, FileText } from 'lucide-react';
+import { Camera, Heart, MessageCircle, Send, MoreHorizontal, Edit3, Trash2, Bookmark, Loader2, FileText, Loader } from 'lucide-react';
 import { canEditPost, canDeletePost } from '../../utils/postUtils';
 import { formatDate } from '../../utils/dateUtils';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const PostCard = ({
     post,
@@ -166,7 +167,7 @@ const PostCard = ({
                         <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-pink-500 to-orange-400 rounded-full p-0.5">
                             <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                                 {isLoadingProfile ? (
-                                    <Loader2 className="w-3 h-3 animate-spin text-gray-700" />
+                                    <LoadingSpinner />
                                 ) : (
                                     <span className="text-xs font-semibold text-gray-700">
                                         {post.user.name.charAt(0).toUpperCase()}
@@ -245,10 +246,7 @@ const PostCard = ({
                     {/* Loading overlay for post content */}
                     {isLoadingPost && (
                         <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
-                            <div className="flex flex-col items-center">
-                                <Loader2 className="w-8 h-8 animate-spin text-gray-600 mb-2" />
-                                <span className="text-sm text-gray-600">Memuat postingan...</span>
-                            </div>
+                            <LoadingSpinner />
                         </div>
                     )}
                     
@@ -259,7 +257,7 @@ const PostCard = ({
                                     {/* Loading indicator for individual image */}
                                     {imageLoading.has(post.files[0].id) && (
                                         <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-                                            <Loader2 className="w-8 h-8 animate-spin text-gray-400" />
+                                            <LoadingSpinner />
                                         </div>
                                     )}
                                     
@@ -325,7 +323,7 @@ const PostCard = ({
                                             {/* Loading indicator for grid images */}
                                             {imageLoading.has(file.id) && (
                                                 <div className="absolute inset-0 bg-gray-100 flex items-center justify-center">
-                                                    <Loader2 className="w-4 h-4 animate-spin text-gray-400" />
+                                                    <Loader className="w-4 h-4 animate-spin text-gray-400" />
                                                 </div>
                                             )}
                                             
@@ -400,7 +398,7 @@ const PostCard = ({
                             disabled={isLoadingPost}
                         >
                             {isLoadingPost ? (
-                                <Loader2 className="w-6 h-6 animate-spin" />
+                                <Loader className="w-6 h-6 animate-spin" />
                             ) : (
                                 <MessageCircle className="w-6 h-6" />
                             )}

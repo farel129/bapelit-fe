@@ -9,6 +9,7 @@ import {
   Check,
   Loader2,
   CheckCircle,
+  Loader,
 } from 'lucide-react';
 import { api } from '../../utils/api';
 import toast from 'react-hot-toast';
@@ -399,7 +400,7 @@ function AdminTambahUser() {
                     >
                       {loading ? (
                         <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
+                          <Loader className="mr-2 h-4 w-4 animate-spin" aria-hidden="true" />
                           Menyimpan...
                         </>
                       ) : success ? (

@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import { api } from '../../utils/api';
 import { useState } from 'react';
 import { useEffect } from 'react';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const AdminDaftarSuratMasuk = () => {
     const [suratData, setSuratData] = useState([]);
@@ -274,8 +275,7 @@ const AdminDaftarSuratMasuk = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f6339a]"></div>
-                <span className="ml-2 text-[#000000]">Memuat surat masuk...</span>
+                <LoadingSpinner />
             </div>
         );
     }

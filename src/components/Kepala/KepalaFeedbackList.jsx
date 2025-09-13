@@ -4,6 +4,7 @@ import { useState } from "react";
 import { api } from "../../utils/api";
 import toast from "react-hot-toast";
 import KepalaFeedbackPhotoModal from "./KepalaFeedbackPhotoModal";
+import LoadingSpinner from "../Ui/LoadingSpinner";
 
 
 // Helper function to get photo as blob URL (sama seperti fitur lain)
@@ -108,10 +109,7 @@ const KepalaFeedbackList = ({ suratId }) => {
   if (loading) {
     return (
       <div className="bg-white rounded-2xl shadow-lg p-6">
-        <div className="flex items-center justify-center py-8">
-          <Loader className="w-6 h-6 animate-spin text-gray-400" />
-          <span className="ml-2 text-gray-500">Memuat feedback...</span>
-        </div>
+        <LoadingSpinner text="Memuat feedback" />
       </div>
     );
   }
@@ -262,10 +260,7 @@ const KepalaFeedbackList = ({ suratId }) => {
                               ) : isLoading ? (
                                 // Loading state
                                 <div className="w-full h-full flex flex-col items-center justify-center text-slate-600">
-                                  <div className="p-3 bg-blue-100 rounded-xl mb-3 shadow-sm">
-                                    <Loader className="w-8 h-8 text-blue-600 animate-spin" />
-                                  </div>
-                                  <span className="text-xs font-medium">Memuat foto...</span>
+                                  <LoadingSpinner text="Memuat file" />
                                 </div>
                               ) : blobUrl ? (
                                 // Loaded image

@@ -4,6 +4,7 @@ import { DisposisiCard } from '../../components/Staff/DisposisiCard';
 import { FileText, AlertCircle, Clock, CheckCircle, Search, X, User, UserCircle2, Building2 } from 'lucide-react';
 import Avatar from '../../assets/img/adminrobot.png'
 import { useAuth } from '../../contexts/AuthContext';
+import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 
 const StaffDashboard = () => {
   const [allDisposisi, setAllDisposisi] = useState([]);
@@ -151,14 +152,8 @@ const StaffDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
-        <div className="text-center">
-          <div className="relative">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4A373] mx-auto mb-3"></div>
-            <div className="absolute inset-0 animate-ping rounded-full h-8 w-8 border border-[#D4A373]/30 mx-auto"></div>
-          </div>
-          <p className="text-[#6D4C41] animate-pulse">Memuat data disposisi...</p>
-        </div>
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner text='Memuat...' />
       </div>
     );
   }

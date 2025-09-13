@@ -4,6 +4,7 @@ import CreateDisposisiModal from "./CreateDisposisiModal";
 import ModalDetailSuratMasuk from "./ModalDetailSuratMasuk";
 import { Eye, Mail, CheckCircle, Clock, ChevronRight, RefreshCcw, FileText, Search, Filter, ChevronLeft } from "lucide-react";
 import toast from 'react-hot-toast';
+import LoadingSpinner from "../Ui/LoadingSpinner";
 
 const SuratMasukList = () => {
   const [suratMasuk, setSuratMasuk] = useState([]);
@@ -47,12 +48,9 @@ const SuratMasukList = () => {
   };
 
   const handleViewDetail = async (surat) => {
-    // Jika status masih belum dibaca, mark as read dulu
     if (surat.status === 'belum dibaca') {
       await markAsRead(surat.id);
     }
-
-    // Buka modal detail
     setViewDetailSurat(surat);
   };
 
@@ -126,7 +124,6 @@ const SuratMasukList = () => {
 
   // Pagination component
   const Pagination = () => {
-    // Always show pagination if there are items, even if only 1 page
     if (totalItems === 0) return null;
 
     const getVisiblePages = () => {
@@ -167,12 +164,12 @@ const SuratMasukList = () => {
     return (
       <div className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border-2 border-[#EDE6E3]">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium" >
+          <span className="text-sm font-medium">
             Menampilkan {startIndex + 1} - {Math.min(endIndex, totalItems)} dari {totalItems} data
           </span>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium" >Per halaman:</span>
+            <span className="text-sm font-medium">Per halaman:</span>
             <select
               value={itemsPerPage}
               onChange={(e) => changeItemsPerPage(Number(e.target.value))}
@@ -194,7 +191,7 @@ const SuratMasukList = () => {
                 disabled={currentPage === 1}
                 className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
-                <ChevronLeft className="h-4 w-4"  />
+                <ChevronLeft className="h-4 w-4" />
               </button>
 
               {getVisiblePages().map((page, index) => (
@@ -204,10 +201,11 @@ const SuratMasukList = () => {
                   <button
                     key={index}
                     onClick={() => goToPage(page)}
-                    className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${currentPage === page
-                      ? 'bg-gradient-to-br from-white to-black text-white border-[#EDE6E3]'
-                      : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-black hover:text-black'
-                      }`}
+                    className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${
+                      currentPage === page
+                        ? 'bg-gradient-to-br from-white to-black text-white border-[#EDE6E3]'
+                        : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-black hover:text-black'
+                    }`}
                   >
                     {page}
                   </button>
@@ -219,7 +217,7 @@ const SuratMasukList = () => {
                 disabled={currentPage === totalPages}
                 className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
-                <ChevronRight className="h-4 w-4"  />
+                <ChevronRight className="h-4 w-4" />
               </button>
             </>
           )}
@@ -231,8 +229,7 @@ const SuratMasukList = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-        <span className="ml-2 text-black">Memuat surat masuk...</span>
+        <LoadingSpinner />
       </div>
     );
   }
@@ -283,7 +280,7 @@ const SuratMasukList = () => {
 
       {/* Filters */}
       <div className="p-3 shadow-lg rounded-2xl border-black/15 border">
-        <div className=" mb-3">
+        <div className="mb-3">
           <div className="flex flex-col lg:flex-row gap-4">
 
             {/* Search */}
@@ -329,7 +326,7 @@ const SuratMasukList = () => {
           </div>
         </div>
 
-        {/* Surat Masuk List */}
+        {/* Surat Masuk List - TABLE VERSION (NO SORTING) */}
         {currentItems.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
             <FileText className="h-12 w-12 text-black mx-auto mb-4" />
@@ -341,69 +338,72 @@ const SuratMasukList = () => {
             </p>
           </div>
         ) : (
-          <div className="space-y-6 mb-8">
-            {currentItems.map((surat) => (
-              <div key={surat.id} className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm hover:shadow-lg transition-all duration-300">
-                <div className="flex justify-between items-start">
-                  <div className="flex-1">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                      <div>
-                        <p className="text-sm font-medium" >Asal Instansi</p>
-                        <p className="font-semibold text-black">{surat.asal_instansi}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium" >Tanggal Surat</p>
-                        <p className="font-semibold text-black">{surat.tanggal_surat}</p>
-                      </div>
-                      <div>
-                        <p className="text-sm font-medium" >Diterima Tanggal</p>
-                        <p className="font-semibold text-black">{surat.diterima_tanggal}</p>
-                      </div>
-                      <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium" >Status:</span>
-                        <span className={`px-3 py-1 rounded-full text-sm font-semibold ${surat.status === 'sudah dibaca'
+          <div className="overflow-x-auto rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
+            <table className="min-w-full divide-y divide-[#EDE6E3] bg-white rounded-2xl">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Asal Instansi</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Tanggal Surat</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Diterima Tanggal</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Keterangan</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#EDE6E3]">
+                {currentItems.map((surat) => (
+                  <tr key={surat.id} className="hover:bg-[#FDFCFB] transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                      {surat.asal_instansi || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      {surat.tanggal_surat || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                      {surat.diterima_tanggal || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                        surat.status === 'sudah dibaca'
                           ? 'bg-green-100 text-green-800 border border-green-200'
                           : 'bg-slate-100 text-yellow-800 border border-slate-200'
-                          }`}>
-                          {surat.status}
-                        </span>
+                      }`}>
+                        {surat.status}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 text-sm text-black max-w-xs truncate" title={surat.keterangan || '-'}>
+                      {surat.keterangan || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex flex-col gap-2">
+                        <button
+                          onClick={() => handleViewDetail(surat)}
+                          className="flex items-center justify-center gap-x-1 text-pink-500 hover:text-pink-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
+                        >
+                          <Eye className="w-4 h-4" /> Lihat
+                        </button>
+
+                        {surat.has_disposisi ? (
+                          <span className="text-green-700 text-xs bg-green-50 px-3 py-1.5 rounded-xl border border-green-200 font-medium">
+                            ✓ Disposisi
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => setSelectedSurat(surat)}
+                            className="flex items-center justify-center gap-x-1 bg-black text-white text-sm font-medium px-3 py-2 rounded-xl hover:opacity-90 transition-all border border-slate-500"
+                          >
+                            <FileText className="w-4 h-4" />Buat Disposisi
+                          </button>
+                        )}
                       </div>
-                    </div>
-
-                    <div className="bg-[#FDFCFB] p-4 rounded-xl border border-[#EDE6E3] mb-4">
-                      <p className="text-sm font-medium" >Keterangan</p>
-                      <p className="text-black">{surat.keterangan}</p>
-                    </div>
-                  </div>
-
-                  <div className="ml-6 flex flex-col space-y-3">
-                    <button
-                      onClick={() => handleViewDetail(surat)}
-                      className="bg-white flex items-center gap-x-2 justify-center shadow-md text-pink-500 px-4 py-3 text-sm font-semibold cursor-pointer rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
-                    >
-                      Lihat Detail<span><ChevronRight className="w-5 h-5" /></span>
-                    </button>
-
-                    {surat.has_disposisi ? (
-                      <div className="text-green-700 text-sm text-center bg-green-50 px-3 py-2.5 rounded-xl border border-green-200 font-semibold">
-                        ✓ Disposisi Sudah Dibuat
-                      </div>
-                    ) : (
-                      <button
-                        onClick={() => setSelectedSurat(surat)}
-                        className="bg-black hover:opacity-90 flex items-center gap-x-2 shadow-md text-white px-4 py-3 rounded-xl cursor-pointer text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-slate-500"
-                      >
-                        Buat Disposisi <FileText className="w-4 h-4" />
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         )}
       </div>
-
 
       {/* Pagination */}
       {totalItems > 0 && <Pagination />}

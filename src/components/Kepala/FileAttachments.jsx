@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { api } from "../../utils/api";
 import { Download, ExternalLink, ChevronLeft, ChevronRight, FileText, Image, File } from "lucide-react";
+import LoadingSpinner from "../Ui/LoadingSpinner";
 
 const FileAttachments = ({ surat }) => {
   const [viewerOpen, setViewerOpen] = useState(false);
@@ -274,8 +275,7 @@ const FileAttachments = ({ surat }) => {
             {loading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-30 backdrop-blur-sm rounded-2xl">
                 <div className="bg-white p-6 rounded-2xl shadow-lg border border-[#EDE6E3]">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4A373] mx-auto mb-3"></div>
-                  <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Memuat file...</p>
+                  <LoadingSpinner />
                 </div>
               </div>
             )}

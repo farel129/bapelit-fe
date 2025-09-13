@@ -22,6 +22,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import Avatar from '../../assets/img/adminrobot.png'
 import toast from 'react-hot-toast';
 import { atasanDisposisiService } from '../../services/atasanDisposisiService';
+import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 
 const KabidDashboard = () => {
   const navigate = useNavigate();
@@ -256,10 +257,7 @@ const KabidDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4A373] mx-auto mb-3"></div>
-          <p className="text-[#6D4C41]">Memuat data disposisi...</p>
-        </div>
+        <LoadingSpinner />
       </div>
     );
   }

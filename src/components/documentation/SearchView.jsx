@@ -2,6 +2,7 @@
 import React from 'react';
 import { Search, Camera } from 'lucide-react';
 import PostCard from './PostCard';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const SearchView = ({
     feedFilters,
@@ -34,8 +35,7 @@ const SearchView = ({
         </div>
         {searchLoading && searchResults.length === 0 ? (
             <div className="text-center py-12">
-                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
-                <p className="mt-4 text-gray-600">Mencari...</p>
+                <LoadingSpinner text='mencari' />
             </div>
         ) : searchResults.length === 0 ? (
             <div className="text-center py-12">

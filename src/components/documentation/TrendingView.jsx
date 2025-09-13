@@ -1,6 +1,7 @@
 // src/components/TrendingView.js
 import React, { useState } from 'react';
-import { TrendingUp, Camera, Heart, MessageCircle, Flame, Loader2, FileText, Video, Music, File } from 'lucide-react';
+import { TrendingUp, Camera, Heart, MessageCircle, Flame, Loader2, FileText, Video, Music, File, Loader } from 'lucide-react';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const TrendingView = ({
     trendingPosts,
@@ -94,7 +95,7 @@ const TrendingView = ({
             {/* Header Section */}
             <div className="mb-6">
                 <div className="flex items-center justify-center mb-4">
-                    <div className="bg-gradient-to-r from-orange-500 to-red-500 p-3 rounded-full">
+                    <div className="bg-black p-3 rounded-full">
                         <Flame className="w-6 h-6 text-white" />
                     </div>
                 </div>
@@ -106,10 +107,7 @@ const TrendingView = ({
 
             {loading ? (
                 <div className="flex justify-center items-center py-16">
-                    <div className="flex flex-col items-center">
-                        <Loader2 className="w-8 h-8 animate-spin text-gray-600 mb-2" />
-                        <span className="text-sm text-gray-600">Memuat trending posts...</span>
-                    </div>
+                    <LoadingSpinner />
                 </div>
             ) : (
                 <>
@@ -160,10 +158,7 @@ const TrendingView = ({
                                                 {/* Loading Overlay for specific post */}
                                                 {loadingPostId === post.id && (
                                                     <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
-                                                        <div className="flex flex-col items-center">
-                                                            <Loader2 className="w-6 h-6 animate-spin text-gray-600 mb-1" />
-                                                            <span className="text-xs text-gray-600">Memuat...</span>
-                                                        </div>
+                                                        <LoadingSpinner />
                                                     </div>
                                                 )}
 
@@ -227,7 +222,7 @@ const TrendingView = ({
                                                     disabled={loadingProfileId === post.user.id}
                                                 >
                                                     {loadingProfileId === post.user.id ? (
-                                                        <Loader2 className="w-3 h-3 animate-spin" />
+                                                        <Loader className="w-3 h-3 animate-spin" />
                                                     ) : (
                                                         post.user.name.charAt(0).toUpperCase()
                                                     )}

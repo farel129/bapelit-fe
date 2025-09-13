@@ -20,11 +20,13 @@ import {
   Loader2,
   Copy,
   ExternalLink,
+  Loader,
 } from 'lucide-react';
 import { api } from '../../utils/api';
-import * as bukuTamuService from '../../services/bukuTamuService'; // Sesuaikan path
+import * as bukuTamuService from '../../services/bukuTamuService';
+import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 
-// === Komponen Modal (Sudah sesuai style AdminJadwalAcara) ===
+// === Komponen Modal (Dipertahankan, tidak diubah) ===
 const Modal = ({ isOpen, onClose, title, children, type = 'info', maxWidth = 'max-w-md' }) => {
   if (!isOpen) return null;
   const typeClasses = {
@@ -57,22 +59,7 @@ const Modal = ({ isOpen, onClose, title, children, type = 'info', maxWidth = 'ma
   );
 };
 
-// === Loading Spinner ===
-const LoadingSpinner = ({ size = 'default', text = 'Memuat...' }) => {
-  const sizeClasses = {
-    sm: 'w-4 h-4',
-    default: 'w-6 h-6',
-    lg: 'w-8 h-8'
-  };
-  return (
-    <div className="flex items-center justify-center space-x-2">
-      <Loader2 className={`animate-spin ${sizeClasses[size]} text-blue-600`} />
-      {text && <span className="text-[#6b7280]">{text}</span>}
-    </div>
-  );
-};
 
-// === Confirmation Modal ===
 const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirmText = 'Konfirmasi', cancelText = 'Batal', type = 'warning' }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type={type}>
@@ -99,7 +86,6 @@ const ConfirmationModal = ({ isOpen, onClose, onConfirm, title, message, confirm
   );
 };
 
-// === Success Modal ===
 const SuccessModal = ({ isOpen, onClose, title, message }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type="success">
@@ -118,7 +104,6 @@ const SuccessModal = ({ isOpen, onClose, title, message }) => {
   );
 };
 
-// === Error Modal ===
 const ErrorModal = ({ isOpen, onClose, title, message }) => {
   return (
     <Modal isOpen={isOpen} onClose={onClose} title={title} type="error">
@@ -143,7 +128,6 @@ const AdminBukuTamu = () => {
   const [currentEvent, setCurrentEvent] = useState(null);
   const [loading, setLoading] = useState(false);
   const [view, setView] = useState('events');
-
   const [actionLoading, setActionLoading] = useState({});
   const [eventsPagination, setEventsPagination] = useState({
     current_page: 1,
@@ -155,11 +139,9 @@ const AdminBukuTamu = () => {
     total_pages: 1,
     total_items: 0
   });
-
   const [eventSearch, setEventSearch] = useState('');
   const [guestSearch, setGuestSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-
   const [formData, setFormData] = useState({
     nama_acara: '',
     tanggal_acara: '',
@@ -168,7 +150,6 @@ const AdminBukuTamu = () => {
   });
   const [qrCode, setQrCode] = useState('');
   const [guestUrl, setGuestUrl] = useState('');
-
   const [showImageModal, setShowImageModal] = useState(false);
   const [selectedImage, setSelectedImage] = useState('');
   const [confirmModal, setConfirmModal] = useState({ isOpen: false, data: null });
@@ -338,8 +319,8 @@ const AdminBukuTamu = () => {
   }, [guestSearch]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100">
-      {/* Modern Header — Disesuaikan dengan AdminJadwalAcara */}
+    <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
+      {/* Modern Header — Tetap dipertahankan */}
       <div className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-gray-200 rounded-2xl">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-8">
@@ -379,13 +360,13 @@ const AdminBukuTamu = () => {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      <div className="mt-8">
 
-        {/* Events View */}
+        {/* Events View — TABEL DENGAN STYLE SURATMASUKLIST */}
         {view === 'events' && (
           <div className="space-y-8">
-            {/* Modern Search and Filter */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
+            {/* Modern Search and Filter — Tetap dipertahankan */}
+            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-5">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1">
                   <div className="relative">
@@ -395,14 +376,14 @@ const AdminBukuTamu = () => {
                       placeholder="Cari nama acara atau lokasi..."
                       value={eventSearch}
                       onChange={(e) => setEventSearch(e.target.value)}
-                      className="w-full pl-12 pr-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-[#000000] placeholder-[#6b7280]"
+                      className="w-full pl-12 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:outline-none focus:ring-2 focus:ring-white focus:border-white text-[#000000] placeholder-[#6b7280]"
                     />
                   </div>
                 </div>
                 <select
                   value={statusFilter}
                   onChange={(e) => setStatusFilter(e.target.value)}
-                  className="px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-[#000000] min-w-[160px]"
+                  className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:outline-none focus:ring-2 focus:ring-white focus:border-white text-[#000000] min-w-[160px]"
                 >
                   <option value="">Semua Status</option>
                   <option value="active">Aktif</option>
@@ -411,114 +392,100 @@ const AdminBukuTamu = () => {
               </div>
             </div>
 
-            {/* Modern Events List */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
               {loading ? (
                 <div className="p-12 text-center">
                   <LoadingSpinner size="lg" text="Memuat data acara..." />
                 </div>
               ) : events.length === 0 ? (
-                <div className="p-12 text-center bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20">
-                  <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <Calendar className="w-10 h-10 text-[#6b7280]" />
-                  </div>
-                  <p className="text-[#000000] text-lg font-semibold mb-1">Belum Ada Acara</p>
-                  <p className="text-[#6b7280] text-sm">Mulai dengan membuat acara pertama Anda.</p>
+                <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
+                  <Calendar className="h-12 w-12 text-black mx-auto mb-4" />
+                  <p className="text-black text-lg font-semibold">
+                    {eventsPagination.total_items === 0 ? 'Belum ada acara' : 'Tidak ada acara yang sesuai filter'}
+                  </p>
+                  <p className="text-black mt-1">
+                    {eventsPagination.total_items === 0 ? 'Mulai dengan membuat acara pertama Anda.' : 'Coba ubah filter pencarian'}
+                  </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="min-w-full divide-y divide-[#EDE6E3] bg-white rounded-2xl">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Acara
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Tanggal
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Lokasi
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Status
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Tamu
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Aksi
-                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Acara</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Tanggal</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Lokasi</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Status</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Tamu</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Aksi</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-100">
+                    <tbody className="divide-y divide-[#EDE6E3]">
                       {events.map((event) => (
-                        <tr key={event.id} className="hover:bg-gray-50/50 transition-colors duration-200">
-                          <td className="px-8 py-6">
-                            <div>
-                              <div className="text-lg font-semibold text-[#000000] mb-1">
-                                {event.nama_acara}
+                        <tr key={event.id} className="hover:bg-[#FDFCFB] transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                            <div className="font-semibold">{event.nama_acara}</div>
+                            {event.deskripsi && (
+                              <div className="text-sm text-black max-w-xs truncate" title={event.deskripsi}>
+                                {event.deskripsi.length > 50 ? `${event.deskripsi.substring(0, 50)}...` : event.deskripsi}
                               </div>
-                              {event.deskripsi && (
-                                <div className="text-sm text-[#6b7280] line-clamp-2">
-                                  {event.deskripsi.substring(0, 80)}
-                                  {event.deskripsi.length > 80 && '...'}
-                                </div>
-                              )}
-                            </div>
+                            )}
                           </td>
-                          <td className="px-8 py-6 text-sm text-[#000000]">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                             {formatDate(event.tanggal_acara)}
                           </td>
-                          <td className="px-8 py-6">
-                            <div className="flex items-center text-sm text-[#000000]">
-                              <MapPin className="w-4 h-4 mr-2 text-[#6b7280]" />
-                              {event.lokasi}
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                            <div className="flex items-center">
+                              <MapPin className="w-4 h-4 text-black mr-2 opacity-70" />
+                              {event.lokasi || '-'}
                             </div>
                           </td>
-                          <td className="px-8 py-6">
-                            <span className={`inline-flex px-3 py-1.5 text-xs font-semibold rounded-full ${event.status === 'active'
-                              ? 'bg-green-100 text-green-800 border border-green-200'
-                              : 'bg-red-100 text-red-800 border border-red-200'
-                              }`}>
+                          <td className="px-6 py-4 whitespace-nowrap">
+                            <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                              event.status === 'active'
+                                ? 'bg-green-100 text-green-800 border border-green-200'
+                                : 'bg-slate-100 text-yellow-800 border border-slate-200'
+                            }`}>
                               {event.status === 'active' ? 'Aktif' : 'Tidak Aktif'}
                             </span>
                           </td>
-                          <td className="px-8 py-6">
-                            <div className="flex items-center text-sm text-[#000000]">
-                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-3">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                            <div className="flex items-center">
+                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center mr-2">
                                 <Users className="w-4 h-4 text-blue-600" />
                               </div>
-                              <span className="font-semibold">{event.kehadiran_tamu?.[0]?.count || 0}</span>
+                              <span className="font-medium">{event.kehadiran_tamu?.[0]?.count || 0}</span>
                             </div>
                           </td>
-                          <td className="px-8 py-6">
-                            <div className="flex space-x-2">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            <div className="flex flex-col gap-2">
                               <button
                                 onClick={() => {
                                   loadGuests(event.id);
                                   setView('guests');
                                 }}
-                                className="px-4 py-2 text-[#000000] bg-white border border-[#e5e7eb] rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm"
+                                className="flex items-center justify-center gap-x-1 text-pink-500 hover:text-pink-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
                               >
-                                <Eye className="w-4 h-4 mr-1" />
-                                Lihat
+                                <Eye className="w-4 h-4" /> Lihat
                               </button>
+
                               <button
                                 onClick={() => toggleEventStatus(event.id, event.status)}
                                 disabled={actionLoading[`status-${event.id}`]}
-                                className={`px-4 py-2 text-sm font-medium rounded-xl transition-colors border ${
+                                className={`flex items-center justify-center gap-x-1 text-sm font-medium px-3 py-2 rounded-xl transition-all border ${
                                   event.status === 'active'
-                                    ? 'text-[#6b7280] bg-yellow-50 hover:bg-yellow-100 border-yellow-200'
-                                    : 'text-[#6b7280] bg-green-50 hover:bg-green-100 border-green-200'
-                                } disabled:opacity-50 disabled:cursor-not-allowed`}
+                                    ? 'bg-yellow-50 text-yellow-800 border-yellow-200 hover:bg-yellow-100'
+                                    : 'bg-green-50 text-green-800 border-green-200 hover:bg-green-100'
+                                } disabled:opacity-50`}
                               >
                                 {actionLoading[`status-${event.id}`] ? (
-                                  <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                                  <Loader2 className="w-4 h-4 animate-spin" />
                                 ) : (
-                                  <Edit className="w-4 h-4 mr-1" />
+                                  <Edit className="w-4 h-4" />
                                 )}
                                 {event.status === 'active' ? 'Nonaktifkan' : 'Aktifkan'}
                               </button>
+
                               <button
                                 onClick={() => setConfirmModal({
                                   isOpen: true,
@@ -529,12 +496,12 @@ const AdminBukuTamu = () => {
                                   }
                                 })}
                                 disabled={actionLoading[`delete-${event.id}`]}
-                                className="px-4 py-2 text-[#000000] bg-white border border-[#e5e7eb] rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="flex items-center justify-center gap-x-1 text-sm font-medium bg-black text-white px-3 py-2 rounded-xl hover:opacity-90 transition-all border border-slate-500 disabled:opacity-50"
                               >
                                 {actionLoading[`delete-${event.id}`] ? (
-                                  <Loader2 className="w-4 h-4 mr-1 animate-spin" />
+                                  <Loader2 className="w-4 h-4 animate-spin" />
                                 ) : (
-                                  <Trash2 className="w-4 h-4 mr-1 text-red-600" />
+                                  <Trash2 className="w-4 h-4" />
                                 )}
                                 Hapus
                               </button>
@@ -547,38 +514,38 @@ const AdminBukuTamu = () => {
                 </div>
               )}
 
-              {/* Pagination */}
+              {/* Pagination — Disesuaikan gaya SuratMasukList */}
               {events.length > 0 && (
-                <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-[#6b7280]">
-                      Menampilkan <span className="font-semibold">{((eventsPagination.current_page - 1) * 10) + 1}</span> - <span className="font-semibold">{Math.min(eventsPagination.current_page * 10, eventsPagination.total_items)}</span> dari <span className="font-semibold">{eventsPagination.total_items}</span> data
+                <div className="px-6 py-4 bg-white border-t border-[#EDE6E3] flex items-center justify-between">
+                  <div className="text-sm font-medium text-black">
+                    Menampilkan {((eventsPagination.current_page - 1) * 10) + 1} - {Math.min(eventsPagination.current_page * 10, eventsPagination.total_items)} dari {eventsPagination.total_items} data
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => loadEvents(eventsPagination.current_page - 1, eventSearch, statusFilter)}
+                      disabled={eventsPagination.current_page === 1}
+                      className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      <span className="px-3 py-2 bg-white text-black rounded-xl font-semibold border border-[#EDE6E3]">
+                        {eventsPagination.current_page}
+                      </span>
+                      <span className="text-sm text-black">dari</span>
+                      <span className="px-3 py-2 bg-white text-black rounded-xl font-semibold border border-[#EDE6E3]">
+                        {eventsPagination.total_pages}
+                      </span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => loadEvents(eventsPagination.current_page - 1, eventSearch, statusFilter)}
-                        disabled={eventsPagination.current_page === 1}
-                        className="p-2 text-[#6b7280] hover:text-[#000000] hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      <div className="flex items-center space-x-1">
-                        <span className="px-4 py-2 text-sm font-semibold bg-[#f6339a] text-white rounded-lg">
-                          {eventsPagination.current_page}
-                        </span>
-                        <span className="text-[#6b7280]">dari</span>
-                        <span className="px-4 py-2 text-sm font-semibold bg-white rounded-lg border border-[#e5e7eb]">
-                          {eventsPagination.total_pages}
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => loadEvents(eventsPagination.current_page + 1, eventSearch, statusFilter)}
-                        disabled={eventsPagination.current_page === eventsPagination.total_pages}
-                        className="p-2 text-[#6b7280] hover:text-[#000000] hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                    </div>
+
+                    <button
+                      onClick={() => loadEvents(eventsPagination.current_page + 1, eventSearch, statusFilter)}
+                      disabled={eventsPagination.current_page === eventsPagination.total_pages}
+                      className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
               )}
@@ -586,124 +553,107 @@ const AdminBukuTamu = () => {
           </div>
         )}
 
-        {/* Guests View */}
+        {/* Guests View — TABEL TAMU DENGAN STYLE SURATMASUKLIST */}
         {view === 'guests' && currentEvent && (
           <div className="space-y-8">
-            {/* Back Button and Event Info */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
-              <div className="flex items-center justify-between mb-6">
-                <button
-                  onClick={() => setView('events')}
-                  className="flex items-center text-[#000000] hover:text-[#6b7280] font-medium transition-colors duration-200"
-                >
-                  <ChevronLeft className="w-5 h-5 mr-2" />
-                  Kembali ke Daftar Acara
-                </button>
-              </div>
-              <div>
-                <h2 className="text-3xl font-bold text-[#000000] mb-3">{currentEvent.nama_acara}</h2>
-                <div className="flex items-center space-x-8 text-[#6b7280]">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3 shadow-sm border border-[#e5e7eb]">
-                      <Calendar className="w-5 h-5 text-[#f6339a]" />
-                    </div>
-                    <span className="font-medium">{formatDate(currentEvent.tanggal_acara)}</span>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center mr-3 shadow-sm border border-[#e5e7eb]">
-                      <MapPin className="w-5 h-5 text-[#f6339a]" />
-                    </div>
-                    <span className="font-medium">{currentEvent.lokasi}</span>
-                  </div>
+            {/* Back Button */}
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setView('events')}
+                className="flex items-center text-black hover:text-gray-700 font-medium transition-colors"
+              >
+                <ChevronLeft className="w-5 h-5" />
+                Kembali ke Daftar Acara
+              </button>
+            </div>
+
+            {/* Event Info Card */}
+            <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm p-6">
+              <h2 className="text-2xl font-bold text-black mb-4">{currentEvent.nama_acara}</h2>
+              <div className="flex flex-wrap gap-6 text-sm text-black">
+                <div className="flex items-center">
+                  <Calendar className="w-5 h-5 text-pink-500 mr-2" />
+                  {formatDate(currentEvent.tanggal_acara)}
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-5 h-5 text-pink-500 mr-2" />
+                  {currentEvent.lokasi}
                 </div>
               </div>
             </div>
 
             {/* Guest Search */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
+            <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm p-6">
               <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
                 <input
                   type="text"
                   placeholder="Cari nama tamu atau instansi..."
                   value={guestSearch}
                   onChange={(e) => setGuestSearch(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-[#000000] placeholder-[#6b7280]"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black placeholder-black shadow-sm"
                 />
               </div>
             </div>
 
-            {/* Guests List */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 overflow-hidden">
+            <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm overflow-hidden">
               {loading ? (
                 <div className="p-12 text-center">
                   <LoadingSpinner size="lg" text="Memuat data tamu..." />
                 </div>
               ) : guests.length === 0 ? (
-                <div className="p-12 text-center bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20">
-                  <div className="w-20 h-20 mx-auto mb-6 bg-gray-100 rounded-full flex items-center justify-center">
-                    <Users className="w-10 h-10 text-[#6b7280]" />
-                  </div>
-                  <p className="text-[#000000] text-lg font-semibold mb-1">Belum Ada Tamu</p>
-                  <p className="text-[#6b7280] text-sm">Belum ada tamu yang melakukan check-in untuk acara ini</p>
+                <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
+                  <Users className="h-12 w-12 text-black mx-auto mb-4" />
+                  <p className="text-black text-lg font-semibold">
+                    {guestsPagination.total_items === 0 ? 'Belum ada tamu' : 'Tidak ada tamu yang sesuai filter'}
+                  </p>
+                  <p className="text-black mt-1">
+                    {guestsPagination.total_items === 0 ? 'Belum ada tamu yang melakukan check-in untuk acara ini.' : 'Coba ubah filter pencarian'}
+                  </p>
                 </div>
               ) : (
                 <div className="overflow-x-auto">
-                  <table className="w-full">
+                  <table className="min-w-full divide-y divide-[#EDE6E3] bg-white rounded-2xl">
                     <thead className="bg-gray-50">
                       <tr>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Tamu
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Instansi
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Jabatan
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Check In
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Foto
-                        </th>
-                        <th className="px-8 py-5 text-left text-sm font-semibold text-[#000000] uppercase tracking-wider">
-                          Aksi
-                        </th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Tamu</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Instansi</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Jabatan / Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Check In</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Foto</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Aksi</th>
                       </tr>
                     </thead>
-                    <tbody className="bg-white divide-y divide-gray-100">
+                    <tbody className="divide-y divide-[#EDE6E3]">
                       {guests.map((guest) => (
-                        <tr key={guest.id} className="hover:bg-gray-50/50 transition-colors duration-200">
-                          <td className="px-8 py-6">
-                            <div className="text-lg font-semibold text-[#000000]">
-                              {guest.nama_lengkap}
-                            </div>
+                        <tr key={guest.id} className="hover:bg-[#FDFCFB] transition-colors">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
+                            {guest.nama_lengkap}
                           </td>
-                          <td className="px-8 py-6 text-sm text-[#000000]">
-                            {guest.instansi || <span className="text-[#6b7280] italic">-</span>}
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+                            {guest.instansi || '-'}
                           </td>
-                          <td className="px-8 py-6 text-sm text-[#000000]">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                             <div className="space-y-1">
-                              <div>{guest.email || <span className="text-[#6b7280] italic">-</span>}</div>
-                              <div className="text-[#6b7280]">{guest.jabatan || <span className="text-[#6b7280] italic">-</span>}</div>
+                              <div>{guest.email || '-'}</div>
+                              <div className="text-gray-600">{guest.jabatan || '-'}</div>
                             </div>
                           </td>
-                          <td className="px-8 py-6 text-sm text-[#000000]">
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
                             <div className="space-y-1">
                               <div className="font-medium">{formatDate(guest.check_in_time)}</div>
-                              <div className="text-[#6b7280]">{formatTime(guest.check_in_time)}</div>
+                              <div className="text-gray-600">{formatTime(guest.check_in_time)}</div>
                             </div>
                           </td>
-                          <td className="px-8 py-6">
+                          <td className="px-6 py-4 whitespace-nowrap">
                             {guest.foto_kehadiran_tamu && guest.foto_kehadiran_tamu.length > 0 ? (
-                              <div className="flex flex-wrap gap-3">
+                              <div className="flex flex-wrap gap-2">
                                 {guest.foto_kehadiran_tamu.map((foto) => (
                                   <div key={foto.id} className="relative group">
                                     <img
                                       src={foto.file_url}
                                       alt={foto.original_name}
-                                      className="w-16 h-16 object-cover rounded-xl cursor-pointer hover:opacity-80 transition-opacity shadow-sm border border-[#e5e7eb]"
+                                      className="w-12 h-12 object-cover rounded-lg cursor-pointer hover:opacity-80 transition-opacity shadow-sm border border-[#EDE6E3]"
                                       onClick={() => {
                                         setSelectedImage(foto.file_url);
                                         setShowImageModal(true);
@@ -718,33 +668,34 @@ const AdminBukuTamu = () => {
                                         }
                                       })}
                                       disabled={actionLoading[`photo-${foto.id}`]}
-                                      className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg disabled:opacity-50"
+                                      className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg disabled:opacity-50"
                                     >
                                       {actionLoading[`photo-${foto.id}`] ? (
-                                        <Loader2 className="w-3 h-3 animate-spin" />
+                                        <Loader2 className="w-2 h-2 animate-spin" />
                                       ) : (
-                                        <X className="w-3 h-3" />
+                                        <X className="w-2 h-2" />
                                       )}
                                     </button>
                                   </div>
                                 ))}
                               </div>
                             ) : (
-                              <span className="text-[#6b7280] text-sm italic">Tidak ada foto</span>
+                              <span className="text-gray-500 text-sm italic">Tidak ada foto</span>
                             )}
                           </td>
-                          <td className="px-8 py-6">
-                            {guest.foto_kehadiran_tamu && guest.foto_kehadiran_tamu.length > 0 && (
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                            {guest.foto_kehadiran_tamu && guest.foto_kehadiran_tamu.length > 0 ? (
                               <button
                                 onClick={() => {
                                   setSelectedImage(guest.foto_kehadiran_tamu[0].file_url);
                                   setShowImageModal(true);
                                 }}
-                                className="px-4 py-2 text-[#000000] bg-white border border-[#e5e7eb] rounded-xl hover:bg-gray-50 transition-colors font-medium text-sm"
+                                className="flex items-center justify-center gap-x-1 text-pink-500 hover:text-pink-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
                               >
-                                <Image className="w-4 h-4 mr-1" />
-                                Lihat
+                                <Image className="w-4 h-4" /> Lihat
                               </button>
+                            ) : (
+                              <span className="text-gray-400 text-sm italic">-</span>
                             )}
                           </td>
                         </tr>
@@ -754,38 +705,38 @@ const AdminBukuTamu = () => {
                 </div>
               )}
 
-              {/* Pagination */}
+              {/* Pagination — Disesuaikan gaya SuratMasukList */}
               {guests.length > 0 && (
-                <div className="px-8 py-6 bg-gray-50 border-t border-gray-200">
-                  <div className="flex items-center justify-between">
-                    <div className="text-sm text-[#6b7280]">
-                      Menampilkan <span className="font-semibold">{((guestsPagination.current_page - 1) * 10) + 1}</span> - <span className="font-semibold">{Math.min(guestsPagination.current_page * 10, guestsPagination.total_items)}</span> dari <span className="font-semibold">{guestsPagination.total_items}</span> tamu
+                <div className="px-6 py-4 bg-white border-t border-[#EDE6E3] flex items-center justify-between">
+                  <div className="text-sm font-medium text-black">
+                    Menampilkan {((guestsPagination.current_page - 1) * 10) + 1} - {Math.min(guestsPagination.current_page * 10, guestsPagination.total_items)} dari {guestsPagination.total_items} tamu
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => loadGuests(currentEvent.id, guestsPagination.current_page - 1, guestSearch)}
+                      disabled={guestsPagination.current_page === 1}
+                      className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                    >
+                      <ChevronLeft className="h-4 w-4" />
+                    </button>
+
+                    <div className="flex items-center gap-1">
+                      <span className="px-3 py-2 bg-white text-black rounded-xl font-semibold border border-[#EDE6E3]">
+                        {guestsPagination.current_page}
+                      </span>
+                      <span className="text-sm text-black">dari</span>
+                      <span className="px-3 py-2 bg-white text-black rounded-xl font-semibold border border-[#EDE6E3]">
+                        {guestsPagination.total_pages}
+                      </span>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <button
-                        onClick={() => loadGuests(currentEvent.id, guestsPagination.current_page - 1, guestSearch)}
-                        disabled={guestsPagination.current_page === 1}
-                        className="p-2 text-[#6b7280] hover:text-[#000000] hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      <div className="flex items-center space-x-1">
-                        <span className="px-4 py-2 text-sm font-semibold bg-[#f6339a] text-white rounded-lg">
-                          {guestsPagination.current_page}
-                        </span>
-                        <span className="text-[#6b7280]">dari</span>
-                        <span className="px-4 py-2 text-sm font-semibold bg-white rounded-lg border border-[#e5e7eb]">
-                          {guestsPagination.total_pages}
-                        </span>
-                      </div>
-                      <button
-                        onClick={() => loadGuests(currentEvent.id, guestsPagination.current_page + 1, guestSearch)}
-                        disabled={guestsPagination.current_page === guestsPagination.total_pages}
-                        className="p-2 text-[#6b7280] hover:text-[#000000] hover:bg-gray-50 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                    </div>
+
+                    <button
+                      onClick={() => loadGuests(currentEvent.id, guestsPagination.current_page + 1, guestSearch)}
+                      disabled={guestsPagination.current_page === guestsPagination.total_pages}
+                      className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                    >
+                      <ChevronRight className="h-4 w-4" />
+                    </button>
                   </div>
                 </div>
               )}
@@ -793,7 +744,7 @@ const AdminBukuTamu = () => {
           </div>
         )}
 
-        {/* Create Event View */}
+        {/* Create Event View — Tidak diubah */}
         {view === 'create' && (
           <div className="space-y-8">
             <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8 max-w-4xl mx-auto">
@@ -890,7 +841,7 @@ const AdminBukuTamu = () => {
               </form>
             </div>
 
-            {/* QR Code Result */}
+            {/* QR Code Result — Tetap dipertahankan */}
             {qrCode && guestUrl && (
               <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8">
                 <div className="text-center">
@@ -945,7 +896,7 @@ const AdminBukuTamu = () => {
         )}
       </div>
 
-      {/* Image Modal */}
+      {/* Image Modal — Tetap dipertahankan */}
       {showImageModal && selectedImage && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="relative max-w-5xl max-h-full">
@@ -967,7 +918,7 @@ const AdminBukuTamu = () => {
         </div>
       )}
 
-      {/* Confirmation Modal */}
+      {/* Confirmation Modal — Tetap dipertahankan */}
       <ConfirmationModal
         isOpen={confirmModal.isOpen}
         onClose={() => setConfirmModal({ isOpen: false, data: null })}
@@ -992,7 +943,7 @@ const AdminBukuTamu = () => {
         type="error"
       />
 
-      {/* Success Modal */}
+      {/* Success Modal — Tetap dipertahankan */}
       <SuccessModal
         isOpen={successModal.isOpen}
         onClose={() => setSuccessModal({ isOpen: false, title: '', message: '' })}
@@ -1000,7 +951,7 @@ const AdminBukuTamu = () => {
         message={successModal.message}
       />
 
-      {/* Error Modal */}
+      {/* Error Modal — Tetap dipertahankan */}
       <ErrorModal
         isOpen={errorModal.isOpen}
         onClose={() => setErrorModal({ isOpen: false, title: '', message: '' })}

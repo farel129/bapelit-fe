@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { api } from '../../utils/api';
 import { RefreshCcw, Trash2, Paperclip, Calendar, Clock, FileText, Eye, Download, User, MessageSquare } from 'lucide-react';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const AdminDaftarSuratKeluar = () => {
   const [suratList, setSuratList] = useState([]);
@@ -70,8 +71,7 @@ const AdminDaftarSuratKeluar = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f6339a]"></div>
-        <span className="ml-2 text-[#000000]">Memuat surat keluar...</span>
+       <LoadingSpinner />
       </div>
     );
   }

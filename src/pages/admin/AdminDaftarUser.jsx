@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { api } from '../../utils/api';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 
 // === Modal Component — Disesuaikan dengan AdminJadwalAcara ===
 const Modal = ({ isOpen, onClose, children, maxWidth = 'max-w-md' }) => {
@@ -316,10 +317,7 @@ function AdminDaftarUser() {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-gray-100">
-        <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-8 text-center">
-          <Loader2 className="animate-spin w-8 h-8 text-blue-600 mx-auto mb-4" />
-          <p className="text-[#000000] font-semibold">Memuat data pengguna...</p>
-        </div>
+        <LoadingSpinner />
       </div>
     );
   }

@@ -4,6 +4,7 @@ import { staffDisposisiService } from '../../services/staffDisposisiService';
 import { FileText, Edit, Trash2, X, ArrowLeft, Check, MessageSquare, Paperclip, Calendar, Building, User, AlertCircle, Eye, Cog, Flag, Send, Save, Clock } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { api } from '../../utils/api';
+import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 
 const StaffDisposisiDetail = () => {
   const { id } = useParams();
@@ -350,8 +351,8 @@ const StaffDisposisiDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
-        <div className="animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-[#D4A373]"></div>
+      <div className="min-h-screen flex items-center justify-center">
+        <LoadingSpinner />
       </div>
     );
   }

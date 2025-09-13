@@ -24,9 +24,7 @@ import DaftarUser from './components/common/DaftarUser';
 import SekretarisDisposisiDetail from './pages/sekretaris/SekretarisDisposisiDetail';
 import Leaderboard from './components/common/Leaderboard';
 import LandingPage from './pages/LandingPage';
-import HomePage from './components/common/HomePage';
 import AdminJadwalAcara from './pages/admin/AdminJadwalAcara';
-import FeedPage from './components/common/FeedPage';
 import DocumentationPage from './components/common/DocumentationPage';
 import AdminBukuTamu from './pages/admin/AdminBukuTamu';
 import PublikBukuTamu from './pages/public/PublicBukuTamu';
@@ -52,7 +50,6 @@ function App() {
       <ScrollToTop />
       <Routes>
         <Route path="/" element={<LandingPage />} />
-        <Route path="/home" element={<HomePage />} />
         <Route path="/guest/:qrToken" element={<PublikBukuTamu />} />
 
 
@@ -143,13 +140,6 @@ function App() {
           <PrivateRoute role='admin'>
             <AdminLayout>
               <AdminJadwalAcara />
-            </AdminLayout>
-          </PrivateRoute>
-        } />
-        <Route path="/admin-feed" element={
-          <PrivateRoute role='admin'>
-            <AdminLayout>
-              <FeedPage />
             </AdminLayout>
           </PrivateRoute>
         } />

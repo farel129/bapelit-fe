@@ -8,6 +8,7 @@ import {
   Trash2,
   Loader2,
   CheckCircle,
+  Loader,
 } from 'lucide-react';
 
 // Success Modal Component — Disesuaikan style AdminJadwalAcara
@@ -474,7 +475,7 @@ const CreatePostModal = ({
                 >
                   {isLoading ? (
                     <>
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <Loader className="w-4 h-4 mr-2 animate-spin" />
                       Memposting...
                     </>
                   ) : (

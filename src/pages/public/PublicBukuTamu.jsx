@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, TrendingUp, Plus, UserCircle2 } from 'lucide-react';
 import { guestBookAPI } from '../../utils/api';
+import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 
 // Modal Component
 const Modal = ({ isOpen, onClose, children, title, type = 'default' }) => {
@@ -32,21 +33,6 @@ const Modal = ({ isOpen, onClose, children, title, type = 'default' }) => {
                     {children}
                 </div>
             </div>
-        </div>
-    );
-};
-
-// Loading Spinner Component
-const LoadingSpinner = ({ size = 'md', text = '' }) => {
-    const sizes = {
-        sm: 'w-4 h-4',
-        md: 'w-6 h-6',
-        lg: 'w-8 h-8'
-    };
-    return (
-        <div className="flex items-center justify-center gap-3">
-            <Loader className={`${sizes[size]} animate-spin text-pink-500`} />
-            {text && <span className="text-gray-600">{text}</span>}
         </div>
     );
 };
@@ -496,13 +482,7 @@ const PublikBukuTamu = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-16 bg-gradient-to-bl from-gray-100 via-white to-gray-100 h-screen">
-                <div className="flex flex-col items-center gap-6">
-                    <div className="relative">
-                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-black"></div>
-                        <div className="animate-spin rounded-full h-10 w-10 border-4 border-pink-500 border-t-transparent absolute inset-0"></div>
-                    </div>
-                    <p className="text-black font-semibold text-base">Memuat informasi acara...</p>
-                </div>
+                <LoadingSpinner text='Memuat...' />
             </div>
         );
     }
