@@ -110,7 +110,7 @@ const SuratMasukList = () => {
   const belumDibaca = suratMasuk.filter(surat => surat.status === 'belum dibaca').length;
   const sudahDibaca = suratMasuk.filter(surat => surat.status === 'sudah dibaca').length;
 
-  const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor }) => (
+  const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor, iconColor }) => (
     <div className={`${bgColor} p-3 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
       <div className="flex items-center gap-x-7 justify-between">
         <div>
@@ -118,7 +118,7 @@ const SuratMasukList = () => {
           <p className={`text-3xl font-bold ${textColor} mt-2`}>{count}</p>
         </div>
         <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
-          <Icon className={`w-6 h-6 text-white`} />
+          <Icon className={`w-6 h-6 ${iconColor}`} />
         </div>
       </div>
     </div>
@@ -167,16 +167,16 @@ const SuratMasukList = () => {
     return (
       <div className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border-2 border-[#EDE6E3]">
         <div className="flex items-center gap-4">
-          <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>
+          <span className="text-sm font-medium" >
             Menampilkan {startIndex + 1} - {Math.min(endIndex, totalItems)} dari {totalItems} data
           </span>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>Per halaman:</span>
+            <span className="text-sm font-medium" >Per halaman:</span>
             <select
               value={itemsPerPage}
               onChange={(e) => changeItemsPerPage(Number(e.target.value))}
-              className="px-3 py-2 border border-[#EDE6E3] rounded-xl text-sm focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] bg-white text-[#2E2A27] shadow-sm"
+              className="px-3 py-2 border border-[#EDE6E3] rounded-xl text-sm focus:ring-2 focus:ring-white focus:border-white bg-white text-black shadow-sm"
             >
               <option value={5}>5</option>
               <option value={10}>10</option>
@@ -194,19 +194,19 @@ const SuratMasukList = () => {
                 disabled={currentPage === 1}
                 className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
-                <ChevronLeft className="h-4 w-4" style={{ color: '#6D4C41' }} />
+                <ChevronLeft className="h-4 w-4"  />
               </button>
 
               {getVisiblePages().map((page, index) => (
                 page === '...' ? (
-                  <span key={index} className="px-3 py-2 text-[#6D4C41]">...</span>
+                  <span key={index} className="px-3 py-2 text-black">...</span>
                 ) : (
                   <button
                     key={index}
                     onClick={() => goToPage(page)}
                     className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${currentPage === page
-                      ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white border-[#EDE6E3]'
-                      : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-[#2E2A27] hover:text-[#6D4C41]'
+                      ? 'bg-gradient-to-br from-white to-black text-white border-[#EDE6E3]'
+                      : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-black hover:text-black'
                       }`}
                   >
                     {page}
@@ -219,7 +219,7 @@ const SuratMasukList = () => {
                 disabled={currentPage === totalPages}
                 className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
               >
-                <ChevronRight className="h-4 w-4" style={{ color: '#6D4C41' }} />
+                <ChevronRight className="h-4 w-4"  />
               </button>
             </>
           )}
@@ -231,8 +231,8 @@ const SuratMasukList = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4A373]"></div>
-        <span className="ml-2 text-[#6D4C41]">Memuat surat masuk...</span>
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+        <span className="ml-2 text-black">Memuat surat masuk...</span>
       </div>
     );
   }
@@ -240,16 +240,9 @@ const SuratMasukList = () => {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-x-3">
-          <div className="h-8 w-1.5 bg-gradient-to-b from-[#D4A373] via-[#6D4C41] to-[#2E2A27] rounded-full shadow-sm"></div>
-          <div>
-            <h1 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Surat Masuk</h1>
-            <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Kelola surat masuk dan buat disposisi</p>
-          </div>
-        </div>
         <button
           onClick={fetchSuratMasuk}
-          className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-[#2E2A27] px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-[#D4A373]"
+          className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-white"
         >
           <RefreshCcw className="w-4 h-4" /> Refresh
         </button>
@@ -262,27 +255,29 @@ const SuratMasukList = () => {
           count={totalSurat}
           icon={Mail}
           bgColor="bg-white"
-          textColor="text-[#2E2A27]"
-          iconBg="bg-gradient-to-br from-[#D4A373] to-[#6D4C41]"
-          borderColor="border-[#EDE6E3]"
+          textColor="text-black"
+          iconBg="bg-pink-500"
+          iconColor='text-white'
+          borderColor="border-slate-200"
         />
         <StatCard
           title="Belum Dibaca"
           count={belumDibaca}
           icon={Clock}
           bgColor="bg-white"
-          textColor="text-[#2E2A27]"
-          iconBg="bg-gradient-to-br from-[#D9534F] to-[#B52B27]"
-          borderColor="border-[#EDE6E3]"
+          textColor="text-black"
+          iconBg="bg-slate-200"
+          borderColor="border-slate-200"
         />
         <StatCard
           title="Sudah Dibaca"
           count={sudahDibaca}
           icon={CheckCircle}
-          bgColor="bg-white"
-          textColor="text-[#2E2A27]"
-          iconBg="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32]"
-          borderColor="border-[#EDE6E3]"
+          bgColor="bg-black"
+          textColor="text-white"
+          iconBg="bg-white"
+          iconColor='text-pink-500'
+          borderColor="border-slate-200"
         />
       </div>
 
@@ -294,13 +289,13 @@ const SuratMasukList = () => {
             {/* Search */}
             <div className="flex-1">
               <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#6D4C41]" />
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
                 <input
                   type="text"
                   placeholder="Cari berdasarkan asal instansi, keterangan, atau tanggal..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] placeholder-[#6D4C41] shadow-sm"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black placeholder-black shadow-sm"
                 />
               </div>
             </div>
@@ -308,11 +303,11 @@ const SuratMasukList = () => {
             {/* Filter Status */}
             <div className="w-full lg:w-48">
               <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#6D4C41] z-10" />
+                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black z-10" />
                 <select
                   value={selectedStatus}
                   onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] shadow-sm appearance-none"
+                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black shadow-sm appearance-none"
                 >
                   <option value="">Semua Status</option>
                   <option value="belum dibaca">Belum Dibaca</option>
@@ -325,7 +320,7 @@ const SuratMasukList = () => {
             <div className="flex gap-2">
               <button
                 onClick={resetFilters}
-                className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-[#2E2A27] font-semibold shadow-sm hover:shadow-md"
+                className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-black font-semibold shadow-sm hover:shadow-md"
               >
                 <Filter className="h-4 w-4" />
                 Reset
@@ -337,11 +332,11 @@ const SuratMasukList = () => {
         {/* Surat Masuk List */}
         {currentItems.length === 0 ? (
           <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-            <FileText className="h-12 w-12 text-[#6D4C41] mx-auto mb-4" />
-            <p className="text-[#2E2A27] text-lg font-semibold">
+            <FileText className="h-12 w-12 text-black mx-auto mb-4" />
+            <p className="text-black text-lg font-semibold">
               {suratMasuk.length === 0 ? 'Tidak ada surat masuk' : 'Tidak ada surat yang sesuai filter'}
             </p>
-            <p className="text-[#6D4C41] mt-1">
+            <p className="text-black mt-1">
               {suratMasuk.length === 0 ? 'Belum ada surat masuk yang diterima' : 'Coba ubah filter pencarian'}
             </p>
           </div>
@@ -353,22 +348,22 @@ const SuratMasukList = () => {
                   <div className="flex-1">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
                       <div>
-                        <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Asal Instansi</p>
-                        <p className="font-semibold text-[#2E2A27]">{surat.asal_instansi}</p>
+                        <p className="text-sm font-medium" >Asal Instansi</p>
+                        <p className="font-semibold text-black">{surat.asal_instansi}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Tanggal Surat</p>
-                        <p className="font-semibold text-[#2E2A27]">{surat.tanggal_surat}</p>
+                        <p className="text-sm font-medium" >Tanggal Surat</p>
+                        <p className="font-semibold text-black">{surat.tanggal_surat}</p>
                       </div>
                       <div>
-                        <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Diterima Tanggal</p>
-                        <p className="font-semibold text-[#2E2A27]">{surat.diterima_tanggal}</p>
+                        <p className="text-sm font-medium" >Diterima Tanggal</p>
+                        <p className="font-semibold text-black">{surat.diterima_tanggal}</p>
                       </div>
                       <div className="flex items-center gap-3">
-                        <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>Status:</span>
+                        <span className="text-sm font-medium" >Status:</span>
                         <span className={`px-3 py-1 rounded-full text-sm font-semibold ${surat.status === 'sudah dibaca'
                           ? 'bg-green-100 text-green-800 border border-green-200'
-                          : 'bg-yellow-100 text-yellow-800 border border-yellow-200'
+                          : 'bg-slate-100 text-yellow-800 border border-slate-200'
                           }`}>
                           {surat.status}
                         </span>
@@ -376,15 +371,15 @@ const SuratMasukList = () => {
                     </div>
 
                     <div className="bg-[#FDFCFB] p-4 rounded-xl border border-[#EDE6E3] mb-4">
-                      <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Keterangan</p>
-                      <p className="text-[#2E2A27]">{surat.keterangan}</p>
+                      <p className="text-sm font-medium" >Keterangan</p>
+                      <p className="text-black">{surat.keterangan}</p>
                     </div>
                   </div>
 
                   <div className="ml-6 flex flex-col space-y-3">
                     <button
                       onClick={() => handleViewDetail(surat)}
-                      className="bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] flex items-center gap-x-2 justify-center shadow-md text-white px-4 py-3 text-sm font-semibold cursor-pointer rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
+                      className="bg-white flex items-center gap-x-2 justify-center shadow-md text-pink-500 px-4 py-3 text-sm font-semibold cursor-pointer rounded-xl transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
                     >
                       Lihat Detail<span><ChevronRight className="w-5 h-5" /></span>
                     </button>
@@ -396,7 +391,7 @@ const SuratMasukList = () => {
                     ) : (
                       <button
                         onClick={() => setSelectedSurat(surat)}
-                        className="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] hover:from-[#2E7D32] hover:to-[#1B5E20] flex items-center gap-x-2 shadow-md text-white px-4 py-3 rounded-xl cursor-pointer text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-[#EDE6E3]"
+                        className="bg-black hover:opacity-90 flex items-center gap-x-2 shadow-md text-white px-4 py-3 rounded-xl cursor-pointer text-sm font-semibold transition-all duration-200 hover:-translate-y-0.5 hover:shadow-lg border border-slate-500"
                       >
                         Buat Disposisi <FileText className="w-4 h-4" />
                       </button>
