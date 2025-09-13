@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { Link, Navigate, useNavigate } from 'react-router-dom'
-import { useAuth } from '../contexts/AuthContext'
-import { Mail, Lock, X, Shield, Building2 } from 'lucide-react'
-import img from '../assets/img/logobapelit.png'
+import { useState } from 'react';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useAuth } from '../contexts/AuthContext';
+import { Mail, Lock, X, Shield, Building2, Eye, EyeOff } from 'lucide-react';
+import img from '../assets/img/logobapelit.png';
 
 export default function LoginPopup({ onClose }) {
   const navigate = useNavigate();
@@ -10,6 +10,7 @@ export default function LoginPopup({ onClose }) {
   const [form, setForm] = useState({ email: '', password: '' });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [showPassword, setShowPassword] = useState(false); // 👈 Fitur reveal password
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -36,14 +37,12 @@ export default function LoginPopup({ onClose }) {
       } else {
         setError('Role tidak dikenali');
       }
-
     } catch (err) {
       setError(err.response?.data?.error || 'Login gagal');
     } finally {
       setLoading(false);
     }
   };
-
 
   return (
     <div className="max-w-5xl w-full mx-auto relative">
@@ -55,7 +54,7 @@ export default function LoginPopup({ onClose }) {
         <X className="w-5 h-5 text-white" />
       </button>
 
-      <div className="grid md:grid-cols-2 bg-gradient-to-br from-[#FDFCFB] via-[#F8F6F4] to-[#F0EDEA] backdrop-blur-xl rounded-3xl shadow-2xl shadow-pink-500/20 border border-[#EDE6E3] overflow-hidden">
+      <div className="grid lg:grid-cols-2 bg-gradient-to-br from-[#FDFCFB] via-[#F8F6F4] to-[#F0EDEA] backdrop-blur-xl rounded-3xl shadow-2xl shadow-pink-500/20 border border-[#EDE6E3] overflow-hidden">
         {/* Left Side - Form */}
         <div className="p-8 lg:p-12 relative">
           {/* Background decoration */}
@@ -103,7 +102,7 @@ export default function LoginPopup({ onClose }) {
                   </div>
                 </div>
 
-                {/* Password Input */}
+                {/* Password Input with Reveal Toggle */}
                 <div className="group">
                   <label className="block text-sm font-medium text-black mb-2">
                     Password
@@ -115,13 +114,22 @@ export default function LoginPopup({ onClose }) {
                     <input
                       id="password"
                       name="password"
-                      type="password"
+                      type={showPassword ? 'text' : 'password'}
                       required
                       value={form.password}
                       onChange={handleChange}
-                      className="block w-full pl-4 pr-4 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-black/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
+                      className="block w-full pl-4 pr-12 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-black/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
                       placeholder="Masukan password"
                     />
+                    {/* Toggle Show/Hide Password Button */}
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute inset-y-0 right-0 pr-4 flex items-center text-gray-500 hover:text-black transition-colors duration-200"
+                      aria-label={showPassword ? "Sembunyikan password" : "Tampilkan password"}
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -158,7 +166,6 @@ export default function LoginPopup({ onClose }) {
         {/* Right Side - Information */}
         <div className="hidden bg-gradient-to-br from-[#EDE6E3] to-[#FDFCFB] p-8 lg:p-12 lg:flex flex-col justify-center relative overflow-hidden">
           {/* Background decorations */}
-          <div className="absolute top-0 right-0 w-40 h-40 bg-gradient-to-bl from-pink-500/30 to-transparent rounded-full blur-3xl"></div>
           <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-black/20 to-transparent rounded-full blur-2xl"></div>
 
           <div className="relative z-10">
@@ -176,7 +183,7 @@ export default function LoginPopup({ onClose }) {
 
               <p className="text-black leading-relaxed opacity-90">
                 Portal ini hanya dapat diakses oleh pegawai internal Bapelitbangda.
-                Silakan login menggunakan akun resmi Anda untuk mengelola dan memantau surat masuk instansi.
+                Silakan login menggunakan akun resmi Anda untuk mengelola dan memantau surat instansi.
               </p>
             </div>
 
@@ -203,10 +210,9 @@ export default function LoginPopup({ onClose }) {
                 <span className="text-sm text-black font-medium">Manajemen Surat Real-time</span>
               </div>
             </div>
-
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

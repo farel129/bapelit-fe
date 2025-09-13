@@ -185,7 +185,7 @@ const LandingPage = () => {
       </div>
 
       {/* Main Content */}
-      <div className='flex flex-col lg:flex-row gap-12 lg:gap-20 items-center z-10 max-w-7xl mx-auto'>
+      <div className='flex flex-col lg:flex-row gap-12 lg:gap-20 items-center z-10 max-w-7xl mx-auto my-20 lg:my-0'>
         {/* Left Elements */}
         <div className='flex flex-col gap-y-6 lg:w-1/2 text-center lg:text-left'>
           <div className='space-y-4'>
@@ -240,7 +240,7 @@ const LandingPage = () => {
         <div className='lg:w-1/2 hidden lg:flex justify-center relative'>
           <div ref={imageContainerRef} className='relative group'>
             {/* Decorative rings - Updated colors */}
-            <div className='absolute -inset-6 animate-pulse rounded-full bg-gradient-to-br from-pink-300 to-pink-500 shadow-2xl group-hover:scale-105 transition-all duration-300 opacity-50'></div>
+            <div className='absolute -inset-6 animate-pulse rounded-full bg-gradient-to-br from-pink-300 to-neutral-300 shadow-2xl group-hover:scale-105 transition-all duration-300 opacity-50'></div>
 
             {/* Main image container */}
             <div className='relative z-10 p-3 bg-gradient-to-br from-white via-[#FDFCFB] to-[#EDE6E3] rounded-full shadow-2xl'>
