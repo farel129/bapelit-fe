@@ -337,7 +337,7 @@ const AdminJadwalAcara = () => {
   return (
     <div className="min-h-screen">
       {/* Header Section */}
-      <div className="bg-white rounded-2xl shadow-sm border-2 border-[#e5e7eb] p-6 mb-6">
+      <div className="bg-white rounded-3xl shadow-lg p-5">
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-white rounded-2xl shadow-lg">
@@ -427,7 +427,7 @@ const AdminJadwalAcara = () => {
 
         {/* Jadwal List */}
         {loading && !showForm ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-8">
             {[...Array(6)].map((_, index) => (
               <div
                 key={index}
@@ -482,7 +482,7 @@ const AdminJadwalAcara = () => {
                 <p className="text-[#6b7280] text-sm">Tambahkan jadwal acara pertama Anda.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 mb-8">
                 {jadwalList.map((jadwal) => (
                   <div
                     key={jadwal.id}

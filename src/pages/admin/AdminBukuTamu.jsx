@@ -321,9 +321,9 @@ const AdminBukuTamu = () => {
   return (
     <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
       {/* Modern Header — Tetap dipertahankan */}
-      <div className="bg-white/80 backdrop-blur-lg shadow-lg border-b border-gray-200 rounded-2xl">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center py-8">
+      <div className="bg-white shadow-lg border border-slate-200 rounded-2xl">
+        <div className="max-w-7xl mx-auto p-5 py-7">
+          <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-white rounded-xl shadow-lg">
                 <Calendar className="h-6 w-6 text-pink-500" />
@@ -360,13 +360,12 @@ const AdminBukuTamu = () => {
         </div>
       </div>
 
-      <div className="mt-8">
-
+      <div className="mt-5">
         {/* Events View — TABEL DENGAN STYLE SURATMASUKLIST */}
         {view === 'events' && (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* Modern Search and Filter — Tetap dipertahankan */}
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-5">
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-5">
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1">
                   <div className="relative">
@@ -392,7 +391,7 @@ const AdminBukuTamu = () => {
               </div>
             </div>
 
-            <div className="bg-white rounded-2xl shadow-sm overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
               {loading ? (
                 <div className="p-12 text-center">
                   <LoadingSpinner size="lg" text="Memuat data acara..." />
@@ -555,7 +554,7 @@ const AdminBukuTamu = () => {
 
         {/* Guests View — TABEL TAMU DENGAN STYLE SURATMASUKLIST */}
         {view === 'guests' && currentEvent && (
-          <div className="space-y-8">
+          <div className="space-y-4">
             {/* Back Button */}
             <div className="flex items-center gap-2">
               <button
@@ -568,9 +567,9 @@ const AdminBukuTamu = () => {
             </div>
 
             {/* Event Info Card */}
-            <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm p-6">
-              <h2 className="text-2xl font-bold text-black mb-4">{currentEvent.nama_acara}</h2>
-              <div className="flex flex-wrap gap-6 text-sm text-black">
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-4">
+              <h2 className="text-xl font-semibold text-neutral-500 mb-4">Nama acara: <span className='text-black'>{currentEvent.nama_acara}</span></h2>
+              <div className="flex flex-wrap gap-4 text-sm text-black">
                 <div className="flex items-center">
                   <Calendar className="w-5 h-5 text-pink-500 mr-2" />
                   {formatDate(currentEvent.tanggal_acara)}
@@ -618,7 +617,7 @@ const AdminBukuTamu = () => {
                       <tr>
                         <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Tamu</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Instansi</th>
-                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Jabatan / Email</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Jabatan / Status / Pekerjaan</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Check In</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Foto</th>
                         <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Aksi</th>
@@ -746,8 +745,8 @@ const AdminBukuTamu = () => {
 
         {/* Create Event View — Tidak diubah */}
         {view === 'create' && (
-          <div className="space-y-8">
-            <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-white/20 p-8 max-w-4xl mx-auto">
+          <div className="space-y-4">
+            <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-4xl mx-auto">
               <div className='flex gap-x-2 items-center mb-8'>
                 <div className='bg-white text-pink-500 p-3 flex justify-center items-center shadow-lg border border-slate-200 rounded-xl'>
                   <Plus className='w-7 h-7' />

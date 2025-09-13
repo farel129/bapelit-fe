@@ -203,7 +203,7 @@ const SuratMasukList = () => {
                     onClick={() => goToPage(page)}
                     className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${
                       currentPage === page
-                        ? 'bg-gradient-to-br from-white to-black text-white border-[#EDE6E3]'
+                        ? 'bg-black text-white border-[#EDE6E3]'
                         : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-black hover:text-black'
                     }`}
                   >

@@ -9,8 +9,8 @@ const DeleteConfirmModal = ({
     if (!showDeleteConfirm) return null;
 
     return (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
-            <div className="bg-white rounded-lg w-full max-w-md">
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center p-4 z-50">
+            <div className="bg-white rounded-2xl w-full max-w-md">
                 <div className="p-6 text-center">
                     <AlertCircle className="w-16 h-16 text-red-500 mx-auto mb-4" />
                     <h2 className="text-lg font-semibold mb-2">Hapus Post?</h2>

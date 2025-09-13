@@ -30,10 +30,10 @@ const KepalaStatistikDisposisi = () => {
 
     // === PALET WARNA WARNANI UNTUK SEMUA STATUS ===
     const colorPalette = [
-        '#EC4899', 
-        '#00bba7', 
-        '#000000', 
-        '#737373', 
+        '#EC4899',
+        '#00bba7',
+        '#000000',
+        '#737373',
     ];
 
     const statusConfig = {
@@ -68,7 +68,7 @@ const KepalaStatistikDisposisi = () => {
     };
 
     // === STAT CARD COMPONENT (KONSISTEN DENGAN SURAT MASUK LIST) ===
-    const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor }) => (
+    const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor, iconColor }) => (
         <div className={`${bgColor} p-3 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
             <div className="flex items-center gap-x-7 justify-between">
                 <div>
@@ -76,7 +76,7 @@ const KepalaStatistikDisposisi = () => {
                     <p className={`text-3xl font-bold ${textColor} mt-2`}>{count}</p>
                 </div>
                 <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
-                    <Icon className={`w-6 h-6 text-white`} />
+                    <Icon className={`w-6 h-6 ${iconColor}`} />
                 </div>
             </div>
         </div>
@@ -160,6 +160,7 @@ const KepalaStatistikDisposisi = () => {
                     textColor="text-black"
                     iconBg="bg-pink-500"
                     borderColor="border-slate-200"
+                    iconColor='text-white'
                 />
                 <StatCard
                     title="Belum Dibaca"
@@ -167,8 +168,9 @@ const KepalaStatistikDisposisi = () => {
                     icon={Clock}
                     bgColor="bg-white"
                     textColor="text-black"
-                    iconBg="bg-pink-500"
+                    iconBg="bg-slate-200"
                     borderColor="border-slate-200"
+                    iconColor="text-black"
                 />
                 <StatCard
                     title="Diproses"
@@ -176,8 +178,9 @@ const KepalaStatistikDisposisi = () => {
                     icon={Activity}
                     bgColor="bg-white"
                     textColor="text-black"
-                    iconBg="bg-emerald-500"
+                    iconBg="bg-neutral-500"
                     borderColor="border-slate-200"
+                    iconColor="text-white"
                 />
                 <StatCard
                     title="Selesai"
@@ -187,6 +190,7 @@ const KepalaStatistikDisposisi = () => {
                     textColor="text-white"
                     iconBg="bg-white"
                     borderColor="border-slate-200"
+                    iconColor="text-pink-500"
                 />
             </div>
 
@@ -271,9 +275,9 @@ const KepalaStatistikDisposisi = () => {
                                 ))}
                             </Pie>
                             <Tooltip content={<CustomTooltip />} />
-                            <Legend 
-                                layout="vertical" 
-                                align="right" 
+                            <Legend
+                                layout="vertical"
+                                align="right"
                                 verticalAlign="middle"
                                 wrapperStyle={{
                                     fontSize: '14px',
@@ -329,7 +333,7 @@ const KepalaStatistikDisposisi = () => {
                         <div className="flex items-center justify-between">
                             <span className="font-medium text-black">Tingkat Penyelesaian</span>
                             <span className="font-semibold text-black">
-                                {stats.statistik_status.total > 0 
+                                {stats.statistik_status.total > 0
                                     ? ((stats.statistik_status.selesai / stats.statistik_status.total) * 100).toFixed(1)
                                     : 0}%
                             </span>
