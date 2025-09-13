@@ -245,7 +245,7 @@ const LandingPage = () => {
             {/* Main image container */}
             <div className='relative z-10 p-3 bg-gradient-to-br from-white via-[#FDFCFB] to-[#EDE6E3] rounded-full shadow-2xl'>
               {/* Placeholder for image - replace with actual img src */}
-              <div className='w-80 h-80 lg:w-96 lg:h-96 xl:w-[440px] xl:h-[440px] rounded-full bg-gradient-to-br from-[#D4A373] via-[#6D4C41] to-[#2E2A27] shadow-inner border-4 border-white   flex items-center justify-center'>
+              <div className='w-80 h-80 lg:w-96 lg:h-96 xl:w-[440px] xl:h-[440px] rounded-full bg-gradient-to-bl shadow-inner border-4 border-white   flex items-center justify-center'>
                 <img src={Img} alt="" className='w-full h-full rounded-full object-cover' />
               </div>
             </div>
