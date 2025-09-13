@@ -51,7 +51,7 @@ const AdminLayout = ({ children }) => {
       <header className='hidden flex-1 h-17 z-20 fixed inset-0 bg-transparent backdrop-blur-2xl text-black lg:flex justify-between items-center p-4'>
         <div className='flex items-center gap-x-1'>
           <img src={img} alt="" className='w-5 brightness-0' />
-          <h1 className='text-lg lg:text-xl font-black'>
+          <h1 className='text-lg lg:text-3xl font-bold'>
             <span className='bg-gradient-to-bl via-pink-800 from-pink-500 to-black bg-clip-text text-transparent'>
               Magessa
             </span>
@@ -76,8 +76,8 @@ const AdminLayout = ({ children }) => {
         <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
         <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl rounded-r-2xl">
           <div className="flex items-center justify-between h-16 px-4 border-b border-[#EDE6E3]">
-            <div className="flex items-center gap-x-2">
-              <img src={img} alt="" className='w-6 brightness-0' />
+            <div className="flex items-center gap-x-1">
+              <img src={img} alt="" className='w-4 brightness-0' />
               <h1 className='text-lg lg:text-xl font-black'>
                 <span className='bg-gradient-to-bl via-pink-800 from-pink-500 to-black bg-clip-text text-transparent'>
                   Magessa
