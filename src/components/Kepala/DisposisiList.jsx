@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Search, Eye, FileText, Calendar, Building, User, AlertCircle, Loader2, Filter, RotateCcw, Trash2, X, RefreshCcw, CheckCircle, Clock, Archive, ChevronLeft, ChevronRight, Loader } from 'lucide-react';
 import { api } from '../../utils/api';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const DisposisiList = () => {
   const [disposisi, setDisposisi] = useState([]);
@@ -371,8 +372,7 @@ const DisposisiList = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-        <span className="ml-2 text-black">Memuat data disposisi...</span>
+        <LoadingSpinner />
       </div>
     );
   }

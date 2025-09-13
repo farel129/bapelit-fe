@@ -49,7 +49,7 @@ const KepalaDashboard = () => {
     <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
       {/* Mobile Header */}
       <div className=" z-20 backdrop-blur-xl bg-white/95 border-b border-slate-200 shadow-lg rounded-2xl">
-        <div className="px-4 py-4 sm:px-6 sm:py-6">
+        <div className="p-4">
           {/* Title and Description - Mobile Optimized */}
           <div className="flex items-start space-x-3 mb-4">
             <div className="p-2.5 sm:p-3 bg-white rounded-xl sm:rounded-2xl shadow-lg flex-shrink-0">
@@ -59,7 +59,7 @@ const KepalaDashboard = () => {
               <h1 className="text-lg lg:text-xl font-bold text-black truncate">
                 Dashboard Kepala Kantor
               </h1>
-              <p className="text-xs sm:text-sm font-medium text-black mt-1 line-clamp-2">
+              <p className="text-xs sm:text-sm text-black mt-1 line-clamp-2">
                 Kelola surat masuk dan buat disposisi untuk bawahan
               </p>
             </div>
@@ -115,7 +115,7 @@ const KepalaDashboard = () => {
                       className={`relative flex items-center space-x-3 cursor-pointer px-4 lg:px-6 py-3 lg:py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
                         activeTab === tab.id
                           ? 'bg-white text-[#2E2A27] shadow-md border border-[#EDE6E3] scale-[1.02]'
-                          : 'text-pink-500 hover:text-[#2E2A27] hover:bg-gray-50 hover:shadow-sm'
+                          : 'text-slate-500 hover:text-[#2E2A27] hover:bg-gray-50 hover:shadow-sm'
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${

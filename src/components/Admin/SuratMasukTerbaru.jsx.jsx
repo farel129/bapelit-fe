@@ -59,11 +59,11 @@ const SuratMasukTerbaru = () => {
             // Belum Dibaca → HITAM (kontras tinggi, urgensi)
             pending: 'bg-black text-white border-2 border-gray-700',
             // Sudah Dibaca → PINK BRAND (progress, selesai)
-            processed: 'bg-[#f6339a] text-white border-2 border-pink-600'
+            processed: 'bg-black text-white border-2 border-pink-600'
         };
         return (
-            <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${styles[status] || 'bg-gray-100 text-gray-600 border-2 border-gray-200'}`}>
-                {status === 'pending' ? 'Belum Dibaca' : status === 'processed' ? 'Sudah Dibaca' : status}
+            <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${styles[status] || 'bg-gray-50 text-gray-600 border border-slate-200'}`}>
+                {status === 'pending' ? 'belum dibaca' : status === 'processed' ? 'sudah dibaca' : status}
             </span>
         );
     };
@@ -177,7 +177,7 @@ const SuratMasukTerbaru = () => {
     return (
         <div className="flex w-full">
             {/* 🎨 Background & Card Utama - Gunakan palet baru yang lebih modern */}
-            <div className="bg-gradient-to-br w-full from-white/95 via-gray-50/90 to-gray-100/60 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-gray-200 shadow-lg hover:shadow-xl transition-all duration-300">
+            <div className="bg-gradient-to-br w-full from-white/95 via-gray-50/90 to-gray-100/60 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-gray-200 shadow-lg">
                 <div className="flex items-center space-x-3 p-5">
                     <div className="w-3 h-8 bg-gradient-to-b from-[#f6339a] to-[#d11b8c] rounded-full shadow-sm"></div>
                     <h3 className="text-lg font-bold text-gray-800 tracking-tight">Surat masuk terbaru</h3>
@@ -227,7 +227,7 @@ const SuratMasukTerbaru = () => {
                                             </span>
                                         </div>
                                     </td>
-                                    <td className="p-3">
+                                    <td className="p-3 truncate bg-white">
                                         {getStatusBadge(surat.status)}
                                     </td>
                                     <td className="p-3">

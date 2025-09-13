@@ -3,6 +3,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { FileText, TrendingUp, Clock, CheckCircle, AlertCircle, RefreshCcw, Activity, Eye, Archive } from 'lucide-react';
 import { api } from '../../utils/api';
 import toast from 'react-hot-toast';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const KepalaStatistikDisposisi = () => {
     const [stats, setStats] = useState(null);
@@ -102,8 +103,7 @@ const KepalaStatistikDisposisi = () => {
     if (loading) {
         return (
             <div className="flex items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
-                <span className="ml-2 text-black">Memuat statistik...</span>
+                <LoadingSpinner />
             </div>
         );
     }
@@ -151,7 +151,7 @@ const KepalaStatistikDisposisi = () => {
             </div>
 
             {/* Stat Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
                 <StatCard
                     title="Total Disposisi"
                     count={stats.statistik_status.total.toLocaleString('id-ID')}
@@ -195,16 +195,16 @@ const KepalaStatistikDisposisi = () => {
             </div>
 
             {/* Charts Section */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 mb-8">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 mb-4">
                 {/* Bar Chart */}
-                <div className="bg-white rounded-2xl shadow-sm p-6 border-2 border-[#EDE6E3]">
+                <div className="bg-white rounded-2xl shadow-sm p-4 border-2 border-[#EDE6E3]">
                     <div className="flex items-center justify-between mb-6">
                         <div className="flex items-center gap-3">
                             <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
                                 <Activity className="h-5 w-5 text-black" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-black">Distribusi Status</h3>
+                                <h3 className="text-base font-bold text-black">Distribusi Status</h3>
                                 <p className="text-sm font-medium text-black opacity-80">Grafik batang status disposisi</p>
                             </div>
                         </div>
@@ -243,14 +243,14 @@ const KepalaStatistikDisposisi = () => {
                 </div>
 
                 {/* Pie Chart */}
-                <div className="bg-white rounded-2xl shadow-sm p-6 border-2 border-[#EDE6E3]">
-                    <div className="flex items-center justify-between mb-6">
+                <div className="bg-white rounded-2xl shadow-sm p-4 border-2 border-[#EDE6E3]">
+                    <div className="flex items-center justify-between mb-4">
                         <div className="flex items-center gap-3">
                             <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
                                 <Eye className="h-5 w-5 text-black" />
                             </div>
                             <div>
-                                <h3 className="text-xl font-bold text-black">Proporsi Status</h3>
+                                <h3 className="text-base font-bold text-black">Proporsi Status</h3>
                                 <p className="text-sm font-medium text-black opacity-80">Diagram lingkaran status disposisi</p>
                             </div>
                         </div>
@@ -292,14 +292,14 @@ const KepalaStatistikDisposisi = () => {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
                             <TrendingUp className="h-5 w-5 text-black" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-black">Ringkasan Statistik</h3>
+                            <h3 className="text-base font-bold text-black">Ringkasan Statistik</h3>
                             <p className="text-sm font-medium text-black opacity-80">Persentase berdasarkan status</p>
                         </div>
                     </div>
@@ -321,7 +321,7 @@ const KepalaStatistikDisposisi = () => {
                             <FileText className="h-5 w-5 text-black" />
                         </div>
                         <div>
-                            <h3 className="text-xl font-bold text-black">Informasi Data</h3>
+                            <h3 className="text-base font-bold text-black">Informasi Data</h3>
                             <p className="text-sm font-medium text-black opacity-80">Ringkasan data disposisi</p>
                         </div>
                     </div>

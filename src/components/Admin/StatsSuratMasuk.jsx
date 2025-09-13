@@ -91,7 +91,7 @@ const StatsSuratMasuk = () => {
     const monthlyData = getMonthlyData()
 
     const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-pink-500', iconColor = 'text-white' }) => (
-        <div className={`${bgColor} p-4 rounded-xl shadow-lg border-2 ${borderColor} hover:shadow-xl transition-all duration-300`}>
+        <div className={`${bgColor} p-4 rounded-xl shadow-lg border-2 ${borderColor}`}>
             <div className="flex items-start justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
@@ -416,7 +416,7 @@ const StatsSuratMasuk = () => {
                                 <h3 className="text-lg font-semibold text-black mb-4">Ringkasan Bulanan</h3>
                                 <div className="grid grid-cols-2 md:grid-cols-2 gap-2">
                                     {monthlyData.slice(-8).map((month, index) => (
-                                        <div key={index} className="text-center p-2 flex items-center justify-between bg-gray-50 rounded-xl border border-gray-200 hover:shadow-lg transition-all duration-300">
+                                        <div key={index} className="text-center p-2 flex items-center justify-between bg-gray-50 rounded-xl border border-gray-200">
                                             <div>
                                                 <h4 className="font-semibold text-black text-lg">{month.month}</h4>
                                                 <p className="text-lg font-semibold text-pink-500 mt-1">{month.total}</p>
@@ -442,12 +442,12 @@ const StatsSuratMasuk = () => {
                     <div className='flex lg:flex-row flex-col w-full gap-2'>
                         <div className="">
                             {/* Quick Actions */}
-                            <div className="bg-pink-500 hover:bg-pink-600 transition-colors duration-200 rounded-xl shadow-lg p-5">
+                            <div className="bg-white border border-pink-200 rounded-xl shadow-lg p-5">
                                 <div className="space-y-4">
                                     <Link to="/admin-surat-masuk">
-                                        <div className='text-white flex flex-col space-y-4 items-center justify-center'>
+                                        <div className='text-black flex flex-col space-y-4 items-center justify-center'>
                                             <p className='text-center'>Tambah Surat Masuk</p>
-                                            <div className='border border-white flex justify-center items-center p-4 rounded-full'>
+                                            <div className='border border-pink-500 flex justify-center items-center p-4 rounded-full'>
                                                 <Plus className='w-7 h-7' />
                                             </div>
                                         </div>

@@ -3,6 +3,7 @@ import { Users, Search, Filter, RefreshCw, Award, Building, Loader } from 'lucid
 import toast from 'react-hot-toast';
 import { useAuth } from '../../contexts/AuthContext';
 import { api } from '../../utils/api';
+import LoadingSpinner from '../Ui/LoadingSpinner';
 
 const DaftarUser = () => {
   const { user } = useAuth();
@@ -63,116 +64,109 @@ const DaftarUser = () => {
     return name?.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) || '??';
   };
 
-  // Get avatar color based on name
+  // ✅ AVATAR DINAMIS — ABU-ABU TERANG (karena hanya 3 warna)
   const getAvatarColor = (name) => {
-    const colors = [
-      'bg-red-100 text-red-800',
-      'bg-blue-100 text-blue-800',
-      'bg-green-100 text-green-800',
-      'bg-red-200 text-red-900',
-      'bg-blue-200 text-blue-900',
-      'bg-green-200 text-green-900'
-    ];
-    const index = name?.charCodeAt(0) % colors.length || 0;
-    return colors[index];
+    if (!name) return 'bg-gray-100 text-gray-600';
+    const hue = (name.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0) * 137.509) % 360;
+    return `hsl(${hue}, 15%, 90%)`; // Abu-abu sangat terang, netral, tidak mencolok
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#D4A373]"></div>
-        <span className="ml-2 text-[#6D4C41]">Memuat data user...</span>
+        <LoadingSpinner />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-6 rounded-2xl" style={{ backgroundColor: '#FDFCFB' }}>
-      <div className="flex items-center justify-between mb-8">
+    <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
+      {/* Header */}
+      <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-x-3">
-          <div className="h-8 w-1.5 bg-gradient-to-b from-[#D4A373] via-[#6D4C41] to-[#2E2A27] rounded-full shadow-sm"></div>
+          <div className="h-8 w-1.5 bg-black rounded-full shadow-sm"></div>
           <div>
-            <h1 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Daftar User</h1>
-            <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Daftar pengguna sistem</p>
+            <h1 className="text-xl font-bold text-black">Daftar User</h1>
+            <p className="text-sm text-gray-600">Daftar pengguna sistem</p>
           </div>
         </div>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-[#2E2A27] px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-[#D4A373]"
+          className="bg-white hover:bg-gray-50 border border-gray-200 gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-pink-500"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
         </button>
       </div>
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#EDE6E3] hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+      {/* Stat Cards — White + Black + Pink Accent */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-[#6D4C41] opacity-80">Total User</p>
-              <p className="text-3xl font-bold text-[#2E2A27] mt-2">{users.length}</p>
+              <p className="text-sm font-medium text-gray-600 opacity-80">Total User</p>
+              <p className="text-lg font-bold text-black mt-2">{users.length}</p>
             </div>
-            <div className="bg-gradient-to-br from-[#D4A373] to-[#6D4C41] p-3 rounded-xl shadow-md">
-              <Users className="w-6 h-6 text-white" />
+            <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
+              <Users className="w-6 h-6 text-pink-500" />
             </div>
           </div>
         </div>
-        
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#EDE6E3] hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-[#6D4C41] opacity-80">Bidang Unik</p>
-              <p className="text-3xl font-bold text-[#2E2A27] mt-2">{uniqueBidang.length}</p>
+              <p className="text-sm font-medium text-gray-600 opacity-80">Bidang Unik</p>
+              <p className="text-lg font-bold text-black mt-2">{uniqueBidang.length}</p>
             </div>
-            <div className="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] p-3 rounded-xl shadow-md">
-              <Building className="w-6 h-6 text-white" />
+            <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
+              <Building className="w-6 h-6 text-pink-500" />
             </div>
           </div>
         </div>
-        
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#EDE6E3] hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm font-medium text-[#6D4C41] opacity-80">Hasil Filter</p>
-              <p className="text-3xl font-bold text-[#2E2A27] mt-2">{filteredUsers.length}</p>
+              <p className="text-sm font-medium text-gray-600 opacity-80">Hasil Filter</p>
+              <p className="text-lg font-bold text-black mt-2">{filteredUsers.length}</p>
             </div>
-            <div className="bg-gradient-to-br from-[#2196F3] to-[#0D47A1] p-3 rounded-xl shadow-md">
-              <Filter className="w-6 h-6 text-white" />
+            <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
+              <Filter className="w-6 h-6 text-pink-500" />
             </div>
           </div>
         </div>
       </div>
 
-      {/* Search and Filter */}
-      <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-md mb-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {/* Search and Filter — GLASSMORPHISM WITH ONLY 3 COLORS */}
+      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-100 shadow-md mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#6D4C41] w-5 h-5" />
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <input
               type="text"
               placeholder="Cari nama atau email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white text-[#2E2A27] rounded-xl border border-[#EDE6E3] focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] transition-all duration-200 text-sm shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200 text-sm shadow-sm"
             />
           </div>
 
           <div className="relative">
-            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[#6D4C41] w-5 h-5" />
+            <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
             <select
               value={filterBidang}
               onChange={(e) => setFilterBidang(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white text-[#2E2A27] rounded-xl border border-[#EDE6E3] focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] transition-all duration-200 text-sm appearance-none cursor-pointer shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-500 focus:border-transparent transition-all duration-200 text-sm appearance-none cursor-pointer shadow-sm"
             >
-              <option value="" className="text-[#6D4C41]">Semua Bidang</option>
+              <option value="" className="text-gray-600">Semua Bidang</option>
               {uniqueBidang.map(bidang => (
-                <option key={bidang} value={bidang} className="text-[#2E2A27]">{bidang}</option>
+                <option key={bidang} value={bidang} className="text-black">{bidang}</option>
               ))}
             </select>
           </div>
 
-          <div className="flex items-center text-sm font-medium" style={{ color: '#6D4C41' }}>
+          <div className="flex items-center text-sm font-medium text-gray-600">
             Menampilkan {filteredUsers.length} dari {users.length} user
           </div>
         </div>
@@ -180,12 +174,12 @@ const DaftarUser = () => {
 
       {/* User List */}
       {filteredUsers.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-          <Users className="w-12 h-12 text-[#6D4C41] mx-auto mb-4" />
-          <p className="text-[#2E2A27] text-lg font-semibold">
+        <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
+          <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <p className="text-black text-lg font-semibold">
             {searchTerm || filterBidang ? 'Tidak ada hasil pencarian' : 'Tidak ada user'}
           </p>
-          <p className="text-[#6D4C41] text-sm mt-1">
+          <p className="text-gray-600 text-sm mt-1">
             {searchTerm || filterBidang ? 'Coba sesuaikan kata kunci atau filter' : 'Belum ada user yang terdaftar'}
           </p>
         </div>
@@ -194,33 +188,37 @@ const DaftarUser = () => {
           {filteredUsers.map((userData) => (
             <div 
               key={userData.id} 
-              className={`bg-white p-5 rounded-2xl border-2 border-[#EDE6E3] shadow-sm hover:shadow-lg transition-all duration-300 ${user && userData.id === user.id ? 'ring-2 ring-[#D4A373]' : ''}`}
+              className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+              style={user && userData.id === user.id ? { borderLeft: '4px solid #ec4899', boxShadow: '0 10px 25px rgba(0,0,0,0.03)' } : {}}
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-4">
-                  <div className={`w-10 h-10 ${getAvatarColor(userData.name)} rounded-full flex items-center justify-center font-semibold text-sm shadow-sm`}>
+                  {/* ✅ MODERN AVATAR — ABU-ABU TERANG DENGAN HSL */}
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center font-semibold text-sm text-black shadow-sm"
+                    style={{ backgroundColor: getAvatarColor(userData.name) }}
+                  >
                     {getUserInitials(userData.name)}
                   </div>
+
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-[#2E2A27]">{userData.name}</h3>
+                      <h3 className="font-semibold text-black">{userData.name}</h3>
                       {user && userData.id === user.id && (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 border border-green-200">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-pink-100 text-pink-800 border border-pink-200">
                           <Award className="w-3 h-3 mr-1" /> Anda
                         </span>
                       )}
                     </div>
-                    <p className="text-sm font-medium text-[#6D4C41] mt-1">
+                    <p className="text-sm font-medium text-gray-600 mt-1">
                       Jabatan: {userData.jabatan || 'Tidak diketahui'}
                     </p>
                   </div>
                 </div>
                 
-                <div className="flex items-center">
-                  <div className="flex items-center gap-2 bg-[#FDFCFB] px-3.5 py-2.5 rounded-xl border border-[#EDE6E3] shadow-sm">
-                    <Building className="w-4 h-4 text-[#6D4C41]" />
-                    <span className="text-sm font-medium text-[#2E2A27]">{userData.bidang}</span>
-                  </div>
+                <div className="flex items-center gap-2 bg-white/80 backdrop-blur-sm px-3.5 py-2.5 rounded-xl border border-gray-100 shadow-sm">
+                  <Building className="w-4 h-4 text-gray-500" />
+                  <span className="text-sm font-medium text-black">{userData.bidang}</span>
                 </div>
               </div>
             </div>
