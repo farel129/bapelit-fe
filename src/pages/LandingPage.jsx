@@ -102,7 +102,7 @@ const LandingPage = () => {
       // Floating animation for decorative elements
       gsap.to([floatingElement1Ref.current, floatingElement2Ref.current], {
         y: -10,
-        duration: 2,
+        duration: 0.5,
         repeat: -1,
         yoyo: true,
         ease: "power2.inOut",
@@ -167,7 +167,6 @@ const LandingPage = () => {
   return (
     <section
       ref={containerRef}
-      style={{ backgroundColor: '#FDFCFB' }}
       className='w-full min-h-screen flex justify-center items-center overflow-hidden px-4 md:px-20 relative'
     >
       {/* Decorative Background Elements - Cocoa Latte Theme */}
@@ -179,7 +178,7 @@ const LandingPage = () => {
 
       {/* Header - Cocoa Latte Style */}
       <div ref={headerRef} className='absolute top-0 w-full px-4 md:px-20 py-5 z-20'>
-        <div className='gap-x-3 items-center backdrop-blur-sm bg-gradient-to-br from-white/90 via-[#FDFCFB]/80 to-[#EDE6E3]/70 rounded-2xl p-4 shadow-lg border-2 border-[#EDE6E3] inline-flex hover:shadow-xl  '>
+        <div className='gap-x-3 items-center backdrop-blur-sm bg-gradient-to-bl from-gray-100 via-white to-gray-100 rounded-2xl p-4 shadow-lg border-2 border-slate-200 inline-flex hover:shadow-xl  '>
           <img src={Logo} alt="" className='w-6' />
           <p className='font-semibold text-[#2E2A27]'>Bapelitbangda Kota Tasikmalaya</p>
         </div>
@@ -191,18 +190,18 @@ const LandingPage = () => {
         <div className='flex flex-col gap-y-6 lg:w-1/2 text-center lg:text-left'>
           <div className='space-y-4'>
             <h1 ref={titleRef} className='text-6xl lg:text-7xl xl:text-8xl font-bold mt-15'>
-              <span className='bg-gradient-to-r from-[#2E2A27] via-[#6D4C41] to-[#D4A373] bg-clip-text text-transparent'>
-                Dispoma
+              <span className='bg-gradient-to-bl via-neutral-800 from-pink-500 to-black bg-clip-text text-transparent'>
+                Magessa
               </span>
             </h1>
 
-            <h2 ref={subtitleRef} className='text-2xl lg:text-3xl font-semibold text-[#6D4C41] tracking-wide'>
-              Disposisi Surat Masuk
+            <h2 ref={subtitleRef} className='text-2xl lg:text-3xl font-semibold text-black tracking-wide'>
+              Management Sistem Surat
             </h2>
           </div>
 
           <p ref={descriptionRef} className='text-[#6D4C41] leading-relaxed max-w-lg mx-auto lg:mx-0 text-base lg:text-lg opacity-90'>
-            Portal ini hanya dapat diakses oleh pegawai internal Bapelitbangda. Silakan login menggunakan akun resmi untuk mengelola dan memantau surat masuk instansi.
+            Portal ini hanya dapat diakses oleh pegawai internal Bapelitbangda. Silakan login menggunakan akun resmi untuk mengelola surat.
           </p>
 
           <div className='flex flex-col sm:flex-row gap-4 items-center justify-center lg:justify-start mt-4'>
@@ -211,7 +210,7 @@ const LandingPage = () => {
               onClick={handleLoginShow}
               onMouseEnter={() => handleButtonHover(true)}
               onMouseLeave={() => handleButtonHover(false)}
-              className='group relative cursor-pointer px-8 py-4 bg-gradient-to-r from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white font-semibold rounded-2xl shadow-xl border-2 border-[#EDE6E3] hover:shadow-2xl flex items-center gap-2 min-w-[140px]   transform hover:scale-105'
+              className='group relative cursor-pointer px-8 py-4 bg-black hover:opacity-90 text-white font-semibold rounded-2xl shadow-xl border-2 border-[#EDE6E3] hover:shadow-2xl flex items-center gap-2 min-w-[140px]   transform hover:scale-105'
             >
               <span>Masuk</span>
               <svg className='w-4 h-4 group-hover:translate-x-1 ' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
@@ -241,10 +240,10 @@ const LandingPage = () => {
         <div className='lg:w-1/2 hidden lg:flex justify-center relative'>
           <div ref={imageContainerRef} className='relative group'>
             {/* Decorative rings - Updated colors */}
-            <div className='absolute -inset-6 animate-pulse rounded-full bg-gradient-to-br from-[#EDE6E3] to-[#D4A373] shadow-2xl group-hover:scale-105   opacity-50'></div>
+            <div className='absolute -inset-6 animate-pulse rounded-full bg-gradient-to-br from-pink-300 to-pink-500 shadow-2xl group-hover:scale-105 transition-all duration-300 opacity-50'></div>
 
             {/* Main image container */}
-            <div className='relative z-10 p-3 bg-gradient-to-br from-white via-[#FDFCFB] to-[#EDE6E3] rounded-full shadow-2xl border-4 border-[#EDE6E3] hover:border-[#D4A373]  '>
+            <div className='relative z-10 p-3 bg-gradient-to-br from-white via-[#FDFCFB] to-[#EDE6E3] rounded-full shadow-2xl'>
               {/* Placeholder for image - replace with actual img src */}
               <div className='w-80 h-80 lg:w-96 lg:h-96 xl:w-[440px] xl:h-[440px] rounded-full bg-gradient-to-br from-[#D4A373] via-[#6D4C41] to-[#2E2A27] shadow-inner border-4 border-white   flex items-center justify-center'>
                 <img src={Img} alt="" className='w-full h-full rounded-full object-cover' />
@@ -252,17 +251,17 @@ const LandingPage = () => {
             </div>
 
             {/* Floating elements - Cocoa Latte Style */}
-            <div ref={floatingElement1Ref} className='absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-white to-[#EDE6E3] rounded-full shadow-xl flex items-center justify-center border-2 border-[#D4A373] hover:border-[#6D4C41]  '>
-              <svg className='w-10 h-10 text-[#6D4C41]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <div ref={floatingElement1Ref} className='absolute -top-4 -right-4 w-20 h-20 bg-gradient-to-br from-neutral-700 to-neutral-950 rounded-full shadow-xl flex items-center justify-center border-2 border-pink-300 hover:border-pink-500'>
+              <svg className='w-10 h-10 text-pink-500' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z' />
               </svg>
             </div>
 
-            <div className='absolute w-7 h-7 rounded-full bg-gradient-to-br from-[#D4A373] to-[#6D4C41] top-17 animate-bounce border-2 border-white shadow-lg'></div>
-            <div className='absolute w-8 h-8 rounded-full bg-gradient-to-br from-[#6D4C41] to-[#2E2A27] bottom-17 right-0 animate-bounce border-2 border-white shadow-lg'></div>
+            <div className='absolute w-7 h-7 rounded-full bg-gradient-to-br from-pink-300 to-pink-500 top-17 animate-bounce border-2 border-white shadow-lg'></div>
+            <div className='absolute w-8 h-8 rounded-full bg-gradient-to-br from-pink-500 to-pink-950 bottom-17 right-0 animate-bounce border-2 border-white shadow-lg'></div>
 
-            <div ref={floatingElement2Ref} className='absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-br from-white to-[#EDE6E3] rounded-full shadow-xl flex items-center justify-center border-2 border-[#D4A373] hover:border-[#6D4C41]  '>
-              <svg className='w-10 h-10 text-[#6D4C41]' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+            <div ref={floatingElement2Ref} className='absolute -bottom-4 -left-4 w-20 h-20 bg-gradient-to-br from-neutral-700 to-neutral-950 rounded-full shadow-xl flex items-center justify-center border-2 border-pink-300 hover:border-pink-500'>
+              <svg className='w-10 h-10 text-pink-500' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
                 <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' />
               </svg>
             </div>
@@ -272,7 +271,7 @@ const LandingPage = () => {
 
       {/* Modal Overlays - Cocoa Latte Style */}
       {showLogin && (
-        <div className='fixed inset-0 bg-gradient-to-br from-[#2E2A27]/60 via-[#6D4C41]/40 to-[#D4A373]/30 backdrop-blur-sm flex justify-center items-center z-50 p-4'>
+        <div className='fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4'>
           <LoginPopup onClose={() => setShowLogin(false)} />
         </div>
       )}
