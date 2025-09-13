@@ -50,9 +50,11 @@ const AdminLayout = ({ children }) => {
     <div className="min-h-screen bg-gradient-to-bl from-gray-100 via-gray-50 to-white">
       <header className='hidden flex-1 h-17 z-20 fixed inset-0 bg-transparent backdrop-blur-2xl text-black lg:flex justify-between items-center p-4'>
         <div className='flex items-center gap-x-1'>
-          <img src={img} alt="" className='w-5' />
-          <h1 className='text-black font-black text-xl'>
-            Dispoma
+          <img src={img} alt="" className='w-5 brightness-0' />
+          <h1 className='text-lg lg:text-xl font-black'>
+            <span className='bg-gradient-to-bl via-pink-800 from-pink-500 to-black bg-clip-text text-transparent'>
+              Magessa
+            </span>
           </h1>
         </div>
 
@@ -64,19 +66,23 @@ const AdminLayout = ({ children }) => {
         </div>
 
         <div>
-          <div className='rounded-full bg-red-500 p-1 text-white flex justify-center items-center'>
-            <UserCircle2 className='w-5 h-5'/>
+          <div className='rounded-full bg-pink-500 p-3 text-white flex justify-center items-center'>
+            <UserCircle2 className='w-5 h-5' />
           </div>
         </div>
       </header>
       {/* Mobile sidebar */}
       <div className={`fixed inset-0 z-50 lg:hidden ${sidebarOpen ? 'block' : 'hidden'}`}>
-        <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setSidebarOpen(false)} />
+        <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
         <div className="fixed inset-y-0 left-0 w-64 bg-white shadow-xl rounded-r-2xl">
           <div className="flex items-center justify-between h-16 px-4 border-b border-[#EDE6E3]">
             <div className="flex items-center gap-x-2">
-              <img src={img} alt="" className='w-6' />
-              <h1 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Dispoma</h1>
+              <img src={img} alt="" className='w-6 brightness-0' />
+              <h1 className='text-lg lg:text-xl font-black'>
+                <span className='bg-gradient-to-bl via-pink-800 from-pink-500 to-black bg-clip-text text-transparent'>
+                  Magessa
+                </span>
+              </h1>
             </div>
             <button onClick={() => setSidebarOpen(false)} className="p-2 rounded-lg hover:bg-[#FDFCFB]">
               <X className="w-6 h-6" style={{ color: '#6D4C41' }} />
@@ -88,8 +94,8 @@ const AdminLayout = ({ children }) => {
                 key={item.name}
                 to={item.href}
                 className={`group flex items-center px-3 py-3 text-sm font-semibold rounded-xl mb-1 transition-all duration-200 ${isActive(item.href)
-                  ? 'bg-gradient-to-r from-[#D4A373] to-[#6D4C41] text-white shadow-md'
-                  : 'text-[#6D4C41] hover:bg-[#FDFCFB] hover:text-[#2E2A27]'
+                  ? 'bg-white text-pink-500 shadow-md'
+                  : 'text-[#6d4141] hover:bg-[#FDFCFB] hover:text-[#2e2727]'
                   }`}
                 onClick={() => setSidebarOpen(false)}
               >
@@ -132,7 +138,7 @@ const AdminLayout = ({ children }) => {
                       to={item.href}
                       className={`flex items-center rounded-xl font-semibold transition-all duration-200 ${isActive(item.href)
                         ? 'bg-white text-pink-500 shadow-md'
-                        : 'text-[#6D4C41] hover:bg-[#FDFCFB] hover:text-[#2E2A27]'
+                        : 'text-[#6d4141] hover:bg-[#FDFCFB] hover:text-[#2e2727]'
                         }`}
                       style={{
                         padding: sidebarHovered ? '7px 16px' : '7px 12px'
@@ -218,9 +224,13 @@ const AdminLayout = ({ children }) => {
             <Menu className="w-6 h-6" style={{ color: '#6D4C41' }} />
           </button>
 
-          <div className="flex items-center space-x-3">
-            <img src={img} className='w-7' alt="" />
-            <p className="text-lg font-bold" style={{ color: '#e06448' }}>Dispoma</p>
+          <div className="flex items-center space-x-1">
+            <img src={img} className='w-4 brightness-0' alt="" />
+            <h1 className='text-lg lg:text-xl font-black'>
+              <span className='bg-gradient-to-bl via-pink-800 from-pink-500 to-black bg-clip-text text-transparent'>
+                Magessa
+              </span>
+            </h1>
           </div>
         </div>
       </div>
