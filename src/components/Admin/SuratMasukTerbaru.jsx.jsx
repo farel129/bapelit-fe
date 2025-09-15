@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FileText, X, CheckCircle, Download, Calendar, User, Building2, MessageSquare, Trash2, AlertTriangle, RefreshCcw, ChevronRightCircle } from 'lucide-react';
+import { FileText, X, CheckCircle, Download, Calendar, User, Building2, MessageSquare, Trash2, AlertTriangle, RefreshCcw, ChevronRightCircle, AlertCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { api } from '../../utils/api';
 

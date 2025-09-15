@@ -43,6 +43,7 @@ const KabidDisposisiDetail = () => {
   const [downloadError, setDownloadError] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   // State untuk feedback
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackData, setFeedbackData] = useState({
@@ -241,7 +242,7 @@ const KabidDisposisiDetail = () => {
       });
 
       const response = await atasanDisposisiService.createFeedback(role, id, formData);
-      
+
       setFeedbackSuccess(true);
       setShowFeedbackForm(false);
       setFeedbackData({ notes: '', status: 'diproses', files: [] });
@@ -288,7 +289,7 @@ const KabidDisposisiDetail = () => {
       formData.append('notes', editFeedbackData.notes);
       formData.append('status', editFeedbackData.status);
       formData.append('status_dari_kabid', editFeedbackData.status);
-      
+
       // Tambahkan file baru
       editFeedbackData.newFiles.forEach(file => {
         formData.append('new_feedback_files', file);
@@ -300,7 +301,7 @@ const KabidDisposisiDetail = () => {
       });
 
       const response = await atasanDisposisiService.updateFeedback(role, editingFeedbackId, formData);
-      
+
       setEditingFeedbackId(null);
       setEditFeedbackData({
         notes: '',
@@ -340,7 +341,7 @@ const KabidDisposisiDetail = () => {
 
       const response = await atasanDisposisiService.getFeedbackForEdit(role, feedbackId);
       const feedback = response.data;
-      
+
       setEditFeedbackData({
         notes: feedback.notes || '',
         status: feedback.disposisi?.status || 'diproses',
@@ -354,10 +355,6 @@ const KabidDisposisiDetail = () => {
     } finally {
       setEditLoading(false);
     }
-  };
-
-  const openImageModal = (imageUrl) => {
-    window.open(imageUrl, '_blank');
   };
 
   const getStatusConfig = (status) => {
@@ -440,14 +437,14 @@ const KabidDisposisiDetail = () => {
   // No data state
   if (!disposisi) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
+      <div className="min-h-screen flex items-center justify-center" >
         <div className="text-center">
-          <FileText className="w-16 h-16 mx-auto mb-4" style={{ color: '#6D4C41' }} />
-          <h3 className="text-xl font-bold mb-2" style={{ color: '#2E2A27' }}>Data Tidak Ditemukan</h3>
-          <p className="mb-6" style={{ color: '#6D4C41' }}>Disposisi tidak ditemukan atau tidak dapat diakses langsung</p>
+          <FileText className="w-16 h-16 mx-auto mb-4 text-pink-400" />
+          <h3 className="text-lg font-bold mb-2">Data Tidak Ditemukan</h3>
+          <p className="mb-4" >Disposisi tidak ditemukan atau tidak dapat diakses langsung</p>
           <button
             onClick={() => navigate('/kabid')}
-            className="bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white px-4 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg border border-[#EDE6E3]"
+            className="bg-black text-white px-4 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg border border-slate-200"
           >
             Kembali ke Daftar
           </button>
@@ -456,26 +453,26 @@ const KabidDisposisiDetail = () => {
     );
   }
   return (
-    <div className="min-h-screen p-4 md:p-6 rounded-2xl" style={{ backgroundColor: '#FDFCFB' }}>
+    <div className="min-h-screen p-4 lg:p-5 rounded-3xl bg-white shadow-lg" >
       <div className="">
         {/* Header Section */}
-        <div className="mb-8">
+        <div className="mb-4">
           <button
             onClick={() => navigate(-1)}
-            className="group inline-flex items-center mb-6 p-2.5 rounded-xl hover:bg-[#FDFCFB] transition-all duration-200 border border-[#EDE6E3]"
+            className="group inline-flex items-center mb-3"
           >
-            <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" style={{ color: '#6D4C41' }} />
-            <span className="font-semibold" style={{ color: '#6D4C41' }}>Kembali</span>
+            <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
+            <span className="font-semibold" >Kembali</span>
           </button>
-          <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] border-2 border-[#EDE6E3] shadow-md p-6 rounded-2xl">
-            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-6">
+          <div className="px-4 mb-4">
+            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-2">
               <div className="flex-1">
-                <h1 className="lg:text-xl text-lg font-bold" style={{ color: '#2E2A27' }}>Detail Disposisi</h1>
-                <p className="text-sm font-medium mt-1" style={{ color: '#6D4C41' }}>Kelola dan berikan feedback terhadap disposisi yang diterima</p>
+                <h1 className="lg:text-lg text-lg font-bold" >Detail Disposisi</h1>
+                <p className="text-sm font-medium mt-1" >Kelola dan berikan feedback terhadap disposisi yang diterima</p>
                 <button
                   onClick={handleDownloadPDF}
                   disabled={downloadLoading}
-                  className={`group inline-flex items-center px-6 py-3 shadow-lg rounded-xl font-semibold transition-all duration-200 border border-[#EDE6E3] shadow-sm${downloadLoading
+                  className={`group inline-flex mt-2 items-center px-6 py-3 shadow-lg rounded-xl font-medium transition-all duration-200 border border-slate-200 shadow-sm${downloadLoading
                     ? 'bg-gradient-to-br from-gray-400 to-gray-500 text-black opacity-75 cursor-not-allowed'
                     : 'bg-gradient-to-br from-gray-500 to-gray-700 hover:from-gray-700 hover:to-gray-900 text-black hover:shadow-md hover:-translate-y-0.5'
                     }`}
@@ -496,16 +493,16 @@ const KabidDisposisiDetail = () => {
               {disposisi && (
                 <div className="flex flex-col items-center lg:items-end space-y-4">
                   {getStatusBadge(disposisi.status_dari_kabid)}
-                  <div className="flex flex-col sm:flex-row gap-3">
+                  <div className="flex flex-col sm:flex-row gap-2">
                     {canAcceptDisposisi() && (
                       <button
                         onClick={handleAcceptDisposisi}
                         disabled={acceptLoading}
                         className={`
-                          group inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-200 border border-[#EDE6E3] shadow-sm
+                          group inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-200 border border-slate-200 shadow-sm
                           ${acceptLoading
-                            ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white opacity-75 cursor-not-allowed'
-                            : 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white hover:shadow-md hover:-translate-y-0.5'
+                            ? 'bg-black text-white opacity-75 cursor-not-allowed'
+                            : 'bg-black text-white hover:shadow-md hover:-translate-y-0.5'
                           }
                         `}
                       >
@@ -525,7 +522,7 @@ const KabidDisposisiDetail = () => {
                     {canForwardDisposisi() && !showForwardModal && !showFeedbackForm && !editingFeedbackId && (
                       <button
                         onClick={() => setShowForwardModal(true)}
-                        className="group inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] hover:from-[#2E7D32] hover:to-[#1B5E20] text-white font-semibold hover:shadow-md hover:-translate-y-0.5 shadow-sm transition-all duration-200 border border-[#EDE6E3]"
+                        className="group inline-flex items-center px-6 py-3 rounded-xl bg-neutral-800 text-white font-semibold hover:shadow-md hover:-translate-y-0.5 shadow-sm transition-all duration-200 border border-slate-200"
                       >
                         <Forward className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
                         Teruskan
@@ -534,7 +531,7 @@ const KabidDisposisiDetail = () => {
                     {canGiveFeedback() && !showForwardModal && !showFeedbackForm && !editingFeedbackId && (
                       <button
                         onClick={() => setShowFeedbackForm(true)}
-                        className="group inline-flex items-center px-6 py-3 rounded-xl bg-gradient-to-br from-[#2196F3] to-[#0D47A1] hover:from-[#0D47A1] hover:to-[#002171] text-white font-semibold hover:shadow-md hover:-translate-y-0.5 shadow-sm transition-all duration-200 border border-[#EDE6E3]"
+                        className="group inline-flex items-center px-6 py-3 rounded-xl bg-black text-white font-semibold hover:shadow-md hover:-translate-y-0.5 shadow-sm transition-all duration-200 border border-slate-200"
                       >
                         <MessageSquare className="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" />
                         Beri Feedback
@@ -565,18 +562,18 @@ const KabidDisposisiDetail = () => {
             />
             {/* Form Feedback */}
             {showFeedbackForm && !showForwardModal && !editingFeedbackId && (
-              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-[#EDE6E3] p-6">
-                <div className="flex items-center mb-6">
-                  <div className="p-3 bg-gradient-to-br from-[#2196F3] to-[#0D47A1] rounded-xl shadow-md mr-4">
-                    <MessageSquare className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+                <div className="flex items-center mb-4">
+                  <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
+                    <MessageSquare className="w-6 h-6 text-pink-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Beri Feedback</h3>
-                    <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Berikan tanggapan dan update status disposisi</p>
+                    <h3 className=" font-semibold" >Beri Feedback</h3>
+                    <p className="text-sm font-medium" >Berikan tanggapan dan update status disposisi</p>
                   </div>
                 </div>
                 {feedbackError && (
-                  <div className="mb-6 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl shadow-sm">
+                  <div className="mb-4 bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl shadow-sm">
                     <div className="flex items-center">
                       <AlertCircle className="w-5 h-5 mr-2 flex-shrink-0" />
                       <span className="font-medium">{feedbackError}</span>
@@ -585,7 +582,7 @@ const KabidDisposisiDetail = () => {
                 )}
                 <form onSubmit={handleFeedbackSubmit} className="space-y-6">
                   <div>
-                    <label className="block text-sm font-semibold mb-3" style={{ color: '#6D4C41' }}>
+                    <label className="block text-sm font-semibold mb-3" >
                       Catatan Feedback *
                     </label>
                     <textarea
@@ -594,15 +591,15 @@ const KabidDisposisiDetail = () => {
                       onChange={handleFeedbackChange}
                       required
                       rows="5"
-                      className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] resize-none text-[#2E2A27] shadow-sm"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 resize-none text-[#2E2A27] shadow-sm"
                       placeholder="Masukkan catatan feedback Anda..."
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-3" style={{ color: '#6D4C41' }}>
+                    <label className="block text-sm font-semibold mb-3" >
                       Status Disposisi *
                     </label>
-                    <div className="flex gap-6">
+                    <div className="flex gap-2">
                       <label className="flex items-center cursor-pointer group">
                         <input
                           type="radio"
@@ -610,9 +607,9 @@ const KabidDisposisiDetail = () => {
                           value="diproses"
                           checked={feedbackData.status === 'diproses'}
                           onChange={handleFeedbackChange}
-                          className="w-4 h-4 text-[#D4A373] border-[#EDE6E3] focus:ring-[#D4A373]"
+                          className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                         />
-                        <span className="ml-3 font-medium" style={{ color: '#6D4C41' }}>Diproses</span>
+                        <span className="ml-3 font-medium" >Diproses</span>
                       </label>
                       <label className="flex items-center cursor-pointer group">
                         <input
@@ -621,14 +618,14 @@ const KabidDisposisiDetail = () => {
                           value="selesai"
                           checked={feedbackData.status === 'selesai'}
                           onChange={handleFeedbackChange}
-                          className="w-4 h-4 text-[#D4A373] border-[#EDE6E3] focus:ring-[#D4A373]"
+                          className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                         />
-                        <span className="ml-3 font-medium" style={{ color: '#6D4C41' }}>Selesai</span>
+                        <span className="ml-3 font-medium" >Selesai</span>
                       </label>
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-3" style={{ color: '#6D4C41' }}>
+                    <label className="block text-sm font-semibold mb-3" >
                       Lampiran File (maks. 5 file)
                     </label>
                     <input
@@ -636,10 +633,10 @@ const KabidDisposisiDetail = () => {
                       multiple
                       onChange={handleFileChange}
                       accept="image/*,application/pdf"
-                      className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] shadow-sm"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 shadow-sm"
                     />
                     {feedbackData.files.length > 0 && (
-                      <div className="mt-2 text-sm bg-[#FDFCFB] px-3 py-2 rounded-lg border border-[#EDE6E3] shadow-sm" style={{ color: '#6D4C41' }}>
+                      <div className="mt-2 text-sm bg-[#FDFCFB] px-3 py-2 rounded-lg border border-slate-200 shadow-sm" >
                         <Paperclip className="w-4 h-4 inline mr-2" />
                         {feedbackData.files.length} file dipilih
                       </div>
@@ -649,7 +646,7 @@ const KabidDisposisiDetail = () => {
                     <button
                       type="button"
                       onClick={() => setShowFeedbackForm(false)}
-                      className="px-6 py-3 border border-[#EDE6E3] rounded-xl text-[#2E2A27] hover:bg-[#FDFCFB] font-semibold transition-colors shadow-sm"
+                      className="px-6 py-3 border border-slate-200 rounded-xl text-[#2E2A27] hover:bg-[#FDFCFB] font-semibold transition-colors shadow-sm"
                     >
                       Batal
                     </button>
@@ -657,10 +654,10 @@ const KabidDisposisiDetail = () => {
                       type="submit"
                       disabled={feedbackLoading}
                       className={`
-                        group inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-200 border border-[#EDE6E3] shadow-sm
+                        group inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-200 border border-slate-200 shadow-sm
                         ${feedbackLoading
-                          ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white opacity-75 cursor-not-allowed'
-                          : 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white hover:shadow-md hover:-translate-y-0.5'
+                          ? 'bg-black text-white opacity-75 cursor-not-allowed'
+                          : 'bg-black text-white hover:shadow-md hover:-translate-y-0.5'
                         }
                       `}
                     >
@@ -681,157 +678,183 @@ const KabidDisposisiDetail = () => {
               </div>
             )}
             {/* Informasi Surat dan Disposisi */}
-            <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-[#EDE6E3] p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                 {/* Informasi Surat */}
                 <div>
-                  <div className="flex items-center mb-6">
-                    <div className="p-3 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-xl shadow-md mr-4">
-                      <FileText className="w-6 h-6 text-white" />
+                  <div className="flex items-center mb-4">
+                    <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
+                      <FileText className="w-6 h-6 text-pink-400" />
                     </div>
-                    <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Informasi Surat</h3>
+                    <h3 className=" font-semibold" >Informasi Surat</h3>
                   </div>
                   <div className="space-y-4">
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <Building className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Nomor Surat</p>
+                        <Building className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Nomor Surat</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{disposisi.nomor_surat || '-'}</p>
+                      <p className="font-semibold" >{disposisi.nomor_surat || '-'}</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <Building className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Asal Instansi</p>
+                        <Building className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Asal Instansi</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{disposisi.asal_instansi || '-'}</p>
+                      <p className="font-semibold" >{disposisi.asal_instansi || '-'}</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <Calendar className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Tanggal Surat</p>
+                        <Calendar className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Tanggal Surat</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{new Date(disposisi.tanggal_surat).toLocaleDateString('id-ID')}</p>
+                      <p className="font-semibold" >{new Date(disposisi.tanggal_surat).toLocaleDateString('id-ID')}</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <Calendar className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Diterima Tanggal</p>
+                        <Calendar className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Diterima Tanggal</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{new Date(disposisi.diterima_tanggal).toLocaleDateString('id-ID')}</p>
+                      <p className="font-semibold" >{new Date(disposisi.diterima_tanggal).toLocaleDateString('id-ID')}</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <FileText className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Nomor Agenda</p>
+                        <FileText className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Nomor Agenda</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{disposisi.nomor_agenda || '-'}</p>
+                      <p className="font-semibold" >{disposisi.nomor_agenda || '-'}</p>
                     </div>
                   </div>
                 </div>
                 {/* Informasi Disposisi */}
                 <div>
-                  <div className="flex items-center mb-6">
-                    <div className="p-3 bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] rounded-xl shadow-md mr-4">
-                      <MessageSquare className="w-6 h-6 text-white" />
+                  <div className="flex items-center mb-4">
+                    <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
+                      <MessageSquare className="w-6 h-6 text-pink-400" />
                     </div>
-                    <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Informasi Disposisi</h3>
+                    <h3 className=" font-semibold" >Informasi Disposisi</h3>
                   </div>
                   <div className="space-y-4">
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
-                      <p className="text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>Status</p>
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
+                      <p className="text-sm font-semibold mb-2" >Status</p>
                       <div className="inline-block">
                         {getStatusBadge(disposisi.status_dari_kabid)}
                       </div>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <AlertCircle className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Sifat</p>
+                        <AlertCircle className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Sifat</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{disposisi.sifat || '-'}</p>
+                      <p className="font-semibold" >{disposisi.sifat || '-'}</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <User className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Disposisi Kepada Jabatan</p>
+                        <User className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Disposisi Kepada Jabatan</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{disposisi.disposisi_kepada_jabatan}</p>
+                      <p className="font-semibold" >{disposisi.disposisi_kepada_jabatan}</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <User className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Diteruskan Kepada</p>
+                        <User className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Diteruskan Kepada</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{disposisi.diteruskan_kepada_nama || disposisi.diteruskan_kepada_jabatan}</p>
+                      <p className="font-semibold" >{disposisi.diteruskan_kepada_nama || disposisi.diteruskan_kepada_jabatan}</p>
                     </div>
-                    <div className="bg-white rounded-xl p-4 border border-[#EDE6E3] shadow-sm">
+                    <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
-                        <Clock className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                        <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Tanggal Disposisi</p>
+                        <Clock className="w-4 h-4 mr-2" />
+                        <p className="text-sm font-semibold" >Tanggal Disposisi</p>
                       </div>
-                      <p className="font-semibold" style={{ color: '#2E2A27' }}>{formatIndonesianDate(disposisi.created_at)}</p>
+                      <p className="font-semibold" >{formatIndonesianDate(disposisi.created_at)}</p>
                     </div>
                   </div>
                 </div>
               </div>
               {/* Content Sections */}
               <div className="mt-8 space-y-6">
-                <div className="bg-white rounded-xl p-6 border border-[#EDE6E3] shadow-sm">
-                  <h4 className="text-lg font-bold mb-4 flex items-center" style={{ color: '#2E2A27' }}>
-                    <MessageSquare className="w-5 h-5 mr-3" style={{ color: '#6D4C41' }} />
+                <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                  <h4 className="font-semibold mb-4 flex items-center" >
+                    <MessageSquare className="w-5 h-5 mr-3" />
                     Dengan hormat harap:
                   </h4>
-                  <div className="bg-[#FDFCFB] border border-[#EDE6E3] p-4 rounded-lg shadow-sm">
-                    <p className="whitespace-pre-wrap leading-relaxed" style={{ color: '#2E2A27' }}>
+                  <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-lg shadow-sm">
+                    <p className="whitespace-pre-wrap leading-relaxed" >
                       {disposisi.dengan_hormat_harap}
                     </p>
                   </div>
                 </div>
                 {disposisi.catatan && (
-                  <div className="bg-white rounded-xl p-6 border border-[#EDE6E3] shadow-sm">
-                    <h4 className="text-lg font-bold mb-4 flex items-center" style={{ color: '#2E2A27' }}>
-                      <User className="w-5 h-5 mr-3" style={{ color: '#6D4C41' }} />
+                  <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                    <h4 className="font-semibold mb-4 flex items-center" >
+                      <User className="w-5 h-5 mr-3" />
                       Catatan dari Kepala
                     </h4>
-                    <div className="bg-[#FDFCFB] border border-[#EDE6E3] p-4 rounded-lg shadow-sm">
-                      <p className="leading-relaxed" style={{ color: '#2E2A27' }}>{disposisi.catatan}</p>
+                    <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-lg shadow-sm">
+                      <p className="leading-relaxed" >{disposisi.catatan}</p>
                     </div>
                   </div>
                 )}
                 {disposisi.catatan_kabid && (
-                  <div className="bg-white rounded-xl p-6 border border-[#EDE6E3] shadow-sm">
-                    <h4 className="text-lg font-bold mb-4 flex items-center" style={{ color: '#2E2A27' }}>
-                      <User className="w-5 h-5 mr-3" style={{ color: '#6D4C41' }} />
+                  <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
+                    <h4 className="font-semibold mb-4 flex items-center" >
+                      <User className="w-5 h-5 mr-3" />
                       Keterangan dari Kabid
                     </h4>
-                    <div className="bg-[#FDFCFB] border border-[#EDE6E3] p-4 rounded-lg shadow-sm">
-                      <p className="leading-relaxed" style={{ color: '#2E2A27' }}>{disposisi.catatan_kabid}</p>
+                    <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-lg shadow-sm">
+                      <p className="leading-relaxed" >{disposisi.catatan_kabid}</p>
                     </div>
                   </div>
                 )}
                 {disposisi.surat_masuk?.has_photos && (
-                  <div className="bg-white rounded-xl border border-[#EDE6E3] p-6 shadow-sm">
+                  <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
                     <div className="flex items-center mb-4">
-                      <FileText className="w-6 h-6 mr-3" style={{ color: '#6D4C41' }} />
-                      <h3 className="text-lg font-bold" style={{ color: '#2E2A27' }}>Lampiran</h3>
+                      <FileText className="w-6 h-6 mr-3" />
+                      <h3 className="font-semibold">Lampiran</h3>
                     </div>
-                    <div className="flex flex-wrap gap-3">
-                      {disposisi.surat_masuk.photos.map((photo, index) => (
-                        <div key={photo.id} className="relative rounded-xl overflow-hidden cursor-pointer border border-[#EDE6E3] hover:scale-105 transition-all duration-300 shadow-sm">
+                    <div className="flex flex-wrap gap-2">
+                      {disposisi.surat_masuk.photos.map((photo, index) => {
+                        // ✅ TAMBAHKAN LOGIKA DETEKSI TIPE FILE INI
+                        const type = photo.type?.toLowerCase() || photo.filename?.split('.').pop()?.toLowerCase();
+                        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(type);
+
+                        return (
                           <div
-                            className=""
-                            onClick={() => openImageModal(photo.url)}
+                            key={photo.id}
+                            className="relative rounded-xl overflow-hidden cursor-pointer border border-slate-200 hover:scale-105 transition-all duration-300 shadow-sm"
+                            onClick={() => {
+                              if (isImage) {
+                                setSelectedImage(photo.url);
+                              } else {
+                                // Non-gambar: buka di tab baru
+                                window.open(photo.url, '_blank', 'noopener,noreferrer');
+                              }
+                            }}
                           >
-                            <img
-                              src={photo.url}
-                              alt={`Surat foto ${index + 1}`}
-                              className="w-32 h-32 object-cover cursor-pointer transition-all"
-                              loading="lazy"
-                            />
+                            <div className="w-32 h-32 flex items-center justify-center bg-gray-50">
+                              {isImage ? (
+                                <img
+                                  src={photo.url}
+                                  alt={`Surat foto ${index + 1}`}
+                                  className="w-full h-full object-cover"
+                                  loading="lazy"
+                                  onError={(e) => {
+                                    e.target.src = 'https://via.placeholder.com/128x128?text=No+Image';
+                                  }}
+                                />
+                              ) : (
+                                <div className="text-[#D9534F] flex flex-col items-center justify-center">
+                                  <FileText className="w-8 h-8" />
+                                  <p className="text-xs font-bold mt-1 text-center break-words">
+                                    {photo.filename.split('.').pop()?.toUpperCase()}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      ))}
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -839,14 +862,14 @@ const KabidDisposisiDetail = () => {
             </div>
             {/* Feedback dari Bawahan */}
             {disposisi.diteruskan_kepada_user_id && (
-              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-[#EDE6E3] p-6">
-                <div className="flex items-center mb-6">
-                  <div className="p-3 bg-gradient-to-br from-[#2196F3] to-[#0D47A1] rounded-xl shadow-md mr-4">
-                    <User className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+                <div className="flex items-center mb-4">
+                  <div className="p-3 bg-black rounded-xl shadow-lg mr-3">
+                    <User className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Feedback dari Bawahan</h3>
-                    <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Tanggapan dari bawahan yang dituju disposisi</p>
+                    <h3 className="font-semibold" >Feedback dari Bawahan</h3>
+                    <p className="text-sm font-medium" >Tanggapan dari bawahan yang dituju disposisi</p>
                   </div>
                 </div>
                 {subFeedbackLoading ? (
@@ -861,15 +884,15 @@ const KabidDisposisiDetail = () => {
                     </div>
                   </div>
                 ) : !subordinateFeedback ? (
-                  <div className="text-center py-10" style={{ color: '#6D4C41' }}>
+                  <div className="text-center py-10" >
                     Belum ada feedback dari bawahan atau bawahan belum memberikan feedback.
                   </div>
                 ) : (
-                  <div className="bg-white rounded-xl p-6 border border-[#EDE6E3] shadow-sm">
+                  <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
                     {/* Header Feedback */}
-                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+                    <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                       <div className="space-y-2">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm" style={{ color: '#6D4C41' }}>
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm" >
                           <div className="flex items-center">
                             <User className="w-4 h-4 mr-2" />
                             Oleh: {subordinateFeedback.user_jabatan || subordinateFeedback.disposisi?.diteruskan_kepada_jabatan || 'Bawahan'}
@@ -886,7 +909,7 @@ const KabidDisposisiDetail = () => {
                             })}
                           </div>
                           {subordinateFeedback.updated_at && subordinateFeedback.updated_at !== subordinateFeedback.created_at && (
-                            <div className="flex items-center bg-[#FDFCFB] text-[#6D4C41] px-3 py-1 rounded-lg border border-[#EDE6E3]">
+                            <div className="flex items-center bg-[#FDFCFB] text-[#6D4C41] px-3 py-1 rounded-lg border border-slate-200">
                               <Clock className="w-3 h-3 mr-1" />
                               Diperbarui: {new Date(subordinateFeedback.updated_at).toLocaleString('id-ID', {
                                 day: 'numeric',
@@ -904,25 +927,32 @@ const KabidDisposisiDetail = () => {
                     {/* Tampilan feedback */}
                     <div className="space-y-4">
                       <div className="mb-4">
-                        <p className="text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>Status:</p>
+                        <p className="text-sm font-semibold mb-2" >Status:</p>
                         {getStatusBadge(disposisi.status_dari_bawahan || 'diproses')}
                       </div>
-                      <div className="bg-[#FDFCFB] border border-[#EDE6E3] p-4 rounded-xl shadow-sm">
-                        <p className="whitespace-pre-wrap leading-relaxed" style={{ color: '#2E2A27' }}>{subordinateFeedback.notes}</p>
+                      <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-xl shadow-sm">
+                        <p className="whitespace-pre-wrap leading-relaxed" >{subordinateFeedback.notes}</p>
                       </div>
                       {subordinateFeedback.has_files && (
                         <div>
                           <div className="flex items-center mb-4">
-                            <Paperclip className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                            <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>
+                            <Paperclip className="w-4 h-4 mr-2" />
+                            <p className="text-sm font-semibold" >
                               Lampiran ({subordinateFeedback.file_count} file)
                             </p>
                           </div>
-                          <div className="flex flex-wrap gap-3">
+                          <div className="flex flex-wrap gap-2">
                             {subordinateFeedback.files.map((file) => (
-                              <div key={file.id} className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-[#EDE6E3] overflow-hidden">
+                              <div key={file.id} className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-slate-200 overflow-hidden">
                                 <button
-                                  onClick={() => openImageModal(file.url)}
+                                  onClick={() => {
+                                    if (isImage) {
+                                      setSelectedImage(file.url);
+                                    } else {
+                                      // Non-gambar: buka di tab baru
+                                      window.open(file.url, '_blank', 'noopener,noreferrer');
+                                    }
+                                  }}
                                   className="w-32 h-32 cursor-pointer"
                                 >
                                   {file.type && file.type.startsWith('image/') ? (
@@ -951,23 +981,23 @@ const KabidDisposisiDetail = () => {
             )}
             {/* Feedback yang Telah Dikirim */}
             {feedbackList.length > 0 && (
-              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-[#EDE6E3] p-6">
-                <div className="flex items-center mb-6">
-                  <div className="p-3 bg-gradient-to-br from-[#4CAF50] to-[#2E7D32] rounded-xl shadow-md mr-4">
-                    <MessageSquare className="w-6 h-6 text-white" />
+              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+                <div className="flex items-center mb-4">
+                  <div className="p-3 bg-white rounded-xl shadow-md mr-3">
+                    <MessageSquare className="w-6 h-6 text-pink-400" />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Feedback yang Telah Dikirim</h3>
-                    <p className="text-sm font-medium" style={{ color: '#6D4C41' }}>Riwayat tanggapan yang telah Anda berikan</p>
+                    <h3 className="font-semibold" >Feedback yang Telah Dikirim</h3>
+                    <p className="text-sm font-medium" >Riwayat tanggapan yang telah Anda berikan</p>
                   </div>
                 </div>
                 <div className="space-y-6">
                   {feedbackList.map((feedback) => (
-                    <div key={feedback.id} className="bg-white rounded-xl p-6 border border-[#EDE6E3] shadow-sm">
+                    <div key={feedback.id} className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
                       {/* Header Feedback */}
-                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4 mb-4">
+                      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                         <div className="space-y-2">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm" style={{ color: '#6D4C41' }}>
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm" >
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-2" />
                               Dibuat: {new Date(feedback.created_at).toLocaleString('id-ID', {
@@ -980,7 +1010,7 @@ const KabidDisposisiDetail = () => {
                               })}
                             </div>
                             {feedback.updated_at && feedback.updated_at !== feedback.created_at && (
-                              <div className="flex items-center bg-[#FDFCFB] text-[#6D4C41] px-3 py-1 rounded-lg border border-[#EDE6E3]">
+                              <div className="flex items-center bg-[#FDFCFB] text-[#6D4C41] px-3 py-1 rounded-lg border border-slate-200">
                                 <Clock className="w-3 h-3 mr-1" />
                                 Diperbarui: {new Date(feedback.updated_at).toLocaleString('id-ID', {
                                   day: 'numeric',
@@ -998,7 +1028,7 @@ const KabidDisposisiDetail = () => {
                           <button
                             onClick={() => fetchFeedbackForEdit(feedback.id)}
                             disabled={editLoading}
-                            className="group inline-flex items-center px-4 py-2 bg-gradient-to-br from-[#2196F3] to-[#0D47A1] hover:from-[#0D47A1] hover:to-[#002171] text-white rounded-xl transition-all duration-200 hover:shadow-md border border-[#EDE6E3]"
+                            className="group inline-flex items-center px-4 py-2 bg-black text-white rounded-xl transition-all duration-200 hover:shadow-md border border-slate-200"
                             title="Edit Feedback"
                           >
                             {editLoading ? (
@@ -1023,7 +1053,7 @@ const KabidDisposisiDetail = () => {
                           )}
                           <form onSubmit={handleEditFeedbackSubmit} className="space-y-6">
                             <div>
-                              <label className="block text-sm font-semibold mb-3" style={{ color: '#6D4C41' }}>
+                              <label className="block text-sm font-semibold mb-3" >
                                 Catatan Feedback *
                               </label>
                               <textarea
@@ -1032,15 +1062,15 @@ const KabidDisposisiDetail = () => {
                                 onChange={handleEditFeedbackChange}
                                 required
                                 rows="5"
-                                className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] resize-none text-[#2E2A27] shadow-sm"
+                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 resize-none text-[#2E2A27] shadow-sm"
                                 placeholder="Masukkan catatan feedback Anda..."
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-semibold mb-3" style={{ color: '#6D4C41' }}>
+                              <label className="block text-sm font-semibold mb-3" >
                                 Status Disposisi *
                               </label>
-                              <div className="flex gap-6">
+                              <div className="flex gap-2">
                                 <label className="flex items-center cursor-pointer group">
                                   <input
                                     type="radio"
@@ -1048,9 +1078,9 @@ const KabidDisposisiDetail = () => {
                                     value="diproses"
                                     checked={editFeedbackData.status === 'diproses'}
                                     onChange={handleEditFeedbackChange}
-                                    className="w-4 h-4 text-[#D4A373] border-[#EDE6E3] focus:ring-[#D4A373]"
+                                    className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                                   />
-                                  <span className="ml-3 font-medium" style={{ color: '#6D4C41' }}>Diproses</span>
+                                  <span className="ml-3 font-medium" >Diproses</span>
                                 </label>
                                 <label className="flex items-center cursor-pointer group">
                                   <input
@@ -1059,26 +1089,26 @@ const KabidDisposisiDetail = () => {
                                     value="selesai"
                                     checked={editFeedbackData.status === 'selesai'}
                                     onChange={handleEditFeedbackChange}
-                                    className="w-4 h-4 text-[#D4A373] border-[#EDE6E3] focus:ring-[#D4A373]"
+                                    className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                                   />
-                                  <span className="ml-3 font-medium" style={{ color: '#6D4C41' }}>Selesai</span>
+                                  <span className="ml-3 font-medium" >Selesai</span>
                                 </label>
                               </div>
                             </div>
                             {/* File yang sudah ada */}
                             {editFeedbackData.existingFiles.length > 0 && (
                               <div>
-                                <label className="block text-sm font-semibold mb-3" style={{ color: '#6D4C41' }}>
+                                <label className="block text-sm font-semibold mb-3" >
                                   File yang sudah ada
                                 </label>
                                 <div className="space-y-3">
                                   {editFeedbackData.existingFiles.map((file) => (
-                                    <div key={file.id} className="flex items-center justify-between bg-[#FDFCFB] p-4 rounded-xl border border-[#EDE6E3] shadow-sm">
+                                    <div key={file.id} className="flex items-center justify-between bg-[#FDFCFB] p-4 rounded-xl border border-slate-200 shadow-sm">
                                       <div className="flex items-center">
-                                        <div className="p-2 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-lg mr-3">
+                                        <div className="p-2 bg-slate-600 rounded-lg mr-3">
                                           <FileText className="w-4 h-4 text-white" />
                                         </div>
-                                        <span className="font-medium" style={{ color: '#2E2A27' }}>{file.filename}</span>
+                                        <span className="font-medium" >{file.filename}</span>
                                       </div>
                                       <button
                                         type="button"
@@ -1093,7 +1123,7 @@ const KabidDisposisiDetail = () => {
                               </div>
                             )}
                             <div>
-                              <label className="block text-sm font-semibold mb-3" style={{ color: '#6D4C41' }}>
+                              <label className="block text-sm font-semibold mb-3" >
                                 Tambah File Baru (maks. 5 file)
                               </label>
                               <input
@@ -1101,20 +1131,20 @@ const KabidDisposisiDetail = () => {
                                 multiple
                                 onChange={handleEditFileChange}
                                 accept="image/*,application/pdf"
-                                className="w-full px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] shadow-sm"
+                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 shadow-sm"
                               />
                               {editFeedbackData.newFiles.length > 0 && (
-                                <div className="mt-2 text-sm bg-green-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm" style={{ color: '#2E7D32' }}>
+                                <div className="mt-2 text-sm bg-green-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm">
                                   <Paperclip className="w-4 h-4 inline mr-2" />
                                   {editFeedbackData.newFiles.length} file baru dipilih
                                 </div>
                               )}
                             </div>
-                            <div className="flex justify-end space-x-4 pt-4 border-t border-[#EDE6E3]">
+                            <div className="flex justify-end space-x-4 pt-4 border-t border-slate-200">
                               <button
                                 type="button"
                                 onClick={cancelEditFeedback}
-                                className="px-6 py-3 border border-[#EDE6E3] rounded-xl text-[#2E2A27] hover:bg-[#FDFCFB] font-semibold transition-colors shadow-sm flex items-center"
+                                className="px-6 py-3 border border-slate-200 rounded-xl text-[#2E2A27] hover:bg-[#FDFCFB] font-semibold transition-colors shadow-sm flex items-center"
                               >
                                 <X className="w-4 h-4 inline mr-2" />
                                 Batal
@@ -1123,10 +1153,10 @@ const KabidDisposisiDetail = () => {
                                 type="submit"
                                 disabled={editLoading}
                                 className={`
-                                  group inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-200 border border-[#EDE6E3] shadow-sm
+                                  group inline-flex items-center px-6 py-3 rounded-xl font-semibold transition-all duration-200 border border-slate-200 shadow-sm
                                   ${editLoading
-                                    ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white opacity-75 cursor-not-allowed'
-                                    : 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white hover:shadow-md hover:-translate-y-0.5'
+                                    ? 'bg-black text-white opacity-75 cursor-not-allowed'
+                                    : 'bg-black text-white hover:shadow-md hover:-translate-y-0.5'
                                   }
                                 `}
                               >
@@ -1149,43 +1179,59 @@ const KabidDisposisiDetail = () => {
                         /* Tampilan normal feedback */
                         <div className="space-y-4">
                           <div className="mb-4">
-                            <p className="text-sm font-semibold mb-2" style={{ color: '#6D4C41' }}>Status:</p>
+                            <p className="text-sm font-semibold mb-2" >Status:</p>
                             {getStatusBadge(feedback.disposisi?.status || 'diproses')}
                           </div>
-                          <div className="bg-[#FDFCFB] border border-[#EDE6E3] p-4 rounded-xl shadow-sm">
-                            <p className="whitespace-pre-wrap leading-relaxed" style={{ color: '#2E2A27' }}>{feedback.notes}</p>
+                          <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-xl shadow-sm">
+                            <p className="whitespace-pre-wrap leading-relaxed" >{feedback.notes}</p>
                           </div>
                           {feedback.has_files && (
                             <div>
                               <div className="flex items-center mb-4">
-                                <Paperclip className="w-4 h-4 mr-2" style={{ color: '#6D4C41' }} />
-                                <p className="text-sm font-semibold" style={{ color: '#6D4C41' }}>
+                                <Paperclip className="w-4 h-4 mr-2" />
+                                <p className="text-sm font-semibold" >
                                   Lampiran ({feedback.file_count} file)
                                 </p>
                               </div>
-                              <div className="flex flex-wrap gap-3">
-                                {feedback.files.map((file) => (
-                                  <div key={file.id} className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-[#EDE6E3] overflow-hidden">
-                                    <button
-                                      onClick={() => openImageModal(file.url)}
-                                      className="w-32 h-32 cursor-pointer"
+                              <div className="flex flex-wrap gap-2">
+                                {feedback.files.map((file, index) => {
+                                  const type = file.type?.toLowerCase() || file.filename?.split('.').pop()?.toLowerCase();
+                                  const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(type);
+
+                                  return (
+                                    <div
+                                      key={file.id}
+                                      className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-slate-200 overflow-hidden"
+                                      onClick={() => {
+                                        if (isImage) {
+                                          setSelectedImage(file.url);
+                                        } else {
+                                          // Non-gambar: buka di tab baru
+                                          window.open(file.url, '_blank', 'noopener,noreferrer');
+                                        }
+                                      }}
                                     >
-                                      {file.type && file.type.startsWith('image/') ? (
-                                        <img
-                                          src={file.url}
-                                          alt={file.filename}
-                                          className="w-32 h-32 object-cover"
-                                          loading="lazy"
-                                        />
-                                      ) : (
-                                        <div className="w-full h-full flex flex-col items-center justify-center bg-[#FDFCFB]">
-                                          <FileText className="w-8 h-8 text-[#D9534F]" />
-                                          <p className='text-[#D9534F] font-bold'>PDF</p>
-                                        </div>
-                                      )}
-                                    </button>
-                                  </div>
-                                ))}
+                                      <div className="w-full h-40 bg-white border-slate-200 shadow-lg flex items-center justify-center">
+                                        {isImage ? (
+                                          <img
+                                            src={file.url}
+                                            alt={`Thumbnail ${index + 1}`}
+                                            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
+                                            onError={(e) => {
+                                              e.target.src = 'https://via.placeholder.com/160x160?text=No+Image';
+                                              e.target.className = "w-full h-full object-cover";
+                                            }}
+                                          />
+                                        ) : (
+                                          <div className="text-pink-400 flex flex-col justify-center items-center">
+                                            <FileText className='w-9 h-9' />
+                                            <p className='font-bold text-lg mt-2 text-center'>File</p>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
+                                  )
+                                })}
                               </div>
                             </div>
                           )}
@@ -1199,6 +1245,31 @@ const KabidDisposisiDetail = () => {
           </div>
         )}
       </div>
+      {/* Modal Gambar Fullscreen */}
+      {selectedImage && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4">
+          <div className="relative max-w-4xl mx-auto max-h-full w-full">
+            <button
+              onClick={() => setSelectedImage(null)}
+              className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 transition-colors"
+              aria-label="Tutup modal"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            <img
+              src={selectedImage}
+              alt="Preview besar"
+              className="max-w-full mx-auto max-h-[90vh] object-contain rounded-lg shadow-2xl"
+              onError={(e) => {
+                e.target.src = 'https://via.placeholder.com/800x600?text=Gambar+Tidak+Dapat+Ditampilkan';
+              }}
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -5,6 +5,7 @@ import ModalDetailSuratMasuk from "./ModalDetailSuratMasuk";
 import { Eye, Mail, CheckCircle, Clock, ChevronRight, RefreshCcw, FileText, Search, Filter, ChevronLeft } from "lucide-react";
 import toast from 'react-hot-toast';
 import LoadingSpinner from "../Ui/LoadingSpinner";
+import StatCard from "../Ui/StatCard";
 
 const SuratMasukList = () => {
   const [suratMasuk, setSuratMasuk] = useState([]);
@@ -107,20 +108,6 @@ const SuratMasukList = () => {
   const totalSurat = suratMasuk.length;
   const belumDibaca = suratMasuk.filter(surat => surat.status === 'belum dibaca').length;
   const sudahDibaca = suratMasuk.filter(surat => surat.status === 'sudah dibaca').length;
-
-  const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor, iconColor }) => (
-    <div className={`${bgColor} p-3 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
-      <div className="flex items-center gap-x-7 justify-between">
-        <div>
-          <p className={`text-sm font-medium ${textColor} opacity-80`}>{title}</p>
-          <p className={`text-3xl font-bold ${textColor} mt-2`}>{count}</p>
-        </div>
-        <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
-          <Icon className={`w-6 h-6 ${iconColor}`} />
-        </div>
-      </div>
-    </div>
-  );
 
   // Pagination component
   const Pagination = () => {

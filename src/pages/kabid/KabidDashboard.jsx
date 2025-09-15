@@ -15,14 +15,19 @@ import {
   User,
   RefreshCcw,
   Building2,
-  UserCircle2
+  UserCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Filter,
+  Trash2
 } from 'lucide-react';
 import { api } from '../../utils/api';
 import { useAuth } from '../../contexts/AuthContext';
-import Avatar from '../../assets/img/adminrobot.png'
+import Avatar from '../../assets/img/adminrobot.png';
 import toast from 'react-hot-toast';
 import { atasanDisposisiService } from '../../services/atasanDisposisiService';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
+import StatCard from '../../components/Ui/StatCard';
 
 const KabidDashboard = () => {
   const navigate = useNavigate();
@@ -30,9 +35,8 @@ const KabidDashboard = () => {
   const [disposisiList, setDisposisiList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState(''); // Untuk pencarian global (instansi, nomor surat, dll)
   const [filterStatus, setFilterStatus] = useState('');
-  const [searchInstansi, setSearchInstansi] = useState('');
-  const [searchInput, setSearchInput] = useState(''); // Untuk input field saja
   const [pagination, setPagination] = useState({
     limit: 10,
     offset: 0,
@@ -47,22 +51,25 @@ const KabidDashboard = () => {
     selesai: 0
   });
 
-  const { user } = useAuth()
+  const { user } = useAuth();
 
   // Filter dan pagination di client side
   const applyFiltersAndPagination = () => {
     let filteredData = allDisposisi;
-    
+
     // Filter berdasarkan status
     if (filterStatus) {
       filteredData = filteredData.filter(item => item.status_dari_kabid === filterStatus);
     }
 
-    // Filter berdasarkan instansi
-    if (searchInstansi.trim()) {
-      filteredData = filteredData.filter(item => 
-        item.asal_instansi && 
-        item.asal_instansi.toLowerCase().includes(searchInstansi.toLowerCase())
+    // Filter berdasarkan pencarian (perihal, nomor surat, instansi, agenda)
+    if (searchTerm.trim()) {
+      const term = searchTerm.toLowerCase();
+      filteredData = filteredData.filter(item =>
+        item.asal_instansi?.toLowerCase().includes(term) ||
+        item.nomor_surat?.toLowerCase().includes(term) ||
+        item.nomor_agenda?.toLowerCase().includes(term) ||
+        item.perihal?.toLowerCase().includes(term)
       );
     }
 
@@ -86,7 +93,6 @@ const KabidDashboard = () => {
       const response = await atasanDisposisiService.getAtasanDisposisi();
       const result = response.data;
 
-
       let allData = [];
       if (result && Array.isArray(result.data)) {
         allData = result.data;
@@ -103,7 +109,9 @@ const KabidDashboard = () => {
       // Hitung statistik dari data lengkap (tanpa filter)
       const total = allData.length;
       const belumDibaca = allData.filter(item => item.status_dari_kabid === 'belum dibaca').length;
-      const diproses = allData.filter(item => item.status_dari_kabid === 'diproses' || item.status_dari_kabid === 'dalam proses').length;
+      const diproses = allData.filter(item =>
+        item.status_dari_kabid === 'diproses' || item.status_dari_kabid === 'dalam proses'
+      ).length;
       const selesai = allData.filter(item => item.status_dari_kabid === 'selesai').length;
 
       setStats({
@@ -209,21 +217,14 @@ const KabidDashboard = () => {
     setPagination(prev => ({ ...prev, offset: 0 }));
   };
 
-  const handleSearchChange = (newSearch) => {
-    setSearchInstansi(newSearch);
+  const handleSearchChange = (value) => {
+    setSearchTerm(value);
     setPagination(prev => ({ ...prev, offset: 0 }));
   };
 
-  // Remove search input handler
-  const handleSearchInput = (value) => {
-    setSearchInput(value);
-    setSearchInstansi(value);
-    setPagination(prev => ({ ...prev, offset: 0 }));
-  };
-
-  const clearSearch = () => {
-    setSearchInstansi('');
-    setSearchInput('');
+  const resetFilters = () => {
+    setSearchTerm('');
+    setFilterStatus('');
     setPagination(prev => ({ ...prev, offset: 0 }));
   };
 
@@ -237,26 +238,11 @@ const KabidDashboard = () => {
     if (allDisposisi.length > 0) {
       applyFiltersAndPagination();
     }
-  }, [filterStatus, searchInstansi, pagination.offset, allDisposisi]);
-
-  // Stat Card Component
-  const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor }) => (
-    <div className={`${bgColor} p-6 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
-      <div className="flex items-center justify-between">
-        <div>
-          <p className={`text-sm font-medium ${textColor} opacity-80`}>{title}</p>
-          <p className={`text-3xl font-bold ${textColor} mt-2`}>{count}</p>
-        </div>
-        <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
-          <Icon className={`w-6 h-6 text-white`} />
-        </div>
-      </div>
-    </div>
-  );
+  }, [filterStatus, searchTerm, pagination.offset, allDisposisi]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
+      <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner />
       </div>
     );
@@ -264,7 +250,7 @@ const KabidDashboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="bg-white border-2 border-[#EDE6E3] rounded-2xl p-6 max-w-md mx-auto shadow-sm">
             <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
@@ -283,16 +269,16 @@ const KabidDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-6 rounded-2xl" style={{ backgroundColor: '#FDFCFB' }}>
+    <div className="min-h-screen p-5 rounded-3xl bg-white shadow-lg">
       <div className="container mx-auto">
-        <div className="relative mb-4">
-          <div className="relative bg-gradient-to-br from-white/90 via-white/80 to-[#EDE6E3]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl overflow-hidden">
-            {/* Animated background patterns */}
+        {/* Header */}
+        <div className="relative mb-6">
+          <div className="relative bg-gradient-to-br from-white/90 via-white/80 to-[#EDE6E3]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
 
             <div className="flex flex-col lg:flex-row items-center justify-between relative z-10">
               <div className='flex items-center gap-x-5'>
-                <img src={Avatar} alt="" className='absolute h-50 w-50 right-0 top-0 object-cover opacity-80 hover:opacity-100 transition-opacity duration-300' />
+                <img src={Avatar} alt="" className='absolute h-50 w-50 right-0 top-0 object-cover' />
                 <div className='space-y-2'>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-[#2E2A27] to-[#6D4C41] bg-clip-text text-transparent">
                     Dashboard
@@ -315,315 +301,233 @@ const KabidDashboard = () => {
           </div>
         </div>
 
-        {/* Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        {/* Stat Cards (SAMA SEPERTI DISPOSISILIST) */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
           <StatCard
             title="Total Disposisi"
             count={stats.total}
             icon={FileText}
             bgColor="bg-white"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#D4A373] to-[#6D4C41]"
-            borderColor="border-[#EDE6E3]"
+            textColor="text-black"
+            iconBg="bg-white"
+            borderColor="border-slate-200"
           />
           <StatCard
             title="Belum Dibaca"
             count={stats.belumDibaca}
             icon={AlertCircle}
             bgColor="bg-white"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#D9534F] to-[#B52B27]"
-            borderColor="border-[#EDE6E3]"
+            textColor="text-black"
+            iconBg="bg-neutral-400"
+            iconColor="text-white"
+            borderColor="border-slate-200"
           />
           <StatCard
             title="Diproses"
             count={stats.diproses}
             icon={Clock}
             bgColor="bg-white"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32]"
-            borderColor="border-[#EDE6E3]"
+            textColor="text-black"
+            iconBg="bg-pink-400"
+            iconColor="text-white"
+            borderColor="border-pink-400"
           />
           <StatCard
             title="Selesai"
             count={stats.selesai}
             icon={CheckCircle}
-            bgColor="bg-white"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#2196F3] to-[#0D47A1]"
-            borderColor="border-[#EDE6E3]"
+            bgColor="bg-black"
+            textColor="text-white"
+            iconBg="bg-white"
+            iconColor="text-pink-400"
+            borderColor="border-slate-200"
           />
         </div>
 
-        {/* Search and Filter Section */}
-        <div className="mb-8">
-          <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl p-6 border-2 border-[#EDE6E3] shadow-md">
-            <div className="flex flex-col lg:flex-row w-full gap-6">
-              {/* Search Bar */}
-              <div className='w-full lg:w-1/2'>
-                <div className="flex items-center space-x-3 mb-4">
-                  <Search className="w-5 h-5" style={{ color: '#6D4C41' }} />
-                  <span className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Pencarian Instansi</span>
-                </div>
+        <div className="mb-4 p-6 shadow-lg rounded-2xl border-2 border-[#EDE6E3] bg-white">
+          <div className="mb-3">
+            <div className="flex flex-col lg:flex-row gap-2">
+
+              {/* Search Bar — SAMA SEPERTI DISPOSISILIST */}
+              <div className="flex-1">
                 <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#6D4C41]" />
                   <input
                     type="text"
-                    value={searchInput}
-                    onChange={(e) => handleSearchInput(e.target.value)}
-                    placeholder="Cari berdasarkan nama instansi..."
-                    className="w-full bg-white border border-[#EDE6E3] rounded-xl px-4 py-3 pr-10 text-[#2E2A27] placeholder-[#6D4C41] focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] transition-all duration-200 shadow-sm"
+                    placeholder="Cari berdasarkan instansi, nomor surat, agenda, atau perihal..."
+                    value={searchTerm}
+                    onChange={(e) => handleSearchChange(e.target.value)}
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] placeholder-[#6D4C41] shadow-sm"
                   />
-                  {searchInput && (
+                  {searchTerm && (
                     <button
-                      onClick={clearSearch}
+                      onClick={resetFilters} // Clear semua filter (termasuk search)
                       className="absolute inset-y-0 right-0 flex items-center pr-3 hover:bg-[#FDFCFB] rounded-r-xl transition-colors"
                     >
-                      <X className="w-4 h-4" style={{ color: '#6D4C41' }} />
+                      <X className="h-5 w-5 text-[#6D4C41]" />
                     </button>
                   )}
-                  {!searchInput && (
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <Search className="w-4 h-4" style={{ color: '#6D4C41' }} />
-                    </div>
-                  )}
                 </div>
-                {searchInstansi && (
-                  <div className="mt-3">
-                    <span className="text-xs font-medium" style={{ color: '#6D4C41' }}>
-                      {pagination.total} hasil ditemukan untuk "{searchInstansi}"
-                    </span>
-                  </div>
-                )}
               </div>
 
-              {/* Filter Status */}
-              <div className='w-full lg:w-1/2'>
-                <div className="flex items-center space-x-3 mb-4">
-                  <svg className="w-5 h-5" style={{ color: '#6D4C41' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
-                  </svg>
-                  <span className="text-sm font-semibold" style={{ color: '#6D4C41' }}>Filter Status</span>
-                </div>
+              {/* Filter Sifat — TIDAK ADA DI KABID, JADI GANTI DENGAN FILTER STATUS */}
+              {/* Karena kabid tidak punya "sifat" seperti kepala, kita gunakan status sebagai filter utama */}
+              <div className="w-full lg:w-48">
                 <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#6D4C41] z-10" />
                   <select
                     value={filterStatus}
                     onChange={(e) => handleFilterChange(e.target.value)}
-                    className="w-full appearance-none bg-white border border-[#EDE6E3] rounded-xl px-4 py-3 pr-10 text-[#2E2A27] focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] transition-all duration-200 shadow-sm"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] shadow-sm appearance-none"
                   >
-                    <option value="" className="text-[#6D4C41]">Semua Status</option>
-                    <option value="belum dibaca" className="text-[#2E2A27]">Belum Dibaca</option>
-                    <option value="diproses" className="text-[#2E2A27]">Diproses</option>
-                    <option value="selesai" className="text-[#2E2A27]">Selesai</option>
+                    <option value="">Semua Status</option>
+                    <option value="belum dibaca">Belum Dibaca</option>
+                    <option value="diproses">Diproses</option>
+                    <option value="selesai">Selesai</option>
                   </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg className="w-4 h-4" style={{ color: '#6D4C41' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Active Filters Display */}
-            {(filterStatus || searchInstansi) && (
-              <div className="mt-6 pt-6 border-t border-[#EDE6E3]">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-sm font-medium" style={{ color: '#6D4C41' }}>Filter Aktif:</span>
-                  {filterStatus && (
-                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm" style={{ color: '#6D4C41' }}>
-                      <span>Status: {filterStatus}</span>
-                      <button
-                        onClick={() => handleFilterChange('')}
-                        className="hover:text-[#2E2A27]"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  )}
-                  {searchInstansi && (
-                    <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm" style={{ color: '#6D4C41' }}>
-                      <span>Instansi: {searchInstansi}</span>
-                      <button
-                        onClick={clearSearch}
-                        className="hover:text-[#2E2A27]"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  )}
-                  <button
-                    onClick={() => {
-                      setFilterStatus('');
-                      setSearchInstansi('');
-                      setSearchInput('');
-                      setPagination(prev => ({ ...prev, offset: 0 }));
-                    }}
-                    className="text-xs font-medium hover:underline" style={{ color: '#6D4C41' }}
-                  >
-                    Hapus Semua Filter
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        <div className="space-y-6">
-          {disposisiList.length === 0 ? (
-            <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-              <div className="text-center py-16 px-6">
-                <div className="mx-auto w-24 h-24 bg-[#FDFCFB] rounded-full flex items-center justify-center mb-6 border border-[#EDE6E3]">
-                  <FileText className="w-10 h-10" style={{ color: '#6D4C41' }} />
-                </div>
-                <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>
-                  {searchInstansi || filterStatus ? 'Tidak Ada Hasil' : 'Tidak Ada Disposisi'}
-                </h3>
-                <p className="text-[#6D4C41] mt-2">
-                  {searchInstansi || filterStatus 
-                    ? 'Tidak ditemukan disposisi yang sesuai dengan kriteria pencarian'
-                    : 'Belum ada disposisi yang tersedia untuk saat ini'
-                  }
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="grid gap-6">
-              {disposisiList.map((item, index) => (
-                <div
-                  key={item.id}
-                  className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm hover:shadow-lg transition-all duration-300"
+              {/* Reset Button — SAMA SEPERTI DISPOSISILIST */}
+              <div className="flex gap-2">
+                <button
+                  onClick={resetFilters}
+                  className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-[#2E2A27] font-semibold shadow-sm hover:shadow-md"
                 >
-                  <div className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-                        <div className="flex items-center gap-3 mb-4">
-                          <h3 className="text-sm uppercase font-semibold" style={{ color: '#6D4C41' }}>
-                            status
-                          </h3>
-                          {getStatusBadge(item.status_dari_kabid)}
-                        </div>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mb-4">
-                          <div className="flex items-center space-x-2">
-                            <Building className="w-4 h-4" style={{ color: '#6D4C41' }} />
-                            <span className="font-semibold" style={{ color: '#6D4C41' }}>Dari:</span>
-                            <span className="font-medium" style={{ color: '#2E2A27' }}>{item.asal_instansi}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <FileText className="w-4 h-4" style={{ color: '#6D4C41' }} />
-                            <span className="font-semibold" style={{ color: '#6D4C41' }}>No. Surat:</span>
-                            <span className="font-medium" style={{ color: '#2E2A27' }}>{item.nomor_surat}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <FileText className="w-4 h-4" style={{ color: '#6D4C41' }} />
-                            <span className="font-semibold" style={{ color: '#6D4C41' }}>No. Agenda:</span>
-                            <span className="font-medium" style={{ color: '#2E2A27' }}>{item.nomor_agenda}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Calendar className="w-4 h-4" style={{ color: '#6D4C41' }} />
-                            <span className="font-semibold" style={{ color: '#6D4C41' }}>Tgl Surat:</span>
-                            <span className="font-medium" style={{ color: '#2E2A27' }}>{item.tanggal_surat}</span>
-                          </div>
-                          <div className="flex items-center space-x-2">
-                            <Clock className="w-4 h-4" style={{ color: '#6D4C41' }} />
-                            <span className="font-semibold" style={{ color: '#6D4C41' }}>Diterima Tanggal:</span>
-                            <span className="font-medium" style={{ color: '#2E2A27' }}>{item.diterima_tanggal}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+                  <Filter className="h-4 w-4" />
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
 
-                    <div className="bg-[#FDFCFB] rounded-xl p-4 mb-4 border border-[#EDE6E3] shadow-sm">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <span className="text-sm font-semibold flex items-center" style={{ color: '#6D4C41' }}>
-                            <AlertCircle className="w-4 h-4 mr-1" style={{ color: '#6D4C41' }} />
-                            Sifat:
-                          </span>
-                          <p className="text-sm mt-1 ml-5" style={{ color: '#2E2A27' }}>{item.sifat}</p>
-                        </div>
-                        <div>
-                          <span className="text-sm font-semibold flex items-center" style={{ color: '#6D4C41' }}>
-                            <CheckCircle className="w-4 h-4 mr-1" style={{ color: '#6D4C41' }} />
-                            Dengan Hormat Harap:
-                          </span>
-                          <p className="text-sm mt-1 ml-5" style={{ color: '#2E2A27' }}>{item.dengan_hormat_harap}</p>
-                        </div>
-                      </div>
-                    </div>
-
-                    {item.surat_masuk?.has_photos && (
-                      <div className="flex items-center gap-3 mb-4 p-3 bg-[#FDFCFB] rounded-xl border border-[#EDE6E3] shadow-sm">
-                        <div className="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] rounded-full">
-                          <Image className="w-4 h-4 text-white" />
-                        </div>
-                        <span className="text-sm font-semibold" style={{ color: '#6D4C41' }}>
-                          {item.surat_masuk.photo_count} lampiran foto/dokumen tersedia
-                        </span>
-                      </div>
-                    )}
-
-                    <div className="flex flex-wrap gap-3 pt-4 border-t border-[#EDE6E3]">
-                      <button
-                        onClick={() => viewDetail(item)}
-                        className="group flex items-center gap-2 px-6 py-3 bg-gradient-to-br from-[#D4A373] to-[#6D4C41] hover:from-[#6D4C41] hover:to-[#2E2A27] text-white rounded-xl font-semibold transition-all duration-200 shadow-md hover:shadow-lg border border-[#EDE6E3]"
-                      >
-                        <Eye className="w-4 h-4 group-hover:scale-110 transition-transform" />
-                        Lihat Detail
-                      </button>
-                    </div>
+          {/* Active Filters Display — SAMA SEPERTI DISPOSISILIST */}
+          {(filterStatus || searchTerm) && (
+            <div className="mt-4 pt-4 border-t border-[#EDE6E3]">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-sm font-medium text-[#6D4C41]">Filter Aktif:</span>
+                {filterStatus && (
+                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm">
+                    <span>Status: {filterStatus}</span>
+                    <button onClick={() => handleFilterChange('')} className="hover:text-[#2E2A27]">
+                      <X className="w-3 h-3" />
+                    </button>
                   </div>
-                </div>
-              ))}
+                )}
+                {searchTerm && (
+                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm">
+                    <span>Pencarian: "{searchTerm}"</span>
+                    <button onClick={resetFilters} className="hover:text-[#2E2A27]">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
 
-        {disposisiList.length > 0 && (
-          <div className="mt-8">
-            <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl p-6 border-2 border-[#EDE6E3] shadow-md">
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-                <button
-                  onClick={() => handlePageChange(Math.max(0, pagination.offset - pagination.limit))}
-                  disabled={pagination.offset === 0}
-                  className={`group flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 disabled:cursor-not-allowed shadow-sm border border-[#EDE6E3] ${
-                    pagination.offset === 0
-                      ? 'bg-white text-[#6D4C41] disabled:opacity-50'
-                      : 'bg-white text-[#2E2A27] hover:bg-[#FDFCFB] hover:shadow-md'
-                  }`}
-                >
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span>Sebelumnya</span>
-                </button>
+        {disposisiList.length === 0 ? (
+          <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm text-center py-16 px-6">
+            <FileText className="h-12 w-12 text-[#6D4C41] mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-[#2E2A27]">
+              {searchTerm || filterStatus ? 'Tidak Ada Hasil' : 'Tidak Ada Disposisi'}
+            </h3>
+            <p className="text-[#6D4C41] mt-2">
+              {searchTerm || filterStatus
+                ? 'Tidak ditemukan disposisi yang sesuai dengan kriteria pencarian'
+                : 'Belum ada disposisi yang tersedia untuk saat ini'
+              }
+            </p>
+          </div>
+        ) : (
+          <div className="overflow-x-auto rounded-2xl border-2 border-[#EDE6E3] shadow-sm bg-white">
+            <table className="min-w-full divide-y divide-[#EDE6E3]">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Nomor Surat</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Asal Instansi</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">No. Agenda</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Tanggal Surat</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Sifat</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Status</th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Aksi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-[#EDE6E3]">
+                {disposisiList.map((item) => (
+                  <tr key={item.id} className="hover:bg-[#FDFCFB] transition-colors">
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#2E2A27]">
+                      {item.nomor_surat || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2E2A27]">
+                      {item.asal_instansi || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2E2A27]">
+                      {item.nomor_agenda || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2E2A27]">
+                      {item.tanggal_surat || '-'}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${item.sifat === 'Sangat Segera' ? 'bg-red-100 text-red-800 border-red-200' :
+                          item.sifat === 'Segera' ? 'bg-orange-100 text-orange-800 border-orange-200' :
+                            item.sifat === 'Rahasia' ? 'bg-purple-100 text-purple-800 border-purple-200' :
+                              item.sifat === 'Biasa' ? 'bg-blue-100 text-blue-800 border-blue-200' :
+                                'bg-gray-100 text-gray-800 border-gray-200'
+                        }`}>
+                        {item.sifat || '-'}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {getStatusBadge(item.status_dari_kabid)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                      <div className="flex flex-col gap-2">
+                        <button
+                          onClick={() => viewDetail(item)}
+                          className="flex items-center justify-center gap-x-1 text-black text-sm shadow-lg font-medium bg-white px-3 py-2 border border-slate-200 rounded-xl hover:-translate-y-1 transition-all"
+                        >
+                          <Eye className="w-4 h-4" /> Lihat
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
 
-                <div className="flex items-center space-x-4">
-                  <div className="bg-white px-4 py-2.5 rounded-xl border border-[#EDE6E3] shadow-sm">
-                    <span className="text-sm font-semibold" style={{ color: '#6D4C41' }}>
-                      <span className="text-[#2E2A27]">{pagination.offset + 1}</span>
-                      {' '}-{' '}
-                      <span className="text-[#2E2A27]">{Math.min(pagination.offset + pagination.limit, pagination.total)}</span>
-                      {' '}dari{' '}
-                      <span className="text-[#2E2A27]">{pagination.total}</span>
-                    </span>
-                  </div>
-                </div>
+        {/* Pagination Component — DISAMAKAN DENGAN DISPOSISILIST */}
+        {pagination.total > 0 && (
+          <div className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border-2 border-[#EDE6E3] mt-8">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-[#2E2A27]">
+                Menampilkan {pagination.offset + 1} - {Math.min(pagination.offset + pagination.limit, pagination.total)} dari {pagination.total} data
+              </span>
+            </div>
 
-                <button
-                  onClick={() => handlePageChange(pagination.offset + pagination.limit)}
-                  disabled={pagination.offset + pagination.limit >= pagination.total}
-                  className={`group flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-200 disabled:cursor-not-allowed shadow-sm border border-[#EDE6E3] ${
-                    pagination.offset + pagination.limit >= pagination.total
-                      ? 'bg-white text-[#6D4C41] disabled:opacity-50'
-                      : 'bg-white text-[#2E2A27] hover:bg-[#FDFCFB] hover:shadow-md'
-                  }`}
-                >
-                  <span>Selanjutnya</span>
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(Math.max(0, pagination.offset - pagination.limit))}
+                disabled={pagination.offset === 0}
+                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+              >
+                <ChevronLeft className="h-4 w-4 text-[#2E2A27]" />
+              </button>
+
+              <span className="px-3 py-2 text-[#2E2A27] font-medium bg-[#FDFCFB] rounded-xl border border-[#EDE6E3]">
+                Halaman {Math.floor(pagination.offset / pagination.limit) + 1}
+              </span>
+
+              <button
+                onClick={() => handlePageChange(pagination.offset + pagination.limit)}
+                disabled={pagination.offset + pagination.limit >= pagination.total}
+                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+              >
+                <ChevronRight className="h-4 w-4 text-[#2E2A27]" />
+              </button>
             </div>
           </div>
         )}

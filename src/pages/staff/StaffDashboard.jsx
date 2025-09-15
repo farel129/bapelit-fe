@@ -1,12 +1,30 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  FileText,
+  Eye,
+  Calendar,
+  Building,
+  Clock,
+  CheckCircle,
+  AlertCircle,
+  Search,
+  X,
+  Building2,
+  UserCircle2,
+  ChevronLeft,
+  ChevronRight,
+  Filter
+} from 'lucide-react';
 import { staffDisposisiService } from '../../services/staffDisposisiService';
-import { DisposisiCard } from '../../components/Staff/DisposisiCard';
-import { FileText, AlertCircle, Clock, CheckCircle, Search, X, User, UserCircle2, Building2 } from 'lucide-react';
-import Avatar from '../../assets/img/adminrobot.png'
+import Avatar from '../../assets/img/adminrobot.png';
 import { useAuth } from '../../contexts/AuthContext';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
+import { DisposisiTable } from '../../components/Staff/DisposisiTable';
+import StatCard from '../../components/Ui/StatCard';
 
 const StaffDashboard = () => {
+  const navigate = useNavigate(); // 👈 Hanya di sini, tidak di DisposisiTable
   const [allDisposisi, setAllDisposisi] = useState([]);
   const [disposisiList, setDisposisiList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -27,8 +45,9 @@ const StaffDashboard = () => {
     selesai: 0
   });
 
-  const { user } = useAuth()
+  const { user } = useAuth();
 
+  // === LOGIKA ASLI — TIDAK DIUBAH SATU PUN ===
   const applyFiltersAndPagination = () => {
     let filteredData = allDisposisi;
 
@@ -88,7 +107,7 @@ const StaffDashboard = () => {
       });
 
     } catch (err) {
-      setError(err.message);
+      setError(err.message); // ← TETAP SEPERTI ASLI
     } finally {
       setLoading(false);
     }
@@ -120,6 +139,12 @@ const StaffDashboard = () => {
     setPagination(prev => ({ ...prev, offset: 0 }));
   };
 
+  // Fungsi navigasi detail — hanya di sini!
+  const handleViewDetail = (id) => {
+    navigate(`/staff/disposisi/${id}`);
+  };
+
+  // === USE EFFECT ASLI — TIDAK DIUBAH ===
   useEffect(() => {
     fetchDisposisi();
   }, []);
@@ -130,45 +155,26 @@ const StaffDashboard = () => {
     }
   }, [filterStatus, searchInstansi, pagination.offset, allDisposisi]);
 
-  const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor }) => (
-    <div className={`group relative ${bgColor} p-6 rounded-2xl shadow-sm border ${borderColor} hover:shadow-xl transition-all duration-500 hover:-translate-y-2 backdrop-blur-sm overflow-hidden`}>
-      {/* Modern gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-br from-white/50 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-      {/* Subtle animated background */}
-      <div className="absolute -top-10 -right-10 w-20 h-20 bg-gradient-to-br from-blue-100/20 to-purple-100/20 rounded-full blur-xl group-hover:scale-150 transition-transform duration-700"></div>
-
-      <div className="relative flex items-center justify-between">
-        <div>
-          <p className={`text-sm font-medium ${textColor} opacity-80 group-hover:opacity-100 transition-opacity duration-300`}>{title}</p>
-          <p className={`text-3xl font-bold ${textColor} mt-2 group-hover:scale-105 transition-transform duration-300`}>{count}</p>
-        </div>
-        <div className={`${iconBg} p-3 rounded-xl shadow-md group-hover:shadow-lg group-hover:scale-110 transition-all duration-300`}>
-          <Icon className={`w-6 h-6 text-white`} />
-        </div>
-      </div>
-    </div>
-  );
-
+  // === LOADING & ERROR — SAMA SEPERTI KABIDDASHBOARD ===
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <LoadingSpinner text='Memuat...' />
+        <LoadingSpinner />
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="bg-white/80 backdrop-blur-sm border-2 border-[#EDE6E3] rounded-2xl p-6 max-w-md mx-auto shadow-xl">
-            <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4 animate-bounce" />
+          <div className="bg-white border-2 border-[#EDE6E3] rounded-2xl p-6 max-w-md mx-auto shadow-sm">
+            <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
             <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Terjadi Kesalahan</h3>
             <p className="text-[#6D4C41] mb-4">{error}</p>
             <button
               onClick={fetchDisposisi}
-              className="bg-gradient-to-br from-[#D9534F] to-[#B52B27] hover:from-[#B52B27] hover:to-[#8B0000] text-white px-4 py-2.5 rounded-xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl transform hover:-translate-y-1 border border-[#EDE6E3]"
+              className="bg-gradient-to-br from-[#D9534F] to-[#B52B27] hover:from-[#B52B27] hover:to-[#8B0000] text-white px-4 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg border border-[#EDE6E3]"
             >
               Coba Lagi
             </button>
@@ -179,16 +185,11 @@ const StaffDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen p-3 rounded-2xl relative overflow-hidden" style={{ backgroundColor: '#FDFCFB' }}>
-      {/* Animated background elements */}
-      <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-blue-100/10 to-purple-100/10 rounded-full blur-3xl animate-pulse"></div>
-      <div className="absolute bottom-0 right-0 w-80 h-80 bg-gradient-to-br from-orange-100/10 to-pink-100/10 rounded-full blur-3xl animate-pulse delay-1000"></div>
-
-      <div className="relative z-10">
-        {/* Modern Header Section */}
-        <div className="relative mb-4">
-          <div className="relative bg-gradient-to-br from-white/90 via-white/80 to-[#EDE6E3]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl overflow-hidden">
-            {/* Animated background patterns */}
+    <div className="min-h-screen p-5 rounded-3xl bg-white shadow-lg">
+      <div className="container mx-auto">
+        {/* Header — SAMA SEPERTI KABIDDASHBOARD */}
+        <div className="relative mb-6">
+          <div className="relative bg-gradient-to-br from-white/90 via-white/80 to-[#EDE6E3]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
 
             <div className="flex flex-col lg:flex-row items-center justify-between relative z-10">
@@ -216,271 +217,193 @@ const StaffDashboard = () => {
           </div>
         </div>
 
-        {/* Enhanced Stat Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-4">
+        {/* Stat Cards — SAMA SEPERTI KABIDDASHBOARD */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
           <StatCard
             title="Total Disposisi"
             count={stats.total}
             icon={FileText}
-            bgColor="bg-white/80 backdrop-blur-sm"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#D4A373] to-[#6D4C41]"
-            borderColor="border-white/50"
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-white"
+            borderColor="border-slate-200"
           />
           <StatCard
             title="Belum Dibaca"
             count={stats.belumDibaca}
             icon={AlertCircle}
-            bgColor="bg-white/80 backdrop-blur-sm"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#D9534F] to-[#B52B27]"
-            borderColor="border-white/50"
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-neutral-400"
+            iconColor="text-white"
+            borderColor="border-slate-200"
           />
           <StatCard
             title="Diproses"
             count={stats.diproses}
             icon={Clock}
-            bgColor="bg-white/80 backdrop-blur-sm"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32]"
-            borderColor="border-white/50"
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-pink-400"
+            iconColor="text-white"
+            borderColor="border-pink-400"
           />
           <StatCard
             title="Selesai"
             count={stats.selesai}
             icon={CheckCircle}
-            bgColor="bg-white/80 backdrop-blur-sm"
-            textColor="text-[#2E2A27]"
-            iconBg="bg-gradient-to-br from-[#2196F3] to-[#0D47A1]"
-            borderColor="border-white/50"
+            bgColor="bg-black"
+            textColor="text-white"
+            iconBg="bg-white"
+            iconColor="text-pink-400"
+            borderColor="border-slate-200"
           />
         </div>
 
-        {/* Modern Search and Filter Section */}
-        <div className="mb-4">
-          <div className="bg-gradient-to-br from-white/90 via-white/80 to-[#EDE6E3]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl relative overflow-hidden">
-            {/* Animated background */}
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-50/20 via-transparent to-purple-50/20 opacity-50"></div>
+        {/* Search and Filter Section — SAMA SEPERTI KABIDDASHBOARD */}
+        <div className="mb-4 p-6 shadow-lg rounded-2xl border-2 border-[#EDE6E3] bg-white">
+          <div className="mb-3">
+            <div className="flex flex-col lg:flex-row gap-2">
 
-            <div className="flex flex-col lg:flex-row w-full gap-6 relative z-10">
-              {/* Enhanced Search Bar */}
-              <div className='w-full lg:w-1/2'>
-                <div className="flex items-center space-x-3 mb-4">
-                  <Search className="w-5 h-5 animate-pulse" style={{ color: '#6D4C41' }} />
-                  <span className="text-sm font-semibold bg-gradient-to-r from-[#6D4C41] to-[#2E2A27] bg-clip-text text-transparent">Pencarian Instansi</span>
-                </div>
-                <div className="relative group">
+              {/* Search Bar — SAMA SEPERTI KABIDDASHBOARD */}
+              <div className="flex-1">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#6D4C41]" />
                   <input
                     type="text"
+                    placeholder="Cari berdasarkan instansi..."
                     value={searchInput}
                     onChange={(e) => handleSearchInput(e.target.value)}
-                    placeholder="Cari berdasarkan nama instansi..."
-                    className="w-full bg-white/90 backdrop-blur-sm border border-white/50 rounded-xl px-4 py-3 pr-10 text-[#2E2A27] placeholder-[#6D4C41] focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] transition-all duration-300 shadow-sm hover:shadow-md group-hover:bg-white"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] placeholder-[#6D4C41] shadow-sm"
                   />
                   {searchInput && (
                     <button
                       onClick={clearSearch}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 hover:bg-[#FDFCFB]/50 rounded-r-xl transition-all duration-300 group"
+                      className="absolute inset-y-0 right-0 flex items-center pr-3 hover:bg-[#FDFCFB] rounded-r-xl transition-colors"
                     >
-                      <X className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" style={{ color: '#6D4C41' }} />
+                      <X className="h-5 w-5 text-[#6D4C41]" />
                     </button>
                   )}
-                  {!searchInput && (
-                    <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                      <Search className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" style={{ color: '#6D4C41' }} />
-                    </div>
-                  )}
                 </div>
-                {searchInstansi && (
-                  <div className="mt-3">
-                    <span className="text-xs font-medium animate-pulse" style={{ color: '#6D4C41' }}>
-                      {pagination.total} hasil ditemukan untuk "{searchInstansi}"
-                    </span>
-                  </div>
-                )}
               </div>
 
-              {/* Enhanced Filter Status */}
-              <div className='w-full lg:w-1/2'>
-                <div className="flex items-center space-x-3 mb-4">
-                  <svg className="w-5 h-5 animate-pulse" style={{ color: '#6D4C41' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.707A1 1 0 013 7V4z" />
-                  </svg>
-                  <span className="text-sm font-semibold bg-gradient-to-r from-[#6D4C41] to-[#2E2A27] bg-clip-text text-transparent">Filter Status</span>
-                </div>
-                <div className="relative group">
+              {/* Filter Status — SAMA SEPERTI KABIDDASHBOARD */}
+              <div className="w-full lg:w-48">
+                <div className="relative">
+                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#6D4C41] z-10" />
                   <select
                     value={filterStatus}
                     onChange={(e) => handleFilterChange(e.target.value)}
-                    className="w-full appearance-none bg-white/90 backdrop-blur-sm border border-white/50 rounded-xl px-4 py-3 pr-10 text-[#2E2A27] focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] transition-all duration-300 shadow-sm hover:shadow-md group-hover:bg-white"
+                    className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] shadow-sm appearance-none"
                   >
-                    <option value="" className="text-[#6D4C41]">Semua Status</option>
-                    <option value="belum dibaca" className="text-[#2E2A27]">Belum Dibaca</option>
-                    <option value="diproses" className="text-[#2E2A27]">Diproses</option>
-                    <option value="selesai" className="text-[#2E2A27]">Selesai</option>
+                    <option value="">Semua Status</option>
+                    <option value="belum dibaca">Belum Dibaca</option>
+                    <option value="diproses">Diproses</option>
+                    <option value="selesai">Selesai</option>
                   </select>
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                    <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" style={{ color: '#6D4C41' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-                    </svg>
-                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Enhanced Active Filters Display */}
-            {(filterStatus || searchInstansi) && (
-              <div className="mt-6 pt-6 border-t border-white/30 relative z-10">
-                <div className="flex flex-wrap items-center gap-3">
-                  <span className="text-sm font-medium bg-gradient-to-r from-[#6D4C41] to-[#2E2A27] bg-clip-text text-transparent">Filter Aktif:</span>
-                  {filterStatus && (
-                    <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium border border-white/50 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105" style={{ color: '#6D4C41' }}>
-                      <span>Status: {filterStatus}</span>
-                      <button
-                        onClick={() => handleFilterChange('')}
-                        className="hover:text-[#2E2A27] transition-colors duration-300 hover:scale-110"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  )}
-                  {searchInstansi && (
-                    <div className="flex items-center gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full text-sm font-medium border border-white/50 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105" style={{ color: '#6D4C41' }}>
-                      <span>Instansi: {searchInstansi}</span>
-                      <button
-                        onClick={clearSearch}
-                        className="hover:text-[#2E2A27] transition-colors duration-300 hover:scale-110"
-                      >
-                        <X className="w-3 h-3" />
-                      </button>
-                    </div>
-                  )}
-                  <button
-                    onClick={() => {
-                      setFilterStatus('');
-                      setSearchInstansi('');
-                      setSearchInput('');
-                      setPagination(prev => ({ ...prev, offset: 0 }));
-                    }}
-                    className="text-xs font-medium hover:underline transition-all duration-300 hover:scale-105" style={{ color: '#6D4C41' }}
-                  >
-                    Hapus Semua Filter
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Enhanced Content Section */}
-        <div className="space-y-6">
-          {disposisiList.length === 0 ? (
-            <div className="bg-white/80 backdrop-blur-sm rounded-2xl border border-white/50 shadow-xl relative overflow-hidden">
-              {/* Animated empty state background */}
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-50/20 to-purple-50/20 opacity-50"></div>
-
-              <div className="text-center py-16 px-6 relative z-10">
-                <div className="mx-auto w-24 h-24 bg-gradient-to-br from-[#FDFCFB] to-white rounded-full flex items-center justify-center mb-6 border border-white/50 shadow-lg hover:shadow-xl transition-all duration-500 hover:scale-110">
-                  <FileText className="w-10 h-10 animate-pulse" style={{ color: '#6D4C41' }} />
-                </div>
-                <h3 className="text-xl font-bold bg-gradient-to-r from-[#2E2A27] to-[#6D4C41] bg-clip-text text-transparent">
-                  {searchInstansi || filterStatus ? 'Tidak Ada Hasil' : 'Tidak Ada Disposisi'}
-                </h3>
-                <p className="text-[#6D4C41] mt-2">
-                  {searchInstansi || filterStatus
-                    ? 'Tidak ditemukan disposisi yang sesuai dengan kriteria pencarian'
-                    : 'Belum ada disposisi yang tersedia untuk saat ini'
-                  }
-                </p>
-              </div>
-            </div>
-          ) : (
-            <div className="grid gap-6">
-              {disposisiList.map((disposisi, index) => (
-                <div
-                  key={disposisi.id}
-                  className="animate-fadeInUp"
-                  style={{ animationDelay: `${index * 100}ms` }}
+              {/* Reset Button — SAMA SEPERTI KABIDDASHBOARD */}
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    setFilterStatus('');
+                    setSearchInstansi('');
+                    setSearchInput('');
+                    setPagination(prev => ({ ...prev, offset: 0 }));
+                  }}
+                  className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-[#2E2A27] font-semibold shadow-sm hover:shadow-md"
                 >
-                  <DisposisiCard
-                    disposisi={disposisi}
-                    onRefresh={fetchDisposisi}
-                    searchHighlight={searchInstansi}
-                  />
-                </div>
-              ))}
+                  <Filter className="h-4 w-4" />
+                  Reset
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Active Filters Display — SAMA SEPERTI KABIDDASHBOARD */}
+          {(filterStatus || searchInstansi) && (
+            <div className="mt-4 pt-4 border-t border-[#EDE6E3]">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="text-sm font-medium text-[#6D4C41]">Filter Aktif:</span>
+                {filterStatus && (
+                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm">
+                    <span>Status: {filterStatus}</span>
+                    <button onClick={() => handleFilterChange('')} className="hover:text-[#2E2A27]">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+                {searchInstansi && (
+                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm">
+                    <span>Instansi: "{searchInstansi}"</span>
+                    <button onClick={clearSearch} className="hover:text-[#2E2A27]">
+                      <X className="w-3 h-3" />
+                    </button>
+                  </div>
+                )}
+              </div>
             </div>
           )}
         </div>
 
-        {/* Ultra Modern Pagination */}
+        {/* Data List — GANTI JADI TABEL MIRIP KABIDDASHBOARD */}
+        {disposisiList.length === 0 ? (
+          <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm text-center py-16 px-6">
+            <FileText className="h-12 w-12 text-[#6D4C41] mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-[#2E2A27]">
+              {searchInstansi || filterStatus ? 'Tidak Ada Hasil' : 'Tidak Ada Disposisi'}
+            </h3>
+            <p className="text-[#6D4C41] mt-2">
+              {searchInstansi || filterStatus
+                ? 'Tidak ditemukan disposisi yang sesuai dengan kriteria pencarian'
+                : 'Belum ada disposisi yang tersedia untuk saat ini'
+              }
+            </p>
+          </div>
+        ) : (
+          <DisposisiTable 
+            disposisiList={disposisiList} 
+            onRefresh={fetchDisposisi} 
+            searchHighlight={searchInstansi}
+            onViewDetail={handleViewDetail} // 👈 Kirim fungsi navigasi
+          />
+        )}
+
+        {/* Pagination Component — SAMA SEPERTI KABIDDASHBOARD */}
         {disposisiList.length > 0 && (
-          <div className="mt-8">
-            <div className="bg-gradient-to-br from-white/90 via-white/80 to-[#EDE6E3]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-xl relative overflow-hidden">
-              {/* Animated background pattern */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
+          <div className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border-2 border-[#EDE6E3] mt-8">
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-medium text-[#2E2A27]">
+                Menampilkan {pagination.offset + 1} - {Math.min(pagination.offset + pagination.limit, pagination.total)} dari {pagination.total} data
+              </span>
+            </div>
 
-              <div className="flex flex-col sm:flex-row justify-between items-center gap-4 relative z-10">
-                <button
-                  onClick={() => handlePageChange(Math.max(0, pagination.offset - pagination.limit))}
-                  disabled={pagination.offset === 0}
-                  className={`group flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 disabled:cursor-not-allowed shadow-sm border border-white/50 hover:shadow-xl hover:-translate-y-1 backdrop-blur-sm ${pagination.offset === 0
-                    ? 'bg-white/60 text-[#6D4C41] disabled:opacity-50'
-                    : 'bg-white/90 text-[#2E2A27] hover:bg-white hover:scale-105'
-                    }`}
-                >
-                  <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                  </svg>
-                  <span>Sebelumnya</span>
-                </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => handlePageChange(Math.max(0, pagination.offset - pagination.limit))}
+                disabled={pagination.offset === 0}
+                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+              >
+                <ChevronLeft className="h-4 w-4 text-[#2E2A27]" />
+              </button>
 
-                <div className="flex items-center space-x-4">
-                  <div className="bg-white/90 backdrop-blur-sm px-4 py-2.5 rounded-xl border border-white/50 shadow-md hover:shadow-lg transition-all duration-300">
-                    <span className="text-sm font-semibold" style={{ color: '#6D4C41' }}>
-                      <span className="text-[#2E2A27]">{pagination.offset + 1}</span>
-                      {' '}-{' '}
-                      <span className="text-[#2E2A27]">{Math.min(pagination.offset + pagination.limit, pagination.total)}</span>
-                      {' '}dari{' '}
-                      <span className="text-[#2E2A27]">{pagination.total}</span>
-                    </span>
-                  </div>
-                </div>
+              <span className="px-3 py-2 text-[#2E2A27] font-medium bg-[#FDFCFB] rounded-xl border border-[#EDE6E3]">
+                Halaman {Math.floor(pagination.offset / pagination.limit) + 1}
+              </span>
 
-                <button
-                  onClick={() => handlePageChange(pagination.offset + pagination.limit)}
-                  disabled={pagination.offset + pagination.limit >= pagination.total}
-                  className={`group flex items-center space-x-2 px-6 py-3 rounded-xl font-semibold transition-all duration-300 disabled:cursor-not-allowed shadow-sm border border-white/50 hover:shadow-xl hover:-translate-y-1 backdrop-blur-sm ${pagination.offset + pagination.limit >= pagination.total
-                    ? 'bg-white/60 text-[#6D4C41] disabled:opacity-50'
-                    : 'bg-white/90 text-[#2E2A27] hover:bg-white hover:scale-105'
-                    }`}
-                >
-                  <span>Selanjutnya</span>
-                  <svg className="w-4 h-4 group-hover:scale-110 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                  </svg>
-                </button>
-              </div>
+              <button
+                onClick={() => handlePageChange(pagination.offset + pagination.limit)}
+                disabled={pagination.offset + pagination.limit >= pagination.total}
+                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+              >
+                <ChevronRight className="h-4 w-4 text-[#2E2A27]" />
+              </button>
             </div>
           </div>
         )}
       </div>
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.6s ease-out forwards;
-        }
-      `}</style>
     </div>
   );
 };
