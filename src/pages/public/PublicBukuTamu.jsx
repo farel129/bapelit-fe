@@ -130,16 +130,16 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
                 <div className="max-w-2xl mx-auto">
                     <div className="bg-white rounded-xl shadow-lg md:p-8 p-4 border border-gray-200">
                         <div className="text-center">
-                            <div className="inline-flex items-center justify-center w-16 h-16 bg-pink-100 rounded-full mb-4">
-                                <Lock className="text-pink-400" size={24} />
+                            <div className="inline-flex items-center justify-center w-16 h-16 bg-teal-100 rounded-full mb-4">
+                                <Lock className="text-teal-400" size={24} />
                             </div>
                             <h2 className="text-2xl font-bold text-black mb-2">Terima Kasih!</h2>
                             <p className="text-gray-600 mb-6">Anda sudah mengisi buku tamu untuk acara ini. Setiap perangkat hanya dapat mengisi sekali.</p>
-                            <div className="bg-pink-50 rounded-xl p-6 text-left">
+                            <div className="bg-teal-50 rounded-xl p-6 text-left">
                                 <h3 className="text-lg font-semibold text-black mb-4">Detail Kehadiran Anda:</h3>
                                 <div className="space-y-3">
                                     <div className="flex items-center gap-3">
-                                        <User className="text-pink-400" size={18} />
+                                        <User className="text-teal-400" size={18} />
                                         <div>
                                             <p className="text-sm text-gray-600">Nama</p>
                                             <p className="font-semibold">{submissionData.nama_lengkap}</p>
@@ -147,7 +147,7 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
                                     </div>
                                     {submissionData.instansi && (
                                         <div className="flex items-center gap-3">
-                                            <Building className="text-pink-400" size={18} />
+                                            <Building className="text-teal-400" size={18} />
                                             <div>
                                                 <p className="text-sm text-gray-600">Instansi</p>
                                                 <p className="font-semibold">{submissionData.instansi}</p>
@@ -156,7 +156,7 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
                                     )}
                                     {submissionData.jabatan && (
                                         <div className="flex items-center gap-3">
-                                            <Briefcase className="text-pink-400" size={18} />
+                                            <Briefcase className="text-teal-400" size={18} />
                                             <div>
                                                 <p className="text-sm text-gray-600">Jabatan</p>
                                                 <p className="font-semibold">{submissionData.jabatan}</p>
@@ -164,7 +164,7 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
                                         </div>
                                     )}
                                     <div className="flex items-center gap-3">
-                                        <Calendar className="text-pink-400" size={18} />
+                                        <Calendar className="text-teal-400" size={18} />
                                         <div>
                                             <p className="text-sm text-gray-600">Waktu Submit</p>
                                             <p className="font-semibold">{new Date(submissionData.submitted_at).toLocaleString('id-ID')}</p>
@@ -174,7 +174,7 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
                             </div>
                             <div className="mt-6 p-4 bg-gray-100 rounded-xl">
                                 <h4 className="font-semibold text-black mb-2">Informasi Acara</h4>
-                                <p className="text-lg font-bold text-pink-600">{eventData.nama_acara}</p>
+                                <p className="text-lg font-bold text-teal-600">{eventData.nama_acara}</p>
                                 <p className="text-gray-600">{eventData.lokasi}</p>
                                 <p className="text-gray-600">
                                     {new Date(eventData.tanggal_acara).toLocaleDateString('id-ID', {
@@ -194,14 +194,14 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
 };
 
 // Stat Card Component (dari StatsSuratMasuk)
-const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-pink-400', iconColor = 'text-white' }) => (
+const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-teal-400', iconColor = 'text-white' }) => (
     <div className={`${bgColor} p-4 rounded-xl shadow-lg border-2 ${borderColor} hover:shadow-xl transition-all duration-300`}>
         <div className="flex items-start justify-between">
             <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                     <p className={`text-sm font-semibold ${titleColor}`}>{title}</p>
                     {trend && (
-                        <div className="flex items-center gap-1 text-pink-400">
+                        <div className="flex items-center gap-1 text-teal-400">
                             <TrendingUp className="w-3 h-3" />
                             <span className="text-xs font-medium">+{trend}%</span>
                         </div>
@@ -491,7 +491,7 @@ const PublikBukuTamu = () => {
         return (
             <div className="min-h-screen bg-gradient-to-bl from-gray-100 via-white to-gray-100 flex items-center justify-center p-4">
                 <div className="text-center p-8 bg-white rounded-xl shadow-lg">
-                    <AlertCircle className="text-pink-400 mx-auto mb-4" size={64} />
+                    <AlertCircle className="text-teal-400 mx-auto mb-4" size={64} />
                     <h1 className="text-lg font-bold text-black mb-2">Acara Tidak Ditemukan</h1>
                     <p className="text-black">QR Code atau link yang Anda gunakan tidak valid.</p>
                 </div>
@@ -522,7 +522,7 @@ const PublikBukuTamu = () => {
                                 <h2 className="text-xl font-bold text-black mb-4">{eventData.nama_acara}</h2>
                                 <div className="grid md:grid-cols-3 gap-2 md:gap-6 text-left">
                                     <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
-                                        <Calendar className="text-pink-400 mt-1 flex-shrink-0" size={20} />
+                                        <Calendar className="text-teal-400 mt-1 flex-shrink-0" size={20} />
                                         <div>
                                             <p className="font-semibold text-black">Tanggal</p>
                                             <p className="text-gray-600">
@@ -536,7 +536,7 @@ const PublikBukuTamu = () => {
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
-                                        <MapPin className="text-pink-400 mt-1 flex-shrink-0" size={20} />
+                                        <MapPin className="text-teal-400 mt-1 flex-shrink-0" size={20} />
                                         <div>
                                             <p className="font-semibold text-black">Lokasi</p>
                                             <p className="text-gray-600">{eventData.lokasi}</p>
@@ -544,7 +544,7 @@ const PublikBukuTamu = () => {
                                     </div>
                                     {eventData.deskripsi && (
                                         <div className="flex items-start gap-3 p-4 bg-slate-50 rounded-xl">
-                                            <FileText className="text-pink-400 mt-1 flex-shrink-0" size={20} />
+                                            <FileText className="text-teal-400 mt-1 flex-shrink-0" size={20} />
                                             <div>
                                                 <p className="font-semibold text-black">Deskripsi</p>
                                                 <p className="text-gray-600">{eventData.deskripsi}</p>
@@ -562,7 +562,7 @@ const PublikBukuTamu = () => {
                             <div className="space-y-6">
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                                        <User className="text-pink-400" size={18} />
+                                        <User className="text-teal-400" size={18} />
                                         Nama Lengkap *
                                     </label>
                                     <input
@@ -572,13 +572,13 @@ const PublikBukuTamu = () => {
                                         onChange={handleInputChange}
                                         required
                                         disabled={submitting}
-                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                         placeholder="Masukkan nama lengkap Anda"
                                     />
                                 </div>
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                                        <Building className="text-pink-400" size={18} />
+                                        <Building className="text-teal-400" size={18} />
                                         Instansi/Organisasi
                                     </label>
                                     <input
@@ -587,13 +587,13 @@ const PublikBukuTamu = () => {
                                         value={formData.instansi}
                                         onChange={handleInputChange}
                                         disabled={submitting}
-                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                         placeholder="Nama instansi atau organisasi"
                                     />
                                 </div>
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                                        <Briefcase className="text-pink-400" size={18} />
+                                        <Briefcase className="text-teal-400" size={18} />
                                         Jabatan/Posisi
                                     </label>
                                     <input
@@ -602,13 +602,13 @@ const PublikBukuTamu = () => {
                                         value={formData.jabatan}
                                         onChange={handleInputChange}
                                         disabled={submitting}
-                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                         placeholder="Jabatan atau posisi Anda"
                                     />
                                 </div>
                                 <div>
                                     <label className="flex items-center gap-2 text-sm font-semibold text-gray-700 mb-2">
-                                        <MessageSquare className="text-pink-400" size={18} />
+                                        <MessageSquare className="text-teal-400" size={18} />
                                         Keperluan/Tujuan
                                     </label>
                                     <textarea
@@ -617,7 +617,7 @@ const PublikBukuTamu = () => {
                                         onChange={handleInputChange}
                                         rows={3}
                                         disabled={submitting}
-                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 resize-none ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                        className={`w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 resize-none ${submitting ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                         placeholder="Jelaskan keperluan atau tujuan kunjungan Anda"
                                     />
                                 </div>
@@ -625,7 +625,7 @@ const PublikBukuTamu = () => {
                                 <div>
                                     <div className="flex items-center justify-between mb-2">
                                         <label className="flex items-center gap-2 text-sm font-semibold text-gray-700">
-                                            <Camera className="text-pink-400" size={18} />
+                                            <Camera className="text-teal-400" size={18} />
                                             Foto (Opsional)
                                         </label>
                                         {previewFiles.length > 0 && !submitting && (
@@ -643,7 +643,7 @@ const PublikBukuTamu = () => {
                                         <div className="flex items-center justify-center w-full">
                                             <label
                                                 htmlFor="photo-upload"
-                                                className={`flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200 hover:border-pink-400 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
+                                                className={`flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-xl cursor-pointer bg-gray-50 hover:bg-gray-100 transition-all duration-200 hover:border-teal-400 ${submitting ? 'opacity-50 cursor-not-allowed' : ''}`}
                                             >
                                                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                                                     <Upload className="w-8 h-8 mb-2 text-gray-400" />
@@ -652,7 +652,7 @@ const PublikBukuTamu = () => {
                                                     </p>
                                                     <p className="text-xs text-gray-500">PNG, JPG, JPEG (MAX. 5MB per file, 5 files)</p>
                                                     {previewFiles.length > 0 && (
-                                                        <p className="text-xs text-pink-600 mt-1">{previewFiles.length} file terpilih</p>
+                                                        <p className="text-xs text-teal-600 mt-1">{previewFiles.length} file terpilih</p>
                                                     )}
                                                 </div>
                                                 <input
@@ -682,7 +682,7 @@ const PublikBukuTamu = () => {
                                         </div>
                                         <div className="w-full bg-gray-200 rounded-full h-2">
                                             <div
-                                                className="bg-gradient-to-r from-pink-400 to-pink-600 h-2 rounded-full transition-all duration-300"
+                                                className="bg-gradient-to-r from-teal-400 to-teal-600 h-2 rounded-full transition-all duration-300"
                                                 style={{ width: `${uploadProgress}%` }}
                                             ></div>
                                         </div>
@@ -694,7 +694,7 @@ const PublikBukuTamu = () => {
                                         type="button"
                                         onClick={handleSubmit}
                                         disabled={submitting || !formData.nama_lengkap.trim()}
-                                        className="w-full bg-black text-white font-semibold py-4 px-6 rounded-xl hover:opacity-90 cursor-pointer focus:outline-none focus:ring-2 focus:ring-pink-400 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                                        className="w-full bg-black text-white font-semibold py-4 px-6 rounded-xl hover:opacity-90 cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                                     >
                                         {submitting ? (
                                             <LoadingSpinner size="sm" text="Menyimpan data..." />
@@ -709,7 +709,7 @@ const PublikBukuTamu = () => {
 
                                 <div className="text-center text-sm text-gray-500 pt-2">
                                     <p>Data yang Anda masukkan akan disimpan dengan aman dan hanya digunakan untuk keperluan acara ini.</p>
-                                    <p className="mt-1 font-semibold text-pink-600 flex items-center justify-center gap-1">
+                                    <p className="mt-1 font-semibold text-teal-600 flex items-center justify-center gap-1">
                                         <AlertCircle size={16} />
                                         Form ini hanya dapat diisi sekali per perangkat
                                     </p>

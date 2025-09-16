@@ -23,7 +23,6 @@ export default function LoginPopup({ onClose }) {
 
     try {
       const loggedInUser = await login(form.email, form.password);
-
       if (loggedInUser.role === 'admin') {
         navigate('/admin');
       } else if (loggedInUser.role === 'kepala') {
@@ -72,7 +71,7 @@ export default function LoginPopup({ onClose }) {
 
             {/* Error Message */}
             {error && (
-              <div className="mb-6 p-3 bg-red-900/30 border border-red-800/50 rounded-xl text-red-300 text-sm">
+              <div className="mb-6 text-red-300 text-sm">
                 {error}
               </div>
             )}

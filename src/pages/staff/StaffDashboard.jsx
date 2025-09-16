@@ -348,7 +348,6 @@ const StaffDashboard = () => {
           )}
         </div>
 
-        {/* Data List — GANTI JADI TABEL MIRIP KABIDDASHBOARD */}
         {disposisiList.length === 0 ? (
           <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm text-center py-16 px-6">
             <FileText className="h-12 w-12 text-teal-400 mx-auto mb-4" />
