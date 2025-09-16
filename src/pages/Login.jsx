@@ -54,17 +54,17 @@ export default function LoginPopup({ onClose }) {
         <X className="w-5 h-5 text-white" />
       </button>
 
-      <div className="grid lg:grid-cols-2 bg-gradient-to-br from-[#FDFCFB] via-[#F8F6F4] to-[#F0EDEA] backdrop-blur-xl rounded-3xl shadow-2xl shadow-pink-400/20 border border-[#EDE6E3] overflow-hidden">
+      <div className="grid lg:grid-cols-2 bg-gradient-to-br from-[#FDFCFB] via-[#F8F6F4] to-[#F0EDEA] backdrop-blur-xl rounded-3xl shadow-2xl shadow-teal-400/20 border border-[#EDE6E3] overflow-hidden">
         {/* Left Side - Form */}
         <div className="p-8 lg:p-12 relative">
           {/* Background decoration */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-pink-400/20 to-transparent rounded-full blur-2xl"></div>
+          <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-teal-400/20 to-transparent rounded-full blur-2xl"></div>
           <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-[#EDE6E3]/20 to-transparent rounded-full blur-xl"></div>
 
           <div className="relative z-10">
             {/* Header */}
             <div className="mb-8">
-              <h2 className='bg-gradient-to-r from-[#2E2A27] via-black to-pink-400 bg-clip-text text-transparent text-xl lg:text-4xl font-extrabold'>
+              <h2 className='bg-gradient-to-r from-[#2E2A27] via-black to-teal-400 bg-clip-text text-transparent text-xl lg:text-4xl font-extrabold'>
                 Halo!
               </h2>
               <p className="text-black text-sm mt-2">Login untuk melanjutkan</p>
@@ -87,7 +87,7 @@ export default function LoginPopup({ onClose }) {
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Mail className="h-5 w-5 text-pink-400 group-focus-within:text-black transition-colors duration-200" />
+                      <Mail className="h-5 w-5 text-teal-400 group-focus-within:text-black transition-colors duration-200" />
                     </div>
                     <input
                       id="email"
@@ -96,7 +96,7 @@ export default function LoginPopup({ onClose }) {
                       required
                       value={form.email}
                       onChange={handleChange}
-                      className="block w-full pl-4 pr-4 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-black/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
+                      className="block w-full pl-4 pr-4 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-black/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
                       placeholder="Masukan email"
                     />
                   </div>
@@ -109,7 +109,7 @@ export default function LoginPopup({ onClose }) {
                   </label>
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                      <Lock className="h-5 w-5 text-pink-400 group-focus-within:text-black transition-colors duration-200" />
+                      <Lock className="h-5 w-5 text-teal-400 group-focus-within:text-black transition-colors duration-200" />
                     </div>
                     <input
                       id="password"
@@ -118,7 +118,7 @@ export default function LoginPopup({ onClose }) {
                       required
                       value={form.password}
                       onChange={handleChange}
-                      className="block w-full pl-4 pr-12 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-black/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
+                      className="block w-full pl-4 pr-12 py-3 border border-[#EDE6E3] rounded-xl bg-white/60 backdrop-blur-sm placeholder-black/60 text-[#2E2A27] focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent focus:bg-white transition-all duration-200 text-sm shadow-sm"
                       placeholder="Masukan password"
                     />
                     {/* Toggle Show/Hide Password Button */}
@@ -164,9 +164,8 @@ export default function LoginPopup({ onClose }) {
         </div>
 
         {/* Right Side - Information */}
-        <div className="hidden bg-gradient-to-br from-[#EDE6E3] to-[#FDFCFB] p-8 lg:p-12 lg:flex flex-col justify-center relative overflow-hidden">
+        <div className="hidden bg-gradient-to-br from-[#e3edec] to-[#fbfdfd] p-8 lg:p-12 lg:flex flex-col justify-center relative overflow-hidden">
           {/* Background decorations */}
-          <div className="absolute bottom-0 left-0 w-32 h-32 bg-gradient-to-tr from-black/20 to-transparent rounded-full blur-2xl"></div>
 
           <div className="relative z-10">
             {/* Logo and Header */}
@@ -190,21 +189,21 @@ export default function LoginPopup({ onClose }) {
             {/* Features */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-pink-400 shadow-sm">
+                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-teal-400 shadow-sm">
                   <Shield className="w-4 h-4 text-black" />
                 </div>
                 <span className="text-sm text-black font-medium">Akses Aman & Terenkripsi</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-pink-400 shadow-sm">
+                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-teal-400 shadow-sm">
                   <Building2 className="w-4 h-4 text-black" />
                 </div>
                 <span className="text-sm text-black font-medium">Khusus Pegawai Internal</span>
               </div>
 
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-pink-400 shadow-sm">
+                <div className="w-8 h-8 bg-gradient-to-br from-white to-[#EDE6E3] rounded-lg flex items-center justify-center border border-teal-400 shadow-sm">
                   <Mail className="w-4 h-4 text-black" />
                 </div>
                 <span className="text-sm text-black font-medium">Manajemen Surat Real-time</span>

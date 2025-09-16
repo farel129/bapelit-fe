@@ -169,7 +169,7 @@ const PostDetailModal = ({
                     {/* Header */}
                     <header className="lg:px-4 lg:py-3 py-3 border-b border-gray-200 flex items-center justify-between">
                         <div className="flex items-center space-x-3">
-                            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-pink-400 to-orange-400 rounded-full p-0.5">
+                            <div className="w-8 h-8 bg-gradient-to-br from-purple-500 via-teal-400 to-orange-400 rounded-full p-0.5">
                                 <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                                     <span className="text-xs font-semibold text-gray-700">
                                         {selectedPost.user.name.charAt(0).toUpperCase()}
@@ -314,7 +314,7 @@ const PostDetailModal = ({
                                     <div className="space-y-3">
                                         {selectedPost.comments.map(comment => (
                                             <div key={comment.id} className="flex items-start space-x-3">
-                                                <div className="w-6 h-6 bg-gradient-to-br from-purple-500 via-pink-400 to-orange-400 rounded-full p-0.5 flex-shrink-0">
+                                                <div className="w-6 h-6 bg-gradient-to-br from-purple-500 via-teal-400 to-orange-400 rounded-full p-0.5 flex-shrink-0">
                                                     <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                                                         <span className="text-xs font-semibold text-gray-700">
                                                             {comment.user.name.charAt(0).toUpperCase()}
@@ -368,7 +368,7 @@ const PostDetailModal = ({
                             {/* Add Comment */}
                             <div className="px-4 py-3 flex-1 flex w-full border-t border-gray-100 absolute bottom-0 bg-white">
                                 <div className="flex items-center w-full space-x-3">
-                                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 via-pink-400 to-orange-400 rounded-full p-0.5 flex-shrink-0">
+                                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 via-teal-400 to-orange-400 rounded-full p-0.5 flex-shrink-0">
                                         <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                                             <span className="text-xs font-semibold text-gray-700">
                                                 {user?.name?.charAt(0).toUpperCase() || 'U'}

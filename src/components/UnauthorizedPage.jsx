@@ -40,7 +40,7 @@ const UnauthorizedPage = () => {
           
           {/* Icon Section */}
           <div className="relative mb-8">
-            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-r from-black to-pink-500 shadow-lg shadow-red-500/25 mb-6 transform hover:scale-105 transition-transform duration-300">
+            <div className="mx-auto flex items-center justify-center h-20 w-20 rounded-full bg-gradient-to-r from-black to-teal-500 shadow-lg shadow-red-500/25 mb-6 transform hover:scale-105 transition-transform duration-300">
               <Shield className="h-10 w-10 text-white" />
             </div>
             
@@ -65,7 +65,7 @@ const UnauthorizedPage = () => {
           <div className="space-y-4 mt-8 text-sm">
             <button
               onClick={handleGoBack}
-              className="group w-full bg-gradient-to-r from-black to-gray-800 hover:from-black hover:to-black text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-pink-500/25 flex items-center justify-center space-x-2"
+              className="group w-full bg-gradient-to-r from-black to-gray-800 hover:from-black hover:to-black text-white font-semibold py-4 px-6 rounded-2xl transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg hover:shadow-teal-500/25 flex items-center justify-center space-x-2"
             >
               <ArrowLeft className="h-5 w-5 group-hover:-translate-x-1 transition-transform duration-300" />
               <span>Kembali ke Dashboard</span>

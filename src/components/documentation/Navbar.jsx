@@ -65,7 +65,7 @@ const Navbar = ({
             </div>
 
             {/* Desktop bottom Navigation */}
-            <div className='fixed bottom-5 rounded-2xl shadow-lg z-30 bg-black shadow-pink-400/15 backdrop-blur-md border border-black/15 hidden md:block'>
+            <div className='fixed bottom-5 rounded-2xl shadow-lg z-30 bg-white shadow-teal-400/15 backdrop-blur-md border border-slate-200 hidden md:block'>
                 <div className="max-w-4xl mx-auto px-6 py-4">
                     <div className="flex items-center justify-between">
 
@@ -77,8 +77,8 @@ const Navbar = ({
                                     setFeedFilters(prev => ({ ...prev, search: '', page: 1 }))
                                 }}
                                 className={`p-2 transition-all duration-200 rounded-lg ${currentPage === 'feed'
-                                        ?'text-pink-400'
-                                        :'text-white'
+                                        ?'text-teal-400'
+                                        :'text-black'
                                     }`}
                             >
                                 <Home className={`w-6 h-6 ${currentPage === 'feed' ? 'fill-current' : ''}`} />
@@ -88,7 +88,7 @@ const Navbar = ({
                                 onClick={() => setCurrentPage('trending')}
                                 className={`p-2 transition-all duration-200 rounded-lg ${currentPage === 'trending'
                                         ?'text-red-400'
-                                        :'text-white'
+                                        :'text-black'
                                     }`}
                             >
                                 <TrendingUp className="w-6 h-6" />
@@ -96,7 +96,7 @@ const Navbar = ({
 
                             <button
                                 onClick={() => setShowCreatePost(true)}
-                                className="p-2 text-white hover:opacity-90 transition-all duration-200 rounded-lg"
+                                className="p-2 text-black hover:opacity-90 transition-all duration-200 rounded-lg"
                             >
                                 <Plus className="w-6 h-6" />
                             </button>
@@ -110,7 +110,7 @@ const Navbar = ({
                             >
                                 <div className={`w-8 h-8 rounded-full flex items-center justify-center bg-neutral-500 text-white font-semibold text-sm transition-all duration-200 ${currentPage === 'profile'
                                         ? 'ring-2 ring-black ring-offset-2'
-                                        : 'hover:ring-2 hover:ring-pink-400 hover:ring-offset-1'
+                                        : 'hover:ring-2 hover:ring-teal-400 hover:ring-offset-1'
                                     }`}>
                                     {user?.name?.charAt(0).toUpperCase()}
                                 </div>

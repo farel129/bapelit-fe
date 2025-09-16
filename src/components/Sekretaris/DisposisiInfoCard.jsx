@@ -64,7 +64,7 @@ const DisposisiInfoCard = ({ disposisi }) => {
           <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
             <p className="text-sm font-semibold mb-2" >Status</p>
             <div className="inline-block">
-              <StatusBadge status={disposisi.status_dari_kabid} />
+              <StatusBadge status={disposisi.status_dari_sekretaris} />
             </div>
           </div>
           <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">

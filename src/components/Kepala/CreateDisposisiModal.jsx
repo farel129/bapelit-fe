@@ -68,7 +68,7 @@ const CreateDisposisiModal = ({ surat, onClose, onSuccess }) => {
           <div className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-3">
               <div className="p-2.5 bg-white rounded-xl shadow-md">
-                <File className="h-5 w-5 text-pink-400" />
+                <File className="h-5 w-5 text-teal-400" />
               </div>
               <div>
                 <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Buat Lembar Disposisi</h3>

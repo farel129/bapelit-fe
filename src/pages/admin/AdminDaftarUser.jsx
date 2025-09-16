@@ -162,7 +162,7 @@ const ResetPasswordModal = ({ isOpen, onClose, onConfirm, userName }) => {
                 type={showPassword ? 'text' : 'password'}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className={`w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent transition-colors pr-12 text-[#000000] shadow-sm ${
+                className={`w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-colors pr-12 text-[#000000] shadow-sm ${
                   errors.password ? 'border-red-500' : ''
                 }`}
                 placeholder="Masukkan password baru (min 6 karakter)"
@@ -189,7 +189,7 @@ const ResetPasswordModal = ({ isOpen, onClose, onConfirm, userName }) => {
                 type={showConfirmPassword ? 'text' : 'password'}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className={`w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent transition-colors pr-12 text-[#000000] shadow-sm ${
+                className={`w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-colors pr-12 text-[#000000] shadow-sm ${
                   errors.confirmPassword ? 'border-red-500' : ''
                 }`}
                 placeholder="Ulangi password baru"
@@ -328,7 +328,7 @@ function AdminDaftarUser() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-x-3">
           <div className="p-3 bg-white rounded-xl shadow-lg">
-            <Users className="h-6 w-6 text-[#f6339a]" />
+            <Users className="h-6 w-6 text-teal-400" />
           </div>
           <div>
             <h1 className="text-lg font-bold text-[#000000]">Daftar User</h1>
@@ -337,7 +337,7 @@ function AdminDaftarUser() {
         </div>
         <button
           onClick={fetchUsers}
-          className="px-5 py-2.5 bg-white hover:bg-gray-50 text-[#000000] border border-[#e5e7eb] rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md hover:border-[#f6339a]"
+          className="px-5 py-2.5 bg-white hover:bg-gray-50 text-[#000000] border border-[#e5e7eb] rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md hover:border-teal-400"
         >
           <RefreshCcw className="w-4 h-4 mr-2 inline" />
           Refresh
@@ -353,7 +353,7 @@ function AdminDaftarUser() {
               <p className="text-3xl font-bold text-[#000000] mt-2">{users.filter(u => u.role === 'admin').length}</p>
             </div>
             <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
-              <UserCircle2 className="w-6 h-6 text-[#f6339a]" />
+              <UserCircle2 className="w-6 h-6 text-teal-400" />
             </div>
           </div>
         </div>
@@ -365,7 +365,7 @@ function AdminDaftarUser() {
               <p className="text-3xl font-bold text-[#000000] mt-2">{users.filter(u => u.role === 'user').length}</p>
             </div>
             <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
-              <Users className="w-6 h-6 text-[#f6339a]" />
+              <Users className="w-6 h-6 text-teal-400" />
             </div>
           </div>
         </div>
@@ -377,7 +377,7 @@ function AdminDaftarUser() {
               <p className="text-3xl font-bold text-[#000000] mt-2">{users.filter(u => u.role === 'staff').length}</p>
             </div>
             <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
-              <FileBadge2 className="w-6 h-6 text-[#f6339a]" />
+              <FileBadge2 className="w-6 h-6 text-teal-400" />
             </div>
           </div>
         </div>
@@ -394,7 +394,7 @@ function AdminDaftarUser() {
               placeholder="Cari pengguna..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent transition-colors outline-none text-[#000000] placeholder-[#6b7280] shadow-sm"
+              className="w-full pl-12 pr-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-colors outline-none text-[#000000] placeholder-[#6b7280] shadow-sm"
             />
           </div>
 
@@ -404,7 +404,7 @@ function AdminDaftarUser() {
             <select
               value={selectedBidang}
               onChange={(e) => setSelectedBidang(e.target.value)}
-              className="w-full pl-12 pr-10 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent transition-colors appearance-none text-[#000000] min-w-[160px] shadow-sm"
+              className="w-full pl-12 pr-10 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-colors appearance-none text-[#000000] min-w-[160px] shadow-sm"
             >
               <option value="">Semua Bidang</option>
               {bidangOptions.map((bidang) => (
@@ -503,7 +503,7 @@ function AdminDaftarUser() {
                             onClick={() => handleResetPasswordClick(user)}
                             className="flex items-center space-x-2 w-full text-left px-4 py-2 hover:bg-gray-50 transition-colors"
                           >
-                            <Key className="h-4 w-4 text-[#f6339a]" />
+                            <Key className="h-4 w-4 text-teal-400" />
                             <span className="text-[#000000]">Reset Password</span>
                           </button>
                           <button

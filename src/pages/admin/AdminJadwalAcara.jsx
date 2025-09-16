@@ -341,7 +341,7 @@ const AdminJadwalAcara = () => {
         <div className="flex justify-between items-center mb-6">
           <div className="flex items-center gap-3">
             <div className="p-3 bg-white rounded-2xl shadow-lg">
-              <Calendar className="h-6 w-6 text-pink-400" />
+              <Calendar className="h-6 w-6 text-teal-400" />
             </div>
             <div>
               <h1 className="text-lg font-bold text-[#000000]">Jadwal Acara</h1>
@@ -364,7 +364,7 @@ const AdminJadwalAcara = () => {
             <select
               value={filter.status}
               onChange={(e) => setFilter({ ...filter, status: e.target.value })}
-              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
             >
               <option value="">Semua Status</option>
               <option value="aktif">Aktif</option>
@@ -379,7 +379,7 @@ const AdminJadwalAcara = () => {
             <select
               value={filter.kategori}
               onChange={(e) => setFilter({ ...filter, kategori: e.target.value })}
-              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
             >
               <option value="">Semua Kategori</option>
               <option value="rapat">Rapat</option>
@@ -394,7 +394,7 @@ const AdminJadwalAcara = () => {
             <select
               value={filter.bulan}
               onChange={(e) => setFilter({ ...filter, bulan: e.target.value })}
-              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
             >
               <option value="">Semua Bulan</option>
               <option value="1">Januari</option>
@@ -418,7 +418,7 @@ const AdminJadwalAcara = () => {
               type="number"
               value={filter.tahun}
               onChange={(e) => setFilter({ ...filter, tahun: e.target.value })}
-              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+              className="w-full px-3 py-2 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
               min="2020"
               max="2030"
             />
@@ -493,7 +493,7 @@ const AdminJadwalAcara = () => {
                       <div className="flex justify-between items-start mb-4">
                         <div className="flex items-center gap-3">
                           <div className="p-2 bg-white shadow-lg rounded-xl">
-                            <Calendar className="h-5 w-5 text-[#f6339a]" />
+                            <Calendar className="h-5 w-5 text-teal-400" />
                           </div>
                           <div>
                             <h3 className="font-bold text-[#000000] truncate max-w-[180px]">{jadwal.nama_acara}</h3>
@@ -567,7 +567,7 @@ const AdminJadwalAcara = () => {
                         <select
                           value={jadwal.status}
                           onChange={(e) => handleStatusChange(jadwal.id, e.target.value)}
-                          className="text-xs border border-[#e5e7eb] rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-[#f6339a] bg-white"
+                          className="text-xs border border-[#e5e7eb] rounded-lg px-2 py-1 focus:outline-none focus:ring-1 focus:ring-teal-400 bg-white"
                           disabled={loading}
                         >
                           <option value="aktif">Aktif</option>
@@ -598,7 +598,7 @@ const AdminJadwalAcara = () => {
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
                     <div className="p-3 bg-white rounded-xl shadow-lg">
-                      <Calendar className="h-6 w-6 text-pink-400" />
+                      <Calendar className="h-6 w-6 text-teal-400" />
                     </div>
                     <div>
                       <h2 className="text-xl font-bold text-[#000000]">
@@ -630,7 +630,7 @@ const AdminJadwalAcara = () => {
                         required
                         value={formData.nama_acara}
                         onChange={(e) => setFormData({ ...formData, nama_acara: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                         placeholder="Contoh: Rapat Koordinasi Bulanan"
                       />
                     </div>
@@ -643,7 +643,7 @@ const AdminJadwalAcara = () => {
                         value={formData.deskripsi}
                         onChange={(e) => setFormData({ ...formData, deskripsi: e.target.value })}
                         rows={3}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                         placeholder="Tulis deskripsi singkat tentang acara ini..."
                       />
                     </div>
@@ -657,7 +657,7 @@ const AdminJadwalAcara = () => {
                         required
                         value={formData.tanggal_mulai}
                         onChange={(e) => setFormData({ ...formData, tanggal_mulai: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                       />
                     </div>
 
@@ -669,7 +669,7 @@ const AdminJadwalAcara = () => {
                         type="date"
                         value={formData.tanggal_selesai}
                         onChange={(e) => setFormData({ ...formData, tanggal_selesai: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                       />
                     </div>
 
@@ -682,7 +682,7 @@ const AdminJadwalAcara = () => {
                         required
                         value={formData.waktu_mulai}
                         onChange={(e) => setFormData({ ...formData, waktu_mulai: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                       />
                     </div>
 
@@ -694,7 +694,7 @@ const AdminJadwalAcara = () => {
                         type="time"
                         value={formData.waktu_selesai}
                         onChange={(e) => setFormData({ ...formData, waktu_selesai: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                       />
                     </div>
 
@@ -709,7 +709,7 @@ const AdminJadwalAcara = () => {
                             required
                             value={formData.lokasi}
                             onChange={(e) => setFormData({ ...formData, lokasi: e.target.value })}
-                            className="flex-1 px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                            className="flex-1 px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                             placeholder="Masukkan alamat atau nama lokasi"
                           />
                           <button
@@ -798,7 +798,7 @@ const AdminJadwalAcara = () => {
                         required
                         value={formData.pic_nama}
                         onChange={(e) => setFormData({ ...formData, pic_nama: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                         placeholder="Nama petugas penanggung jawab"
                       />
                     </div>
@@ -811,7 +811,7 @@ const AdminJadwalAcara = () => {
                         type="text"
                         value={formData.pic_kontak}
                         onChange={(e) => setFormData({ ...formData, pic_kontak: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                         placeholder="Nomor HP / Email"
                       />
                     </div>
@@ -823,7 +823,7 @@ const AdminJadwalAcara = () => {
                       <select
                         value={formData.kategori}
                         onChange={(e) => setFormData({ ...formData, kategori: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                       >
                         <option value="umum">Umum</option>
                         <option value="rapat">Rapat</option>
@@ -839,7 +839,7 @@ const AdminJadwalAcara = () => {
                       <select
                         value={formData.prioritas}
                         onChange={(e) => setFormData({ ...formData, prioritas: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                       >
                         <option value="biasa">Biasa</option>
                         <option value="penting">Penting</option>
@@ -855,7 +855,7 @@ const AdminJadwalAcara = () => {
                         type="number"
                         value={formData.peserta_target}
                         onChange={(e) => setFormData({ ...formData, peserta_target: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                         min="1"
                         placeholder="Jumlah peserta yang diharapkan"
                       />
@@ -868,7 +868,7 @@ const AdminJadwalAcara = () => {
                       <select
                         value={formData.status}
                         onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent text-sm text-[#000000]"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent text-sm text-[#000000]"
                       >
                         <option value="aktif">Aktif</option>
                         <option value="selesai">Selesai</option>

@@ -47,10 +47,10 @@ const StatsSuratMasuk = () => {
     const sudahDibaca = suratData.filter(surat => surat.status === 'sudah dibaca').length
     const persentaseBaca = totalSurat > 0 ? ((sudahDibaca / totalSurat) * 100).toFixed(1) : 0
 
-    // pink color palette for charts
+    // teal color palette for charts
     const pieData = [
         { name: 'Belum Dibaca', value: belumDibaca, color: '#000000' },
-        { name: 'Sudah Dibaca', value: sudahDibaca, color: '#f6339a' }
+        { name: 'Sudah Dibaca', value: sudahDibaca, color: '#00d5be' }
     ]
 
     // Calculate monthly data for bar chart
@@ -90,14 +90,14 @@ const StatsSuratMasuk = () => {
 
     const monthlyData = getMonthlyData()
 
-    const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-pink-400', iconColor = 'text-white' }) => (
+    const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-teal-400', iconColor = 'text-white' }) => (
         <div className={`${bgColor} p-4 rounded-xl shadow-lg border-2 ${borderColor}`}>
             <div className="flex items-start justify-between">
                 <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
                         <p className={`text-sm font-semibold ${titleColor}`}>{title}</p>
                         {trend && (
-                            <div className="flex items-center gap-1 text-pink-400">
+                            <div className="flex items-center gap-1 text-teal-400">
                                 <TrendingUp className="w-3 h-3" />
                                 <span className="text-xs font-medium">+{trend}%</span>
                             </div>
@@ -108,7 +108,7 @@ const StatsSuratMasuk = () => {
                         <p className="text-xs text-gray-500 mt-1 font-medium">{subtitle}</p>
                     )}
                 </div>
-                <div className={`${bgIcon} p-3 self-end rounded-xl shadow-lg transition-all duration-300`}>
+                <div className={`${bgIcon} p-3 self-end rounded-xl shadow-lg transition-all duration-300 animate-bounce`}>
                     <Icon className={`w-6 h-6 ${iconColor}`} />
                 </div>
             </div>
@@ -192,7 +192,7 @@ const StatsSuratMasuk = () => {
 
                 {/* Quick Action + Surat List Placeholder */}
                 <div className="flex lg:flex-row flex-col gap-4">
-                    <div className="bg-pink-400 rounded-xl shadow-lg p-5 h-32"></div>
+                    <div className="bg-teal-400 rounded-xl shadow-lg p-5 h-32"></div>
                     <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-6 h-64"></div>
                 </div>
             </div>
@@ -228,7 +228,7 @@ const StatsSuratMasuk = () => {
                             title="Sudah Dibaca"
                             count={sudahDibaca}
                             subtitle="Telah diproses"
-                            borderColor='border-pink-200'
+                            borderColor='border-teal-200'
                             icon={CheckCircle}
                         />
                         <StatCard
@@ -240,7 +240,7 @@ const StatsSuratMasuk = () => {
                             titleColor='text-white'
                             countColor='text-white'
                             bgIcon='bg-white'
-                            iconColor='text-pink-400'
+                            iconColor='text-teal-400'
                             trend={persentaseBaca > 50 ? "12.5" : null}
                             borderColor='border-black'
                         />
@@ -261,7 +261,7 @@ const StatsSuratMasuk = () => {
                                         <span className="text-xs text-gray-400 font-medium">Belum</span>
                                     </div>
                                     <div className="flex items-center gap-2">
-                                        <div className="w-4 h-4 bg-pink-400 rounded-full"></div>
+                                        <div className="w-4 h-4 bg-teal-400 rounded-full"></div>
                                         <span className="text-xs text-gray-400 font-medium">Sudah</span>
                                     </div>
                                 </div>
@@ -335,7 +335,7 @@ const StatsSuratMasuk = () => {
                                     <p className="text-sm text-gray-400 mt-1">Distribusi surat masuk tahun {new Date().getFullYear()}</p>
                                 </div>
                                 <div className="flex items-center gap-4">
-                                    <Calendar className="w-5 h-5 text-pink-400" />
+                                    <Calendar className="w-5 h-5 text-teal-400" />
                                 </div>
                             </div>
 
@@ -380,7 +380,7 @@ const StatsSuratMasuk = () => {
                                             />
                                             <Bar
                                                 dataKey="total"
-                                                fill="#f6339a"
+                                                fill="#00d5be"
                                                 name="total"
                                                 radius={[4, 4, 0, 0]}
                                             />
@@ -392,7 +392,7 @@ const StatsSuratMasuk = () => {
                                             />
                                             <Bar
                                                 dataKey="sudahDibaca"
-                                                fill="#f6339a"
+                                                fill="#00d5be"
                                                 name="sudahDibaca"
                                                 radius={[4, 4, 0, 0]}
                                             />
@@ -419,17 +419,17 @@ const StatsSuratMasuk = () => {
                                         <div key={index} className="text-center p-2 flex items-center justify-between bg-gray-50 rounded-xl border border-gray-200">
                                             <div>
                                                 <h4 className="font-semibold text-black text-lg">{month.month}</h4>
-                                                <p className="text-lg font-semibold text-pink-400 mt-1">{month.total}</p>
+                                                <p className="text-lg font-semibold text-teal-400 mt-1">{month.total}</p>
                                             </div>
 
                                             <div className="text-xs text-gray-400 space-y-2">
                                                 <div className="flex justify-between items-center">
                                                     <span>Belum:</span>
-                                                    <span className="text-pink-400 font-semibold bg-pink-50 px-2 py-1 rounded-full">{month.belumDibaca}</span>
+                                                    <span className="text-teal-400 font-semibold bg-teal-50 px-2 py-1 rounded-full">{month.belumDibaca}</span>
                                                 </div>
                                                 <div className="flex justify-between items-center">
                                                     <span>Dibaca:</span>
-                                                    <span className="text-pink-400 font-semibold bg-pink-100 px-2 py-1 rounded-full">{month.sudahDibaca}</span>
+                                                    <span className="text-teal-400 font-semibold bg-teal-100 px-2 py-1 rounded-full">{month.sudahDibaca}</span>
                                                 </div>
                                             </div>
                                         </div>
@@ -442,12 +442,12 @@ const StatsSuratMasuk = () => {
                     <div className='flex lg:flex-row flex-col w-full gap-2'>
                         <div className="">
                             {/* Quick Actions */}
-                            <div className="bg-white border border-pink-200 rounded-xl shadow-lg p-5">
+                            <div className="bg-white border border-teal-200 rounded-xl shadow-lg p-5">
                                 <div className="space-y-4">
                                     <Link to="/admin-surat-masuk">
                                         <div className='text-black flex flex-col space-y-4 items-center justify-center'>
                                             <p className='text-center'>Tambah Surat Masuk</p>
-                                            <div className='border border-pink-400 flex justify-center items-center p-4 rounded-full'>
+                                            <div className='border border-teal-400 flex justify-center items-center p-4 rounded-full'>
                                                 <Plus className='w-7 h-7' />
                                             </div>
                                         </div>

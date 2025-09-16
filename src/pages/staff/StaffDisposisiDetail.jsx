@@ -356,7 +356,7 @@ const StaffDisposisiDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <AlertCircle className="w-16 h-16 mx-auto mb-4 text-pink-400" />
+          <AlertCircle className="w-16 h-16 mx-auto mb-4 text-teal-400" />
           <h3 className="text-lg font-bold mb-2">Error</h3>
           <p className="mb-4">{error}</p>
           <button
@@ -468,7 +468,7 @@ const StaffDisposisiDetail = () => {
               <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
-                    <MessageSquare className="w-6 h-6 text-pink-400" />
+                    <MessageSquare className="w-6 h-6 text-teal-400" />
                   </div>
                   <div>
                     <h3 className="font-semibold">Beri Feedback</h3>
@@ -494,7 +494,7 @@ const StaffDisposisiDetail = () => {
                       onChange={handleFeedbackChange}
                       required
                       rows="5"
-                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 resize-none text-[#2E2A27] shadow-sm"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 resize-none text-[#2E2A27] shadow-sm"
                       placeholder="Masukkan catatan feedback Anda..."
                     />
                   </div>
@@ -510,7 +510,7 @@ const StaffDisposisiDetail = () => {
                           value="diproses"
                           checked={feedbackData.status === 'diproses'}
                           onChange={handleFeedbackChange}
-                          className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
+                          className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
                         />
                         <span className="ml-3 font-medium">Diproses</span>
                       </label>
@@ -521,7 +521,7 @@ const StaffDisposisiDetail = () => {
                           value="selesai"
                           checked={feedbackData.status === 'selesai'}
                           onChange={handleFeedbackChange}
-                          className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
+                          className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
                         />
                         <span className="ml-3 font-medium">Selesai</span>
                       </label>
@@ -536,7 +536,7 @@ const StaffDisposisiDetail = () => {
                       multiple
                       onChange={handleFileChange}
                       accept="image/*,application/pdf"
-                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 shadow-sm"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 shadow-sm"
                     />
                     {feedbackData.files.length > 0 && (
                       <div className="mt-2 text-sm bg-[#FDFCFB] px-3 py-2 rounded-lg border border-slate-200 shadow-sm">
@@ -588,7 +588,7 @@ const StaffDisposisiDetail = () => {
                 <div>
                   <div className="flex items-center mb-4">
                     <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
-                      <FileText className="w-6 h-6 text-pink-400" />
+                      <FileText className="w-6 h-6 text-teal-400" />
                     </div>
                     <h3 className="font-semibold">Informasi Surat</h3>
                   </div>
@@ -635,7 +635,7 @@ const StaffDisposisiDetail = () => {
                 <div>
                   <div className="flex items-center mb-4">
                     <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
-                      <MessageSquare className="w-6 h-6 text-pink-400" />
+                      <MessageSquare className="w-6 h-6 text-teal-400" />
                     </div>
                     <h3 className="font-semibold">Informasi Disposisi</h3>
                   </div>
@@ -765,7 +765,7 @@ const StaffDisposisiDetail = () => {
               <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-white rounded-xl shadow-md mr-3">
-                    <MessageSquare className="w-6 h-6 text-pink-400" />
+                    <MessageSquare className="w-6 h-6 text-teal-400" />
                   </div>
                   <div>
                     <h3 className="font-semibold">Feedback yang Telah Dikirim</h3>
@@ -844,7 +844,7 @@ const StaffDisposisiDetail = () => {
                                 onChange={handleEditFeedbackChange}
                                 required
                                 rows="5"
-                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 resize-none text-[#2E2A27] shadow-sm"
+                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 resize-none text-[#2E2A27] shadow-sm"
                                 placeholder="Masukkan catatan feedback Anda..."
                               />
                             </div>
@@ -860,7 +860,7 @@ const StaffDisposisiDetail = () => {
                                     value="diproses"
                                     checked={editFeedbackData.status === 'diproses'}
                                     onChange={handleEditFeedbackChange}
-                                    className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
+                                    className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
                                   />
                                   <span className="ml-3 font-medium">Diproses</span>
                                 </label>
@@ -871,7 +871,7 @@ const StaffDisposisiDetail = () => {
                                     value="selesai"
                                     checked={editFeedbackData.status === 'selesai'}
                                     onChange={handleEditFeedbackChange}
-                                    className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
+                                    className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
                                   />
                                   <span className="ml-3 font-medium">Selesai</span>
                                 </label>
@@ -915,7 +915,7 @@ const StaffDisposisiDetail = () => {
                                 multiple
                                 onChange={handleEditFileChange}
                                 accept="image/*,application/pdf"
-                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 shadow-sm"
+                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 shadow-sm"
                               />
                               {editFeedbackData.newFiles.length > 0 && (
                                 <div className="mt-2 text-sm bg-green-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm">

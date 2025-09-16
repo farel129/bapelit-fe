@@ -152,15 +152,15 @@ function AdminTambahUser() {
   const getRoleIcon = (role) => {
     switch (role) {
       case 'kepala':
-        return <Shield className="w-6 h-6 text-[#f6339a]" />;
+        return <Shield className="w-6 h-6 text-teal-400" />;
       case 'sekretaris':
-        return <Shield className="w-6 h-6 text-[#f6339a]" />;
+        return <Shield className="w-6 h-6 text-teal-400" />;
       case 'user':
-        return <Users className="w-6 h-6 text-[#f6339a]" />;
+        return <Users className="w-6 h-6 text-teal-400" />;
       case 'staff':
-        return <User className="w-6 h-6 text-[#f6339a]" />;
+        return <User className="w-6 h-6 text-teal-400" />;
       default:
-        return <User className="w-6 h-6 text-[#f6339a]" />;
+        return <User className="w-6 h-6 text-teal-400" />;
     }
   };
 
@@ -204,7 +204,7 @@ function AdminTambahUser() {
           <div className="flex-1 bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300">
             <div className="flex flex-col items-center text-center space-y-4">
               <div className="p-3 bg-white rounded-xl shadow-sm border border-gray-200">
-                <User className="w-6 h-6 text-[#f6339a]" />
+                <User className="w-6 h-6 text-teal-400" />
               </div>
               <div>
                 <h3 className="text-lg font-semibold text-[#000000] mb-2">Staff</h3>
@@ -279,7 +279,7 @@ function AdminTambahUser() {
                         onChange={handleChange}
                         required
                         disabled={loading || success}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                       />
                     </div>
                     <div className="space-y-2">
@@ -295,7 +295,7 @@ function AdminTambahUser() {
                         onChange={handleChange}
                         required
                         disabled={loading || success}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                       />
                     </div>
                   </div>
@@ -313,7 +313,7 @@ function AdminTambahUser() {
                       onChange={handleChange}
                       required
                       disabled={loading || success}
-                      className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
+                      className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                     />
                   </div>
 
@@ -329,7 +329,7 @@ function AdminTambahUser() {
                         onChange={handleChange}
                         required
                         disabled={loading || success}
-                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed appearance-none"
+                        className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition-all duration-200 text-[#000000] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed appearance-none"
                       >
                         <option value="" className="text-[#6b7280]">
                           Pilih Bidang
@@ -355,7 +355,7 @@ function AdminTambahUser() {
                           onChange={handleChange}
                           required
                           disabled={loading || success}
-                          className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
+                          className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition-all duration-200 text-[#000000] placeholder-[#6b7280] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed"
                         />
                       ) : (
                         <select
@@ -365,7 +365,7 @@ function AdminTambahUser() {
                           onChange={handleChange}
                           required
                           disabled={loading || success}
-                          className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-[#f6339a] focus:border-transparent outline-none transition-all duration-200 text-[#000000] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed appearance-none"
+                          className="w-full px-4 py-3 bg-white border border-[#e5e7eb] rounded-xl focus:ring-2 focus:ring-teal-400 focus:border-transparent outline-none transition-all duration-200 text-[#000000] shadow-sm disabled:bg-gray-50 disabled:cursor-not-allowed appearance-none"
                         >
                           <option value="" className="text-[#6b7280]">
                             Pilih Jabatan

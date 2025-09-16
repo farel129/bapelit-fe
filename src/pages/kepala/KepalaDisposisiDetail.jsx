@@ -175,7 +175,7 @@ const KepalaDisposisiDetail = () => {
         };
 
         return (
-            <span className='inline-flex items-center px-4 py-2 bg-white border-pink-400 border text-black rounded-full text-sm font-medium'>
+            <span className='inline-flex items-center px-4 py-2 bg-white border-teal-400 border text-black rounded-full text-sm font-medium'>
                 {sifat}
             </span>
         );
@@ -225,7 +225,7 @@ const KepalaDisposisiDetail = () => {
                     <div className="flex items-start justify-between">
                         <div className="flex-1">
                             <h1 className="text-lg font-bold text-black mb-2 flex items-center gap-2">
-                                <FileText className="h-6 w-6 text-pink-400" />
+                                <FileText className="h-6 w-6 text-teal-400" />
                                 Detail Disposisi
                             </h1>
                             <div className="flex items-center gap-3">
@@ -271,14 +271,14 @@ const KepalaDisposisiDetail = () => {
                                     <div>
                                         <label className="block text-sm font-medium text-gray-600 mb-1">Tanggal Surat</label>
                                         <p className="text-black flex items-center gap-2">
-                                            <Calendar className="h-4 w-4 text-pink-400" />
+                                            <Calendar className="h-4 w-4 text-teal-400" />
                                             {formatDateOnly(disposisi?.tanggal_surat)}
                                         </p>
                                     </div>
                                     <div>
                                         <label className="block text-sm font-medium text-gray-600 mb-1">Diterima Tanggal</label>
                                         <p className="text-black flex items-center gap-2">
-                                            <Calendar className="h-4 w-4 text-pink-400" />
+                                            <Calendar className="h-4 w-4 text-teal-400" />
                                             {formatDateOnly(disposisi?.diterima_tanggal)}
                                         </p>
                                     </div>
@@ -287,7 +287,7 @@ const KepalaDisposisiDetail = () => {
                                 <div>
                                     <label className="block text-sm font-medium text-gray-600 mb-1">Disposisi Kepada</label>
                                     <p className="text-black flex items-center gap-2">
-                                        <User className="h-4 w-4 text-pink-400" />
+                                        <User className="h-4 w-4 text-teal-400" />
                                         {disposisi?.disposisi_kepada_jabatan || '-'}
                                     </p>
                                 </div>
@@ -313,7 +313,7 @@ const KepalaDisposisiDetail = () => {
                         {disposisi?.photos && disposisi.photos.length > 0 && (
                             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                                 <h2 className="text-lg font-semibold text-black mb-4 flex items-center gap-2">
-                                    <Image className="h-5 w-5 text-pink-400" />
+                                    <Image className="h-5 w-5 text-teal-400" />
                                     Lampiran Surat ({disposisi.photos.length})
                                 </h2>
 
@@ -347,7 +347,7 @@ const KepalaDisposisiDetail = () => {
                                                             }}
                                                         />
                                                     ) : (
-                                                        <div className="text-pink-400 flex flex-col justify-center items-center">
+                                                        <div className="text-teal-400 flex flex-col justify-center items-center">
                                                             <FileText className='w-9 h-9' />
                                                             <p className='font-bold text-lg mt-2 text-center'>File</p>
                                                         </div>
@@ -470,7 +470,7 @@ const KepalaDisposisiDetail = () => {
                     <div className="space-y-6">
                         <div className="bg-white rounded-2xl shadow-sm border border-slate-200 p-4">
                             <h2 className="text-lg font-semibold text-black mb-4 flex items-center gap-2">
-                                <History className="h-5 w-5 text-pink-600" />
+                                <History className="h-5 w-5 text-teal-600" />
                                 Riwayat Status
                             </h2>
 
@@ -502,12 +502,12 @@ const KepalaDisposisiDetail = () => {
                                             <div className="flex items-start gap-3">
                                                 <div className="flex-shrink-0 relative">
                                                     <div className="w-6 h-6 rounded-full bg-white border-2 border-gray-300 flex items-center justify-center shadow-sm">
-                                                        <div className="w-2 h-2 rounded-full bg-pink-400"></div>
+                                                        <div className="w-2 h-2 rounded-full bg-teal-400"></div>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex-1 min-w-0">
-                                                    <div className="bg-neutral-50 rounded-xl p-3 border border-pink-200">
+                                                    <div className="bg-neutral-50 rounded-xl p-3 border border-teal-200">
                                                         <div className="flex items-center justify-between mb-2">
                                                             <StatusBadge status={log.status} />
                                                             <span className="text-xs text-gray-500">

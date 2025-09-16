@@ -53,7 +53,7 @@ const KepalaDashboard = () => {
           {/* Title and Description - Mobile Optimized */}
           <div className="flex items-start space-x-3 mb-4">
             <div className="p-2.5 sm:p-3 bg-white rounded-xl sm:rounded-2xl shadow-lg flex-shrink-0">
-              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-pink-400" />
+              <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400" />
             </div>
             <div className="flex-1 min-w-0">
               <h1 className="text-lg lg:text-xl font-bold text-black truncate">
@@ -79,20 +79,20 @@ const KepalaDashboard = () => {
                       className={`relative flex flex-col items-center space-y-1 cursor-pointer px-3 py-3 rounded-lg font-semibold text-xs transition-all duration-300 flex-shrink-0 min-w-[80px] ${
                         activeTab === tab.id
                           ? 'bg-white text-[#2E2A27] shadow-sm border border-[#EDE6E3]'
-                          : 'text-pink-400 hover:text-[#2E2A27] hover:bg-gray-50'
+                          : 'text-teal-400 hover:text-[#2E2A27] hover:bg-gray-50'
                       }`}
                     >
                       <Icon className={`w-4 h-4 ${
                         activeTab === tab.id 
                           ? tab.color
-                          : 'text-pink-400'
+                          : 'text-teal-400'
                       } transition-colors duration-300`} />
                       <span className="text-center leading-tight">{tab.shortLabel}</span>
                       
                       {/* Active indicator for mobile */}
                       {activeTab === tab.id && (
                         <div className={`absolute -bottom-0.5 left-1/2 transform -translate-x-1/2 w-6 h-0.5 rounded-full transition-all duration-300 ${
-                          tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-pink-400' :
+                          tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-teal-400' :
                           tab.id === 'disposisi-saya' ? 'bg-gradient-to-r from-[#4CAF50] to-[#2E7D32]' :
                           'bg-gradient-to-r from-[#D9534F] to-[#B52B27]'
                         }`} />
@@ -121,7 +121,7 @@ const KepalaDashboard = () => {
                       <Icon className={`w-4 h-4 ${
                         activeTab === tab.id 
                           ? tab.color
-                          : 'text-pink-400'
+                          : 'text-teal-400'
                       } transition-colors duration-300`} />
                       <span className="hidden md:inline">{tab.label}</span>
                       <span className="md:hidden">{tab.shortLabel}</span>
@@ -129,7 +129,7 @@ const KepalaDashboard = () => {
                       {/* Active indicator for desktop */}
                       {activeTab === tab.id && (
                         <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 lg:w-10 h-1 rounded-full transition-all duration-300 ${
-                          tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-pink-400' :
+                          tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-teal-400' :
                           tab.id === 'disposisi-saya' ? 'bg-gradient-to-r from-[#4CAF50] to-[#2E7D32]' :
                           'bg-gradient-to-r from-[#D9534F] to-[#B52B27]'
                         }`} />

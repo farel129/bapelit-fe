@@ -22,7 +22,8 @@ import {
   BookOpen,
   ImagePlusIcon,
   UserCircle2,
-  Camera
+  Camera,
+  User2
 } from 'lucide-react'
 import img from '../../assets/img/logobapelit.png'
 
@@ -52,7 +53,7 @@ const AdminLayout = ({ children }) => {
         <div className='flex items-center gap-x-1'>
           <img src={img} alt="" className='w-5 brightness-0' />
           <h1 className='text-lg lg:text-3xl font-bold'>
-            <span className='bg-gradient-to-bl via-pink-800 from-pink-400 to-black bg-clip-text text-transparent'>
+            <span className='bg-gradient-to-bl via-teal-800 from-teal-400 to-black bg-clip-text text-transparent'>
               Magessa
             </span>
           </h1>
@@ -66,8 +67,8 @@ const AdminLayout = ({ children }) => {
         </div>
 
         <div>
-          <div className='rounded-full bg-pink-400 p-3 text-white flex justify-center items-center'>
-            <UserCircle2 className='w-5 h-5' />
+          <div className='rounded-full bg-black p-3 text-white flex justify-center items-center'>
+            <User2 className='w-5 h-5' />
           </div>
         </div>
       </header>
@@ -79,7 +80,7 @@ const AdminLayout = ({ children }) => {
             <div className="flex items-center gap-x-1">
               <img src={img} alt="" className='w-4 brightness-0' />
               <h1 className='text-lg lg:text-xl font-black'>
-                <span className='bg-gradient-to-bl via-pink-800 from-pink-400 to-black bg-clip-text text-transparent'>
+                <span className='bg-gradient-to-bl via-teal-800 from-teal-400 to-black bg-clip-text text-transparent'>
                   Magessa
                 </span>
               </h1>
@@ -94,7 +95,7 @@ const AdminLayout = ({ children }) => {
                 key={item.name}
                 to={item.href}
                 className={`group flex items-center px-3 py-3 text-sm font-semibold rounded-xl mb-1 transition-all duration-200 ${isActive(item.href)
-                  ? 'bg-white text-pink-400 shadow-md'
+                  ? 'bg-white text-teal-400 shadow-md'
                   : 'text-[#6d4141] hover:bg-[#FDFCFB] hover:text-[#2e2727]'
                   }`}
                 onClick={() => setSidebarOpen(false)}
@@ -137,7 +138,7 @@ const AdminLayout = ({ children }) => {
                     <Link
                       to={item.href}
                       className={`flex items-center rounded-xl font-semibold transition-all duration-200 ${isActive(item.href)
-                        ? 'bg-white text-pink-400 shadow-md'
+                        ? 'bg-white text-teal-400 shadow-md'
                         : 'text-[#6d4141] hover:bg-[#FDFCFB] hover:text-[#2e2727]'
                         }`}
                       style={{
@@ -227,7 +228,7 @@ const AdminLayout = ({ children }) => {
           <div className="flex items-center space-x-1">
             <img src={img} className='w-4 brightness-0' alt="" />
             <h1 className='text-lg lg:text-xl font-black'>
-              <span className='bg-gradient-to-bl via-pink-800 from-pink-400 to-black bg-clip-text text-transparent'>
+              <span className='bg-gradient-to-bl via-teal-800 from-teal-400 to-black bg-clip-text text-transparent'>
                 Magessa
               </span>
             </h1>

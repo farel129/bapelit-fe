@@ -77,7 +77,7 @@ const AdminDaftarSuratKeluar = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#f9f9f9]">
+    <div className="min-h-screen">
       {/* Header Section — Gunakan warna utama sistem */}
       
 
@@ -102,19 +102,19 @@ const AdminDaftarSuratKeluar = () => {
 
       {/* Main Grid — Semua card menggunakan palet sistem */}
       {suratList.length > 0 && (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-6 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
           {suratList.map((surat) => (
             <div
               key={surat.id}
               className="bg-white rounded-2xl border-2 border-[#e5e7eb] shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden hover:-translate-y-1"
             >
-              <div className="p-6">
+              <div className="p-4">
                 {/* Header Card — Gunakan ikon gradient utama sistem */}
                 <div className="flex justify-between items-start mb-4">
                   <div className="flex items-center gap-3">
-                    {/* Ikon utama: gradient pink-magenta (primary sistem) */}
-                    <div className="p-2 bg-gradient-to-br from-[#f6339a] to-[#e02c88] rounded-xl shadow-md">
-                      <FileText className="h-5 w-5 text-white" />
+                    {/* Ikon utama: gradient teal-magenta (primary sistem) */}
+                    <div className="p-3 bg-white rounded-xl shadow-md">
+                      <FileText className="h-5 w-5 text-teal-400" />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#000000] truncate max-w-[180px]">{surat.nama_surat}</h3>
@@ -223,8 +223,8 @@ const AdminDaftarSuratKeluar = () => {
               <div className="sticky top-0 bg-white backdrop-blur-sm border-b border-[#e5e7eb] px-8 py-6">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-2.5 bg-gradient-to-br from-[#f6339a] to-[#e02c88] rounded-xl shadow-md">
-                      <FileText className="h-6 w-6 text-white" />
+                    <div className="p-3 bg-white rounded-xl shadow-md">
+                      <FileText className="h-6 w-6 text-teal-400" />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold text-[#000000]">Detail Surat Keluar</h3>
@@ -249,7 +249,7 @@ const AdminDaftarSuratKeluar = () => {
                 </div>
 
                 {/* Main Info Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
                   <div className="space-y-6">
                     <div className="group">
                       <label className="flex items-center gap-2 text-sm font-semibold mb-2 text-[#000000]">
@@ -325,7 +325,7 @@ const AdminDaftarSuratKeluar = () => {
                       <FileText className="h-4 w-4 text-[#000000]" />
                       Keterangan
                     </label>
-                    <div className="p-6 bg-[#f9f9f9] rounded-xl border border-[#e5e7eb]">
+                    <div className="p-4 bg-[#f9f9f9] rounded-xl border border-[#e5e7eb]">
                       <p className="text-[#000000] leading-relaxed">{selectedSurat.keterangan}</p>
                     </div>
                   </div>
@@ -367,7 +367,7 @@ const AdminDaftarSuratKeluar = () => {
 
                 {/* Catatan Internal (jika ada) */}
                 {selectedSurat.catatan_internal && (
-                  <div className="mb-8 p-6 bg-gradient-to-r from-[#f9f9f9]/50 to-[#ffffff]/50 rounded-xl border border-[#e5e7eb]">
+                  <div className="mb-8 p-4 bg-gradient-to-r from-[#f9f9f9]/50 to-[#ffffff]/50 rounded-xl border border-[#e5e7eb]">
                     <h4 className="font-bold mb-4 flex items-center gap-2 text-[#000000]">
                       <MessageSquare className="h-5 w-5 text-[#6b7280]" />
                       Catatan Internal

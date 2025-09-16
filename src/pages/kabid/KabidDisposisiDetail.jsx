@@ -356,7 +356,7 @@ const KabidDisposisiDetail = () => {
     return (
       <div className="min-h-screen flex items-center justify-center" >
         <div className="text-center">
-          <FileText className="w-16 h-16 mx-auto mb-4 text-pink-400" />
+          <FileText className="w-16 h-16 mx-auto mb-4 text-teal-400" />
           <h3 className="text-lg font-bold mb-2">Data Tidak Ditemukan</h3>
           <p className="mb-4" >Disposisi tidak ditemukan atau tidak dapat diakses langsung</p>
           <button

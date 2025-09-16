@@ -5,7 +5,7 @@ const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, border
           <p className={`text-sm font-medium ${textColor} opacity-80`}>{title}</p>
           <p className={`text-3xl font-bold ${textColor} mt-2`}>{count}</p>
         </div>
-        <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
+        <div className={`${iconBg} p-3 rounded-xl shadow-md animate-bounce`}>
           <Icon className={`w-6 h-6 ${iconColor}`} />
         </div>
       </div>

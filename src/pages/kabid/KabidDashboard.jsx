@@ -328,9 +328,9 @@ const KabidDashboard = () => {
             icon={Clock}
             bgColor="bg-white"
             textColor="text-black"
-            iconBg="bg-pink-400"
+            iconBg="bg-teal-400"
             iconColor="text-white"
-            borderColor="border-pink-400"
+            borderColor="border-teal-400"
           />
           <StatCard
             title="Selesai"
@@ -339,7 +339,7 @@ const KabidDashboard = () => {
             bgColor="bg-black"
             textColor="text-white"
             iconBg="bg-white"
-            iconColor="text-pink-400"
+            iconColor="text-teal-400"
             borderColor="border-slate-200"
           />
         </div>

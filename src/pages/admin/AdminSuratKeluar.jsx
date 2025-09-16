@@ -11,7 +11,7 @@ const AdminSuratKeluar = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-x-3">
-                    <div className="h-8 w-1.5 bg-pink-400 rounded-full shadow-sm"></div>
+                    <div className="h-8 w-1.5 bg-teal-400 rounded-full shadow-sm"></div>
                     <div>
                         <h1 className="text-xl font-bold">Surat Keluar</h1>
                         <p className="text-sm font-medium">Arsip digital untuk surat keluar</p>

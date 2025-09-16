@@ -28,6 +28,7 @@ import AdminJadwalAcara from './pages/admin/AdminJadwalAcara';
 import DocumentationPage from './components/common/DocumentationPage';
 import AdminBukuTamu from './pages/admin/AdminBukuTamu';
 import PublikBukuTamu from './pages/public/PublicBukuTamu';
+import JadwalAcara from './components/common/JadwalAcara';
 
 const PrivateRoute = ({ children, role }) => {
   const { user, loading } = useAuth();
@@ -86,6 +87,20 @@ function App() {
           </PrivateRoute>
         } />
 
+        <Route path="/kepala/dokumentasi" element={
+          <PrivateRoute role='kepala'>
+            <KepalaLayout>
+              <DocumentationPage />
+            </KepalaLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kepala/jadwal-acara" element={
+          <PrivateRoute role='kepala'>
+            <KepalaLayout>
+              <JadwalAcara />
+            </KepalaLayout>
+          </PrivateRoute>
+        } />
         {/* ----------------------ADMIN----------------------- */}
         <Route path="/admin" element={
           <PrivateRoute role="admin">
@@ -187,6 +202,20 @@ function App() {
             </SekretarisLayout>
           </PrivateRoute>
         } />
+        <Route path="/sekretaris/dokumentasi" element={
+          <PrivateRoute role='sekretaris'>
+            <SekretarisLayout>
+              <DocumentationPage />
+            </SekretarisLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/sekretaris/jadwal-acara" element={
+          <PrivateRoute role='sekretaris'>
+            <SekretarisLayout>
+              <JadwalAcara />
+            </SekretarisLayout>
+          </PrivateRoute>
+        } />
         {/* ----------------------KABID----------------------- */}
         <Route path="/kabid" element={
           <PrivateRoute role='user'>
@@ -217,10 +246,17 @@ function App() {
           </PrivateRoute>
         } />
 
-        <Route path="/kabid-profile" element={
+        <Route path="/kabid/dokumentasi" element={
           <PrivateRoute role='user'>
             <KabidLayout>
               <DocumentationPage />
+            </KabidLayout>
+          </PrivateRoute>
+        } />
+        <Route path="/kabid/jadwal-acara" element={
+          <PrivateRoute role='user'>
+            <KabidLayout>
+              <JadwalAcara />
             </KabidLayout>
           </PrivateRoute>
         } />
@@ -251,6 +287,22 @@ function App() {
           <PrivateRoute role='staff'>
             <StaffLayout>
               <Leaderboard />
+            </StaffLayout>
+          </PrivateRoute>
+        } />
+
+        <Route path="/staff/dokumentasi" element={
+          <PrivateRoute role='staff'>
+            <StaffLayout>
+              <DocumentationPage />
+            </StaffLayout>
+          </PrivateRoute>
+        } />
+
+        <Route path="/staff/jadwal-acara" element={
+          <PrivateRoute role='staff'>
+            <StaffLayout>
+              <JadwalAcara />
             </StaffLayout>
           </PrivateRoute>
         } />

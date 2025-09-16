@@ -5,14 +5,11 @@ import {
   Calendar,
   Building,
   Clock,
-  CheckCircle,
   AlertCircle,
-  Loader,
   ArrowLeft,
   Check,
   MessageSquare,
   Send,
-  RefreshCw,
   Eye,
   Edit,
   Save,
@@ -24,27 +21,24 @@ import {
   X,
   Forward
 } from 'lucide-react';
-import { id } from 'date-fns/locale';
 import { api } from '../../utils/api';
-import ForwardModal from '../../components/Kabid/ForwardModal';
+import ForwardModal from '../../components/Sekretaris/ForwardModal';
 import { formatIndonesianDate } from '../../utils/timeZone';
 import toast from 'react-hot-toast';
 import { atasanDisposisiService } from '../../services/atasanDisposisiService';
-import StatusBadge from '../../components/Kabid/StatusBadge';
 
-const KabidDisposisiDetail = () => {
+const SekretarisDisposisiDetail = () => {
   const { id } = useParams();
   const location = useLocation();
   const navigate = useNavigate();
   const [disposisi, setDisposisi] = useState(location.state?.disposisi || null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [acceptLoading, setAcceptLoading] = useState(false);
   const [acceptError, setAcceptError] = useState(null);
   const [showForwardModal, setShowForwardModal] = useState(false);
   const [downloadLoading, setDownloadLoading] = useState(false);
   const [downloadError, setDownloadError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [selectedImage, setSelectedImage] = useState(null);
   // State untuk feedback
   const [showFeedbackForm, setShowFeedbackForm] = useState(false);
   const [feedbackData, setFeedbackData] = useState({
@@ -89,7 +83,7 @@ const KabidDisposisiDetail = () => {
   }, [id]);
 
   // Fetch feedback data
-  const fetchFeedbackForDisposisi = async (role = 'user') => {
+  const fetchFeedbackForDisposisi = async (role = 'sekretaris') => {
     try {
       setFeedbackLoading(true);
       const response = await atasanDisposisiService.getMyFeedback(role);
@@ -112,24 +106,21 @@ const KabidDisposisiDetail = () => {
       setFeedbackLoading(false);
     }
   };
+
   // Fetch feedback dari bawahan
-  const fetchSubordinateFeedback = useCallback(async (role = 'user') => {
+  const fetchSubordinateFeedback = useCallback(async (role = 'sekretaris') => {
     // Hanya fetch jika disposisi ada dan sudah diteruskan ke seseorang
     if (!disposisi || !disposisi.diteruskan_kepada_user_id) {
       setSubordinateFeedback(null);
       return;
     }
-
     try {
       setSubFeedbackLoading(true);
       setSubFeedbackError(null);
-
       const feedbackData = await atasanDisposisiService.getFeedbackDariBawahan(role, id);
       setSubordinateFeedback(feedbackData);
-
     } catch (err) {
       console.error('Error fetching subordinate feedback:', err);
-
       // Jika 404, itu berarti belum ada feedback
       if (err.status !== 404) {
         setSubFeedbackError('Gagal memuat feedback dari bawahan: ' + err.message);
@@ -140,19 +131,20 @@ const KabidDisposisiDetail = () => {
     } finally {
       setSubFeedbackLoading(false);
     }
-  }, [disposisi?.diteruskan_kepada_user_id, id]); // Ubah dependency
+  }, [disposisi?.diteruskan_kepada_user_id, id]);
+
   // Handle terima disposisi
   const handleAcceptDisposisi = async () => {
     try {
       setAcceptLoading(true);
       setAcceptError(null);
-      const response = await atasanDisposisiService.acceptDisposisiKabid(id);
+      const response = await atasanDisposisiService.acceptDisposisiSekretaris(id);
       if (response.data) {
         // Update disposisi state dengan data yang baru
         const updatedData = response.data.data || response.data;
         setDisposisi(prevDisposisi => ({
           ...prevDisposisi,
-          status_dari_kabid: updatedData.status_dari_kabid || 'diterima'
+          status_dari_sekretaris: updatedData.status_dari_sekretaris || 'diterima'
         }));
         toast.success(response.data.message || 'Disposisi berhasil diterima!');
         fetchDisposisiDetail();
@@ -167,32 +159,25 @@ const KabidDisposisiDetail = () => {
 
   const handleDownloadPDF = async () => {
     if (!disposisi?.id) return;
-
     setDownloadLoading(true);
     setDownloadError(null);
-
     try {
       const blobData = await atasanDisposisiService.downloadPDF(disposisi.id);
-
       // Buat URL objek dari blob
       const blob = new Blob([blobData], { type: 'application/pdf' });
       const url = window.URL.createObjectURL(blob);
-
       // Buat elemen <a> sementara untuk trigger download
       const link = document.createElement('a');
       link.href = url;
       // Gunakan nomor surat atau ID untuk nama file, sesuai dengan backend
       const filename = `disposisi-${disposisi.nomor_surat || disposisi.id}.pdf`;
       link.setAttribute('download', filename); // Atribut download
-
       // Tambahkan ke DOM, klik, lalu hapus
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
-
       // Hapus URL objek setelah beberapa saat untuk membebaskan memori
       window.setTimeout(() => window.URL.revokeObjectURL(url), 100);
-
       toast.success('PDF berhasil diunduh!');
     } catch (err) {
       console.error('Gagal mengunduh PDF:', err);
@@ -202,16 +187,18 @@ const KabidDisposisiDetail = () => {
       setDownloadLoading(false);
     }
   };
+
   // Handle forward success
   const handleForwardSuccess = () => {
     // Update disposisi status to 'diteruskan'
     setDisposisi(prevDisposisi => ({
       ...prevDisposisi,
-      status_dari_kabid: 'diteruskan'
+      status_dari_sekretaris: 'diteruskan'
     }));
     toast.success('Disposisi berhasil diteruskan!');
     fetchDisposisiDetail();
   };
+
   // Handler untuk feedback baru
   const handleFeedbackChange = (e) => {
     const { name, value } = e.target;
@@ -227,23 +214,20 @@ const KabidDisposisiDetail = () => {
       files: files.slice(0, 5) // Maksimal 5 file
     }));
   };
-
-  const handleFeedbackSubmit = async (e, role = 'user') => {
+  const handleFeedbackSubmit = async (e, role = 'sekretaris') => {
     e.preventDefault();
     try {
       setFeedbackLoading(true);
       setFeedbackError(null);
-
       const formData = new FormData();
       formData.append('notes', feedbackData.notes);
       formData.append('status', feedbackData.status);
-      formData.append('status_dari_kabid', feedbackData.status);
+      // ✅ TAMBAHKAN INI - Backend memerlukan status_dari_sekretaris
+      formData.append('status_dari_sekretaris', feedbackData.status);
       feedbackData.files.forEach(file => {
         formData.append('feedback_files', file);
       });
-
       const response = await atasanDisposisiService.createFeedback(role, id, formData);
-
       setFeedbackSuccess(true);
       setShowFeedbackForm(false);
       setFeedbackData({ notes: '', status: 'diproses', files: [] });
@@ -258,6 +242,7 @@ const KabidDisposisiDetail = () => {
       setFeedbackLoading(false);
     }
   };
+
   // Handler untuk edit feedback
   const handleEditFeedbackChange = (e) => {
     const { name, value } = e.target;
@@ -280,29 +265,24 @@ const KabidDisposisiDetail = () => {
       existingFiles: prev.existingFiles.filter(file => file.id !== fileId)
     }));
   };
-  const handleEditFeedbackSubmit = async (e, role = 'user') => {
+  const handleEditFeedbackSubmit = async (e, role = 'sekretaris') => {
     e.preventDefault();
     try {
       setEditLoading(true);
       setFeedbackError(null);
-
       const formData = new FormData();
       formData.append('notes', editFeedbackData.notes);
       formData.append('status', editFeedbackData.status);
-      formData.append('status_dari_kabid', editFeedbackData.status);
-
+      formData.append('status_dari_sekretaris', editFeedbackData.status);
       // Tambahkan file baru
       editFeedbackData.newFiles.forEach(file => {
         formData.append('new_feedback_files', file);
       });
-
       // Tambahkan ID file yang akan dihapus
       editFeedbackData.removeFileIds.forEach(fileId => {
         formData.append('remove_file_ids', fileId);
       });
-
       const response = await atasanDisposisiService.updateFeedback(role, editingFeedbackId, formData);
-
       setEditingFeedbackId(null);
       setEditFeedbackData({
         notes: '',
@@ -311,7 +291,6 @@ const KabidDisposisiDetail = () => {
         removeFileIds: [],
         existingFiles: []
       });
-
       // Refresh feedback data
       fetchDisposisiDetail();
       fetchFeedbackForDisposisi();
@@ -336,13 +315,11 @@ const KabidDisposisiDetail = () => {
   };
 
   // Fungsi untuk mengambil detail feedback untuk edit
-  const fetchFeedbackForEdit = async (feedbackId, role = 'user') => {
+  const fetchFeedbackForEdit = async (feedbackId, role = 'sekretaris') => {
     try {
       setEditLoading(true);
-
       const response = await atasanDisposisiService.getFeedbackForEdit(role, feedbackId);
       const feedback = response.data;
-
       setEditFeedbackData({
         notes: feedback.notes || '',
         status: feedback.disposisi?.status || 'diproses',
@@ -358,22 +335,84 @@ const KabidDisposisiDetail = () => {
     }
   };
 
-  
+  const openImageModal = (imageUrl) => {
+    window.open(imageUrl, '_blank');
+  };
+
+  const getStatusConfig = (status) => {
+    const statusConfigs = {
+      'belum dibaca': {
+        bg: 'bg-red-100',
+        text: 'text-red-800',
+        border: 'border-red-200',
+        icon: AlertCircle,
+        label: 'Belum Dibaca'
+      },
+      'dibaca': {
+        bg: 'bg-yellow-100',
+        text: 'text-yellow-800',
+        border: 'border-yellow-200',
+        icon: Eye,
+        label: 'Sudah Dibaca'
+      },
+      'diterima': {
+        bg: 'bg-green-100',
+        text: 'text-green-800',
+        border: 'border-green-200',
+        icon: Check,
+        label: 'Diterima'
+      },
+      'diproses': {
+        bg: 'bg-blue-100',
+        text: 'text-blue-800',
+        border: 'border-blue-200',
+        icon: Cog,
+        label: 'Diproses'
+      },
+      'selesai': {
+        bg: 'bg-purple-100',
+        text: 'text-purple-800',
+        border: 'border-purple-200',
+        icon: Flag,
+        label: 'Selesai'
+      },
+      'diteruskan': {
+        bg: 'bg-indigo-100',
+        text: 'text-indigo-800',
+        border: 'border-indigo-200',
+        icon: Forward,
+        label: 'Diteruskan'
+      }
+    };
+    return statusConfigs[status] || statusConfigs['belum dibaca'];
+  };
+
+  const getStatusBadge = (status) => {
+    const config = getStatusConfig(status);
+    const IconComponent = config.icon;
+    return (
+      <div className={`inline-flex items-center px-4 py-2 rounded-xl text-sm font-semibold ${config.bg} ${config.text} border ${config.border} shadow-sm`}>
+        <IconComponent className="w-4 h-4 mr-2" />
+        {config.label}
+      </div>
+    );
+  };
+
   const canAcceptDisposisi = () => {
     return disposisi &&
       disposisi.status === 'dibaca' &&
-      disposisi.status_dari_kabid !== 'diterima' &&
-      disposisi.status_dari_kabid !== 'diteruskan';
+      disposisi.status_dari_sekretaris !== 'diterima' &&
+      disposisi.status_dari_sekretaris !== 'diteruskan';
   };
 
   const canGiveFeedback = () => {
     return disposisi &&
       !disposisi.has_feedback &&
-      (disposisi.status_dari_kabid === 'diterima' || disposisi.status === 'diproses');
+      (disposisi.status_dari_sekretaris === 'diterima' || disposisi.status === 'diproses');
   };
 
   const canForwardDisposisi = () => {
-    return disposisi && (disposisi.status_dari_kabid === 'diterima');
+    return disposisi && (disposisi.status_dari_sekretaris === 'diterima');
   };
 
   useEffect(() => {
@@ -383,53 +422,16 @@ const KabidDisposisiDetail = () => {
     }
   }, [disposisi?.id]);
 
-
-  const isImageFile = (file) => {
-    if (!file) return false;
-
-    // 1. Cek dari URL (paling andal)
-    const urlPath = new URL(file.url).pathname.toLowerCase();
-    const urlExt = urlPath.split('.').pop();
-    if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(urlExt)) {
-      return true;
-    }
-
-    // 2. Cek dari MIME type (jika tersedia)
-    const mimeToExt = {
-      'image/jpeg': 'jpg',
-      'image/jpg': 'jpg',
-      'image/png': 'png',
-      'image/gif': 'gif',
-      'image/webp': 'webp',
-      'image/bmp': 'bmp',
-      'image/svg+xml': 'svg',
-    };
-    if (file.type && mimeToExt[file.type.toLowerCase()]) {
-      return true;
-    }
-
-    // 3. Cek dari filename (fallback terakhir)
-    if (file.filename) {
-      const ext = file.filename.split('.').pop()?.toLowerCase();
-      if (['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(ext)) {
-        return true;
-      }
-    }
-
-    return false;
-  };
-
-
   // No data state
   if (!disposisi) {
     return (
-      <div className="min-h-screen flex items-center justify-center" >
+      <div className="min-h-screen flex items-center justify-center" style={{ backgroundColor: '#FDFCFB' }}>
         <div className="text-center">
-          <FileText className="w-16 h-16 mx-auto mb-4 text-teal-400" />
-          <h3 className="text-lg font-bold mb-2">Data Tidak Ditemukan</h3>
-          <p className="mb-4" >Disposisi tidak ditemukan atau tidak dapat diakses langsung</p>
+          <FileText className="w-16 h-16 mx-auto mb-4" style={{ color: '#6D4C41' }} />
+          <h3 className="text-lg font-bold mb-2" style={{ color: '#2E2A27' }}>Data Tidak Ditemukan</h3>
+          <p className="mb-4" style={{ color: '#6D4C41' }}>Disposisi tidak ditemukan atau tidak dapat diakses langsung</p>
           <button
-            onClick={() => navigate('/kabid')}
+            onClick={() => navigate('/sekretaris')}
             className="bg-black text-white px-4 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg border border-slate-200"
           >
             Kembali ke Daftar
@@ -438,8 +440,9 @@ const KabidDisposisiDetail = () => {
       </div>
     );
   }
+
   return (
-    <div className="min-h-screen p-4 lg:p-5 rounded-3xl bg-white shadow-lg" >
+    <div className="min-h-screen p-4 lg:p-5 rounded-3xl bg-white shadow-lg">
       <div className="">
         {/* Header Section */}
         <div className="mb-4">
@@ -448,13 +451,13 @@ const KabidDisposisiDetail = () => {
             className="group inline-flex items-center mb-3"
           >
             <ArrowLeft className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform" />
-            <span className="font-semibold" >Kembali</span>
+            <span className="font-semibold">Kembali</span>
           </button>
           <div className="px-4 mb-4">
             <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-2">
               <div className="flex-1">
-                <h1 className="lg:text-lg text-lg font-bold" >Detail Disposisi</h1>
-                <p className="text-sm font-medium mt-1" >Kelola dan berikan feedback terhadap disposisi yang diterima</p>
+                <h1 className="lg:text-lg text-lg font-bold">Detail Disposisi</h1>
+                <p className="text-sm font-medium mt-1">Kelola dan berikan feedback terhadap disposisi yang diterima</p>
                 <button
                   onClick={handleDownloadPDF}
                   disabled={downloadLoading}
@@ -478,7 +481,7 @@ const KabidDisposisiDetail = () => {
               </div>
               {disposisi && (
                 <div className="flex flex-col items-center lg:items-end space-y-4">
-                  <StatusBadge status={disposisi.status_dari_kabid} />
+                  {getStatusBadge(disposisi.status_dari_sekretaris)}
                   <div className="flex flex-col sm:flex-row gap-2">
                     {canAcceptDisposisi() && (
                       <button
@@ -537,6 +540,7 @@ const KabidDisposisiDetail = () => {
             </div>
           </div>
         </div>
+
         {disposisi && (
           <div className="space-y-8">
             {/* Forward Modal Component */}
@@ -546,16 +550,17 @@ const KabidDisposisiDetail = () => {
               disposisi={disposisi}
               onSuccess={handleForwardSuccess}
             />
+
             {/* Form Feedback */}
             {showFeedbackForm && !showForwardModal && !editingFeedbackId && (
               <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
-                    <MessageSquare className="w-6 h-6 text-teal-400" />
+                    <MessageSquare className="w-6 h-6 text-pink-400" />
                   </div>
                   <div>
-                    <h3 className=" font-semibold" >Beri Feedback</h3>
-                    <p className="text-sm font-medium" >Berikan tanggapan dan update status disposisi</p>
+                    <h3 className="font-semibold">Beri Feedback</h3>
+                    <p className="text-sm font-medium">Berikan tanggapan dan update status disposisi</p>
                   </div>
                 </div>
                 {feedbackError && (
@@ -568,7 +573,7 @@ const KabidDisposisiDetail = () => {
                 )}
                 <form onSubmit={handleFeedbackSubmit} className="space-y-6">
                   <div>
-                    <label className="block text-sm font-semibold mb-3" >
+                    <label className="block text-sm font-semibold mb-3">
                       Catatan Feedback *
                     </label>
                     <textarea
@@ -577,12 +582,12 @@ const KabidDisposisiDetail = () => {
                       onChange={handleFeedbackChange}
                       required
                       rows="5"
-                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 resize-none text-[#2E2A27] shadow-sm"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 resize-none text-[#2E2A27] shadow-sm"
                       placeholder="Masukkan catatan feedback Anda..."
                     />
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-3" >
+                    <label className="block text-sm font-semibold mb-3">
                       Status Disposisi *
                     </label>
                     <div className="flex gap-2">
@@ -593,9 +598,9 @@ const KabidDisposisiDetail = () => {
                           value="diproses"
                           checked={feedbackData.status === 'diproses'}
                           onChange={handleFeedbackChange}
-                          className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
+                          className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                         />
-                        <span className="ml-3 font-medium" >Diproses</span>
+                        <span className="ml-3 font-medium">Diproses</span>
                       </label>
                       <label className="flex items-center cursor-pointer group">
                         <input
@@ -604,14 +609,14 @@ const KabidDisposisiDetail = () => {
                           value="selesai"
                           checked={feedbackData.status === 'selesai'}
                           onChange={handleFeedbackChange}
-                          className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
+                          className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                         />
-                        <span className="ml-3 font-medium" >Selesai</span>
+                        <span className="ml-3 font-medium">Selesai</span>
                       </label>
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-semibold mb-3" >
+                    <label className="block text-sm font-semibold mb-3">
                       Lampiran File (maks. 5 file)
                     </label>
                     <input
@@ -619,10 +624,10 @@ const KabidDisposisiDetail = () => {
                       multiple
                       onChange={handleFileChange}
                       accept="image/*,application/pdf"
-                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 shadow-sm"
+                      className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 shadow-sm"
                     />
                     {feedbackData.files.length > 0 && (
-                      <div className="mt-2 text-sm bg-[#FDFCFB] px-3 py-2 rounded-lg border border-slate-200 shadow-sm" >
+                      <div className="mt-2 text-sm bg-[#FDFCFB] px-3 py-2 rounded-lg border border-slate-200 shadow-sm">
                         <Paperclip className="w-4 h-4 inline mr-2" />
                         {feedbackData.files.length} file dipilih
                       </div>
@@ -663,6 +668,7 @@ const KabidDisposisiDetail = () => {
                 </form>
               </div>
             )}
+
             {/* Informasi Surat dan Disposisi */}
             <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
@@ -670,129 +676,134 @@ const KabidDisposisiDetail = () => {
                 <div>
                   <div className="flex items-center mb-4">
                     <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
-                      <FileText className="w-6 h-6 text-teal-400" />
+                      <FileText className="w-6 h-6 text-pink-400" />
                     </div>
-                    <h3 className=" font-semibold" >Informasi Surat</h3>
+                    <h3 className="font-semibold">Informasi Surat</h3>
                   </div>
                   <div className="space-y-4">
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <Building className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Nomor Surat</p>
+                        <p className="text-sm font-semibold">Nomor Surat</p>
                       </div>
-                      <p className="font-semibold" >{disposisi.nomor_surat || '-'}</p>
+                      <p className="font-semibold">{disposisi.nomor_surat || '-'}</p>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <Building className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Asal Instansi</p>
+                        <p className="text-sm font-semibold">Asal Instansi</p>
                       </div>
-                      <p className="font-semibold" >{disposisi.asal_instansi || '-'}</p>
+                      <p className="font-semibold">{disposisi.asal_instansi || '-'}</p>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <Calendar className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Tanggal Surat</p>
+                        <p className="text-sm font-semibold">Tanggal Surat</p>
                       </div>
-                      <p className="font-semibold" >{new Date(disposisi.tanggal_surat).toLocaleDateString('id-ID')}</p>
+                      <p className="font-semibold">{new Date(disposisi.tanggal_surat).toLocaleDateString('id-ID')}</p>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <Calendar className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Diterima Tanggal</p>
+                        <p className="text-sm font-semibold">Diterima Tanggal</p>
                       </div>
-                      <p className="font-semibold" >{new Date(disposisi.diterima_tanggal).toLocaleDateString('id-ID')}</p>
+                      <p className="font-semibold">{new Date(disposisi.diterima_tanggal).toLocaleDateString('id-ID')}</p>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <FileText className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Nomor Agenda</p>
+                        <p className="text-sm font-semibold">Nomor Agenda</p>
                       </div>
-                      <p className="font-semibold" >{disposisi.nomor_agenda || '-'}</p>
+                      <p className="font-semibold">{disposisi.nomor_agenda || '-'}</p>
                     </div>
                   </div>
                 </div>
+
                 {/* Informasi Disposisi */}
                 <div>
                   <div className="flex items-center mb-4">
                     <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
-                      <MessageSquare className="w-6 h-6 text-teal-400" />
+                      <MessageSquare className="w-6 h-6 text-pink-400" />
                     </div>
-                    <h3 className=" font-semibold" >Informasi Disposisi</h3>
+                    <h3 className="font-semibold">Informasi Disposisi</h3>
                   </div>
                   <div className="space-y-4">
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
-                      <p className="text-sm font-semibold mb-2" >Status</p>
+                      <p className="text-sm font-semibold mb-2">Status</p>
                       <div className="inline-block">
-                        <StatusBadge status={disposisi.status_dari_kabid} />
+                        {getStatusBadge(disposisi.status_dari_sekretaris)}
                       </div>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <AlertCircle className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Sifat</p>
+                        <p className="text-sm font-semibold">Sifat</p>
                       </div>
-                      <p className="font-semibold" >{disposisi.sifat || '-'}</p>
+                      <p className="font-semibold">{disposisi.sifat || '-'}</p>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <User className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Disposisi Kepada Jabatan</p>
+                        <p className="text-sm font-semibold">Disposisi Kepada Jabatan</p>
                       </div>
-                      <p className="font-semibold" >{disposisi.disposisi_kepada_jabatan}</p>
+                      <p className="font-semibold">{disposisi.disposisi_kepada_jabatan}</p>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <User className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Diteruskan Kepada</p>
+                        <p className="text-sm font-semibold">Diteruskan Kepada</p>
                       </div>
-                      <p className="font-semibold" >{disposisi.diteruskan_kepada_nama || disposisi.diteruskan_kepada_jabatan}</p>
+                      <p className="font-semibold">{disposisi.diteruskan_kepada_nama || disposisi.diteruskan_kepada_jabatan}</p>
                     </div>
                     <div className="bg-white rounded-xl p-4 border border-slate-200 shadow-sm">
                       <div className="flex items-center mb-2">
                         <Clock className="w-4 h-4 mr-2" />
-                        <p className="text-sm font-semibold" >Tanggal Disposisi</p>
+                        <p className="text-sm font-semibold">Tanggal Disposisi</p>
                       </div>
-                      <p className="font-semibold" >{formatIndonesianDate(disposisi.created_at)}</p>
+                      <p className="font-semibold">{formatIndonesianDate(disposisi.created_at)}</p>
                     </div>
                   </div>
                 </div>
               </div>
+
               {/* Content Sections */}
               <div className="mt-8 space-y-6">
                 <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-                  <h4 className="font-semibold mb-4 flex items-center" >
+                  <h4 className="font-semibold mb-4 flex items-center">
                     <MessageSquare className="w-5 h-5 mr-3" />
                     Dengan hormat harap:
                   </h4>
                   <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-lg shadow-sm">
-                    <p className="whitespace-pre-wrap leading-relaxed" >
+                    <p className="whitespace-pre-wrap leading-relaxed">
                       {disposisi.dengan_hormat_harap}
                     </p>
                   </div>
                 </div>
+
                 {disposisi.catatan && (
                   <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-                    <h4 className="font-semibold mb-4 flex items-center" >
+                    <h4 className="font-semibold mb-4 flex items-center">
                       <User className="w-5 h-5 mr-3" />
                       Catatan dari Kepala
                     </h4>
                     <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-lg shadow-sm">
-                      <p className="leading-relaxed" >{disposisi.catatan}</p>
+                      <p className="leading-relaxed">{disposisi.catatan}</p>
                     </div>
                   </div>
                 )}
+
                 {disposisi.catatan_kabid && (
                   <div className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
-                    <h4 className="font-semibold mb-4 flex items-center" >
+                    <h4 className="font-semibold mb-4 flex items-center">
                       <User className="w-5 h-5 mr-3" />
                       Keterangan dari Kabid
                     </h4>
                     <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-lg shadow-sm">
-                      <p className="leading-relaxed" >{disposisi.catatan_kabid}</p>
+                      <p className="leading-relaxed">{disposisi.catatan_kabid}</p>
                     </div>
                   </div>
                 )}
+
                 {disposisi.surat_masuk?.has_photos && (
                   <div className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm">
                     <div className="flex items-center mb-4">
@@ -801,19 +812,15 @@ const KabidDisposisiDetail = () => {
                     </div>
                     <div className="flex flex-wrap gap-2">
                       {disposisi.surat_masuk.photos.map((photo, index) => {
-                        const isImage = isImageFile(photo);
+                        // ✅ TAMBAHKAN LOGIKA DETEKSI TIPE FILE INI
+                        const type = photo.type?.toLowerCase() || photo.filename?.split('.').pop()?.toLowerCase();
+                        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(type);
+
                         return (
                           <div
                             key={photo.id}
                             className="relative rounded-xl overflow-hidden cursor-pointer border border-slate-200 hover:scale-105 transition-all duration-300 shadow-sm"
-                            onClick={() => {
-                              if (isImage) {
-                                setSelectedImage(photo.url);
-                              } else {
-                                // Non-gambar: buka di tab baru
-                                window.open(photo.url, '_blank', 'noopener,noreferrer');
-                              }
-                            }}
+                            onClick={() => openImageModal(photo.url)} // ← Tetap buka di tab baru, karena tidak ada modal fullscreen di sini
                           >
                             <div className="w-32 h-32 flex items-center justify-center bg-gray-50">
                               {isImage ? (
@@ -843,6 +850,7 @@ const KabidDisposisiDetail = () => {
                 )}
               </div>
             </div>
+
             {/* Feedback dari Bawahan */}
             {disposisi.diteruskan_kepada_user_id && (
               <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
@@ -851,8 +859,8 @@ const KabidDisposisiDetail = () => {
                     <User className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold" >Feedback dari Bawahan</h3>
-                    <p className="text-sm font-medium" >Tanggapan dari bawahan yang dituju disposisi</p>
+                    <h3 className="font-semibold">Feedback dari Bawahan</h3>
+                    <p className="text-sm font-medium">Tanggapan dari bawahan yang dituju disposisi</p>
                   </div>
                 </div>
                 {subFeedbackLoading ? (
@@ -867,7 +875,7 @@ const KabidDisposisiDetail = () => {
                     </div>
                   </div>
                 ) : !subordinateFeedback ? (
-                  <div className="text-center py-10" >
+                  <div className="text-center py-10">
                     Belum ada feedback dari bawahan atau bawahan belum memberikan feedback.
                   </div>
                 ) : (
@@ -875,7 +883,7 @@ const KabidDisposisiDetail = () => {
                     {/* Header Feedback */}
                     <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                       <div className="space-y-2">
-                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm" >
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
                           <div className="flex items-center">
                             <User className="w-4 h-4 mr-2" />
                             Oleh: {subordinateFeedback.user_jabatan || subordinateFeedback.disposisi?.diteruskan_kepada_jabatan || 'Bawahan'}
@@ -910,53 +918,43 @@ const KabidDisposisiDetail = () => {
                     {/* Tampilan feedback */}
                     <div className="space-y-4">
                       <div className="mb-4">
-                        <p className="text-sm font-semibold mb-2" >Status:</p>
-                        <StatusBadge status={disposisi.status_dari_bawahan || 'diproses'} />
+                        <p className="text-sm font-semibold mb-2">Status:</p>
+                        {getStatusBadge(disposisi.status_dari_bawahan || 'diproses')}
                       </div>
                       <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-xl shadow-sm">
-                        <p className="whitespace-pre-wrap leading-relaxed" >{subordinateFeedback.notes}</p>
+                        <p className="whitespace-pre-wrap leading-relaxed">{subordinateFeedback.notes}</p>
                       </div>
                       {subordinateFeedback.has_files && (
                         <div>
                           <div className="flex items-center mb-4">
                             <Paperclip className="w-4 h-4 mr-2" />
-                            <p className="text-sm font-semibold" >
+                            <p className="text-sm font-semibold">
                               Lampiran ({subordinateFeedback.file_count} file)
                             </p>
                           </div>
                           <div className="flex flex-wrap gap-2">
-                            {subordinateFeedback.files.map((file) => {
-                              const isImage = isImageFile(file);
-                              return (
-                                <div key={file.id} className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-slate-200 overflow-hidden">
-                                  <button
-                                    onClick={() => {
-                                      if (isImage) {
-                                        setSelectedImage(file.url);
-                                      } else {
-                                        // Non-gambar: buka di tab baru
-                                        window.open(file.url, '_blank', 'noopener,noreferrer');
-                                      }
-                                    }}
-                                    className="w-32 h-32 cursor-pointer"
-                                  >
-                                    {file.type && file.type.startsWith('image/') ? (
-                                      <img
-                                        src={file.url}
-                                        alt={file.filename}
-                                        className="w-32 h-32 object-cover"
-                                        loading="lazy"
-                                      />
-                                    ) : (
-                                      <div className="w-full h-full flex flex-col items-center justify-center p-2 bg-[#FDFCFB]">
-                                        <FileText className="w-8 h-8 text-[#D9534F]" />
-                                        <p className='text-[#D9534F] text-xs font-bold text-center break-words'>{file.filename.split('.').pop().toUpperCase()}</p>
-                                      </div>
-                                    )}
-                                  </button>
-                                </div>
-                              )
-                            })}
+                            {subordinateFeedback.files.map((file) => (
+                              <div key={file.id} className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-slate-200 overflow-hidden">
+                                <button
+                                  onClick={() => openImageModal(file.url)}
+                                  className="w-32 h-32 cursor-pointer"
+                                >
+                                  {file.type && file.type.startsWith('image/') ? (
+                                    <img
+                                      src={file.url}
+                                      alt={file.filename}
+                                      className="w-32 h-32 object-cover"
+                                      loading="lazy"
+                                    />
+                                  ) : (
+                                    <div className="w-full h-full flex flex-col items-center justify-center p-2 bg-[#FDFCFB]">
+                                      <FileText className="w-8 h-8 text-[#D9534F]" />
+                                      <p className='text-[#D9534F] text-xs font-bold text-center break-words'>{file.filename.split('.').pop().toUpperCase()}</p>
+                                    </div>
+                                  )}
+                                </button>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       )}
@@ -965,16 +963,17 @@ const KabidDisposisiDetail = () => {
                 )}
               </div>
             )}
+
             {/* Feedback yang Telah Dikirim */}
             {feedbackList.length > 0 && (
               <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-white rounded-xl shadow-md mr-3">
-                    <MessageSquare className="w-6 h-6 text-teal-400" />
+                    <MessageSquare className="w-6 h-6 text-pink-400" />
                   </div>
                   <div>
-                    <h3 className="font-semibold" >Feedback yang Telah Dikirim</h3>
-                    <p className="text-sm font-medium" >Riwayat tanggapan yang telah Anda berikan</p>
+                    <h3 className="font-semibold">Feedback yang Telah Dikirim</h3>
+                    <p className="text-sm font-medium">Riwayat tanggapan yang telah Anda berikan</p>
                   </div>
                 </div>
                 <div className="space-y-6">
@@ -983,7 +982,7 @@ const KabidDisposisiDetail = () => {
                       {/* Header Feedback */}
                       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-start gap-2 mb-4">
                         <div className="space-y-2">
-                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm" >
+                          <div className="flex flex-col sm:flex-row sm:items-center gap-2 text-sm">
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-2" />
                               Dibuat: {new Date(feedback.created_at).toLocaleString('id-ID', {
@@ -1026,6 +1025,7 @@ const KabidDisposisiDetail = () => {
                           </button>
                         )}
                       </div>
+
                       {/* Jika sedang dalam mode edit untuk feedback ini */}
                       {editingFeedbackId === feedback.id ? (
                         <div className="space-y-6">
@@ -1039,7 +1039,7 @@ const KabidDisposisiDetail = () => {
                           )}
                           <form onSubmit={handleEditFeedbackSubmit} className="space-y-6">
                             <div>
-                              <label className="block text-sm font-semibold mb-3" >
+                              <label className="block text-sm font-semibold mb-3">
                                 Catatan Feedback *
                               </label>
                               <textarea
@@ -1048,12 +1048,12 @@ const KabidDisposisiDetail = () => {
                                 onChange={handleEditFeedbackChange}
                                 required
                                 rows="5"
-                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 resize-none text-[#2E2A27] shadow-sm"
+                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 resize-none text-[#2E2A27] shadow-sm"
                                 placeholder="Masukkan catatan feedback Anda..."
                               />
                             </div>
                             <div>
-                              <label className="block text-sm font-semibold mb-3" >
+                              <label className="block text-sm font-semibold mb-3">
                                 Status Disposisi *
                               </label>
                               <div className="flex gap-2">
@@ -1064,9 +1064,9 @@ const KabidDisposisiDetail = () => {
                                     value="diproses"
                                     checked={editFeedbackData.status === 'diproses'}
                                     onChange={handleEditFeedbackChange}
-                                    className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
+                                    className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                                   />
-                                  <span className="ml-3 font-medium" >Diproses</span>
+                                  <span className="ml-3 font-medium">Diproses</span>
                                 </label>
                                 <label className="flex items-center cursor-pointer group">
                                   <input
@@ -1075,16 +1075,17 @@ const KabidDisposisiDetail = () => {
                                     value="selesai"
                                     checked={editFeedbackData.status === 'selesai'}
                                     onChange={handleEditFeedbackChange}
-                                    className="w-4 h-4 text-black border-slate-200 focus:ring-teal-400"
+                                    className="w-4 h-4 text-black border-slate-200 focus:ring-pink-400"
                                   />
-                                  <span className="ml-3 font-medium" >Selesai</span>
+                                  <span className="ml-3 font-medium">Selesai</span>
                                 </label>
                               </div>
                             </div>
+
                             {/* File yang sudah ada */}
                             {editFeedbackData.existingFiles.length > 0 && (
                               <div>
-                                <label className="block text-sm font-semibold mb-3" >
+                                <label className="block text-sm font-semibold mb-3">
                                   File yang sudah ada
                                 </label>
                                 <div className="space-y-3">
@@ -1094,7 +1095,7 @@ const KabidDisposisiDetail = () => {
                                         <div className="p-2 bg-slate-600 rounded-lg mr-3">
                                           <FileText className="w-4 h-4 text-white" />
                                         </div>
-                                        <span className="font-medium" >{file.filename}</span>
+                                        <span className="font-medium">{file.filename}</span>
                                       </div>
                                       <button
                                         type="button"
@@ -1108,8 +1109,9 @@ const KabidDisposisiDetail = () => {
                                 </div>
                               </div>
                             )}
+
                             <div>
-                              <label className="block text-sm font-semibold mb-3" >
+                              <label className="block text-sm font-semibold mb-3">
                                 Tambah File Baru (maks. 5 file)
                               </label>
                               <input
@@ -1117,7 +1119,7 @@ const KabidDisposisiDetail = () => {
                                 multiple
                                 onChange={handleEditFileChange}
                                 accept="image/*,application/pdf"
-                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 shadow-sm"
+                                className="w-full px-4 py-3 bg-white border border-slate-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-400 focus:border-pink-400 shadow-sm"
                               />
                               {editFeedbackData.newFiles.length > 0 && (
                                 <div className="mt-2 text-sm bg-green-50 px-3 py-2 rounded-lg border border-green-200 shadow-sm">
@@ -1126,6 +1128,7 @@ const KabidDisposisiDetail = () => {
                                 </div>
                               )}
                             </div>
+
                             <div className="flex justify-end space-x-4 pt-4 border-t border-slate-200">
                               <button
                                 type="button"
@@ -1165,59 +1168,43 @@ const KabidDisposisiDetail = () => {
                         /* Tampilan normal feedback */
                         <div className="space-y-4">
                           <div className="mb-4">
-                            <p className="text-sm font-semibold mb-2" >Status:</p>
-                            <StatusBadge status={feedback.disposisi?.status || 'diproses'} />
+                            <p className="text-sm font-semibold mb-2">Status:</p>
+                            {getStatusBadge(feedback.disposisi?.status || 'diproses')}
                           </div>
                           <div className="bg-[#FDFCFB] border border-slate-200 p-4 rounded-xl shadow-sm">
-                            <p className="whitespace-pre-wrap leading-relaxed" >{feedback.notes}</p>
+                            <p className="whitespace-pre-wrap leading-relaxed">{feedback.notes}</p>
                           </div>
                           {feedback.has_files && (
                             <div>
                               <div className="flex items-center mb-4">
                                 <Paperclip className="w-4 h-4 mr-2" />
-                                <p className="text-sm font-semibold" >
+                                <p className="text-sm font-semibold">
                                   Lampiran ({feedback.file_count} file)
                                 </p>
                               </div>
                               <div className="flex flex-wrap gap-2">
-
-                                {feedback.files.map((file, index) => {
-                                  const isImage = isImageFile(file);
-                                  return (
-                                    <div
-                                      key={file.id}
-                                      className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-slate-200 overflow-hidden"
-                                      onClick={() => {
-                                        if (isImage) {
-                                          setSelectedImage(file.url);
-                                        } else {
-                                          // Non-gambar: buka di tab baru
-                                          window.open(file.url, '_blank', 'noopener,noreferrer');
-                                        }
-                                      }}
+                                {feedback.files.map((file) => (
+                                  <div key={file.id} className="relative cursor-pointer rounded-xl hover:scale-105 transition-all duration-300 shadow-sm border border-slate-200 overflow-hidden">
+                                    <button
+                                      onClick={() => openImageModal(file.url)}
+                                      className="w-32 h-32 cursor-pointer"
                                     >
-                                      <div className="w-32 h-32 bg-white border-slate-200 shadow-lg flex items-center justify-center">
-                                        {isImage ? (
-                                          <img
-                                            src={file.url}
-                                            alt={`Thumbnail ${index + 1}`}
-                                            className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
-                                            onError={(e) => {
-                                              e.target.src = 'https://via.placeholder.com/160x160?text=No+Image';
-                                              e.target.className = "w-full h-full object-cover";
-                                            }}
-                                          />
-                                        ) : (
-                                          <div className="text-teal-400 flex flex-col justify-center items-center">
-                                            <FileText className='w-9 h-9' />
-                                            <p className='text-[#D9534F] text-xs font-bold text-center break-words'>{file.filename.split('.').pop().toUpperCase()}</p>
-
-                                          </div>
-                                        )}
-                                      </div>
-                                    </div>
-                                  )
-                                })}
+                                      {file.type && file.type.startsWith('image/') ? (
+                                        <img
+                                          src={file.url}
+                                          alt={file.filename}
+                                          className="w-32 h-32 object-cover"
+                                          loading="lazy"
+                                        />
+                                      ) : (
+                                        <div className="w-full h-full flex flex-col items-center justify-center bg-[#FDFCFB]">
+                                          <FileText className="w-8 h-8 text-[#D9534F]" />
+                                          <p className='text-[#D9534F] font-bold'>PDF</p>
+                                        </div>
+                                      )}
+                                    </button>
+                                  </div>
+                                ))}
                               </div>
                             </div>
                           )}
@@ -1231,74 +1218,8 @@ const KabidDisposisiDetail = () => {
           </div>
         )}
       </div>
-      {/* Modal Gambar Fullscreen */}
-      {selectedImage && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm p-2 sm:p-4 animate-in fade-in duration-300">
-          {/* Container Modal */}
-          <div className="relative w-full max-w-7xl mx-auto max-h-full animate-in zoom-in-95 duration-300">
-
-            {/* Tombol Close */}
-            <button
-              onClick={() => setSelectedImage(null)}
-              className="absolute -top-12 right-0 sm:top-4 sm:right-4 z-20 
-                   bg-white/20 hover:bg-white/30 active:bg-white/40
-                   backdrop-blur-md rounded-full p-2 sm:p-3
-                   text-white hover:text-gray-200 
-                   transition-all duration-200 ease-out
-                   hover:scale-110 active:scale-95
-                   border border-white/20 hover:border-white/30
-                   shadow-lg hover:shadow-xl"
-              aria-label="Tutup modal"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-
-            {/* Container Gambar */}
-            <div className="relative bg-white/5 backdrop-blur-xl rounded-2xl sm:rounded-3xl 
-                      border border-white/20 shadow-2xl overflow-hidden
-                      hover:shadow-3xl transition-shadow duration-300">
-
-              {/* Gradient Overlay untuk Estetika */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-black/20 pointer-events-none rounded-2xl sm:rounded-3xl"></div>
-
-              {/* Gambar */}
-              <img
-                src={selectedImage}
-                alt="Preview gambar"
-                className="w-full max-h-[85vh] sm:max-h-[90vh] object-contain 
-                     rounded-2xl sm:rounded-3xl
-                     transition-transform duration-300 ease-out"
-                onError={(e) => {
-                  e.target.src = 'https://via.placeholder.com/800x600?text=Gambar+Tidak+Dapat+Ditampilkan';
-                }}
-                loading="lazy"
-              />
-
-              {/* Loading Shimmer Effect (Optional) */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent 
-                        -translate-x-full animate-pulse duration-1000 pointer-events-none"></div>
-            </div>
-
-            {/* Info atau Actions (Optional) */}
-            <div className="absolute bottom-4 left-4 right-4 
-                      bg-black/30 backdrop-blur-md rounded-xl p-3
-                      border border-white/10 opacity-0 hover:opacity-100
-                      transition-opacity duration-300 pointer-events-none">
-              <p className="text-white/80 text-sm text-center">
-                Klik di luar gambar atau tombol × untuk menutup
-              </p>
-            </div>
-          </div>
-
-          <div
-            className="absolute inset-0 -z-10"
-            onClick={() => setSelectedImage(null)}
-          />
-        </div>
-      )}
     </div>
   );
 };
-export default KabidDisposisiDetail;
+
+export default SekretarisDisposisiDetail;

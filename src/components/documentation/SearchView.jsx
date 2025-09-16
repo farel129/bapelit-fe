@@ -23,13 +23,13 @@ const SearchView = ({
     setCurrentPage,
     loadUserProfile
 }) => (
-    <div className="space-y-4">
-        <div className="bg-white rounded-lg p-4 shadow-md">
-            <h2 className="text-xl font-bold text-gray-900 mb-2 flex items-center">
-                <Search className="w-6 h-6 mr-2 text-blue-500" />
+    <div className="space-y-4 max-w-xl mx-auto">
+        <div className="">
+            <h2 className="text-sm font-bold text-gray-900 mb-2 flex items-center">
+                <Search className="w-6 h-6 mr-2 text-teal-500" />
                 Hasil Pencarian
             </h2>
-            <p className="text-gray-600">
+            <p className="text-gray-600 text-xs">
                 Menampilkan hasil untuk: "<span className="font-semibold">{feedFilters.search}</span>"
             </p>
         </div>

@@ -4,6 +4,7 @@ import { api } from '../../utils/api';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import LoadingSpinner from '../Ui/LoadingSpinner';
+import StatCard from '../Ui/StatCard';
 
 const AdminDaftarSuratMasuk = () => {
     const [suratData, setSuratData] = useState([]);
@@ -197,31 +198,17 @@ const AdminDaftarSuratMasuk = () => {
     const belumDibaca = suratData.filter(surat => surat.status === 'belum dibaca').length;
     const sudahDibaca = suratData.filter(surat => surat.status === 'sudah dibaca').length;
 
-    const StatCard = ({ title, count, icon: Icon, bgColor, textColor, iconBg, borderColor }) => (
-        <div className={`${bgColor} p-6 rounded-2xl shadow-sm border ${borderColor} hover:shadow-lg transition-all duration-300 hover:-translate-y-1`}>
-            <div className="flex items-center justify-between">
-                <div>
-                    <p className={`text-sm font-medium ${textColor} opacity-80`}>{title}</p>
-                    <p className={`text-3xl font-bold ${textColor} mt-2`}>{count}</p>
-                </div>
-                <div className={`${iconBg} p-3 rounded-xl shadow-md`}>
-                    <Icon className={`w-6 h-6 text-white`} />
-                </div>
-            </div>
-        </div>
-    );
-
     const DisposisiCard = ({ surat }) => (
-        <div className="bg-white rounded-2xl border-2 border-[#e5e7eb] shadow-sm hover:shadow-lg transition-all duration-300 overflow-hidden">
-            <div className="p-6">
+        <div className="bg-white rounded-2xl shadow-lg transition-all duration-300 overflow-hidden">
+            <div className="p-4">
                 {/* Header Card */}
                 <div className="flex justify-between items-start mb-4">
                     <div className="flex items-center gap-3">
                         <div className="p-2 bg-white shadow-lg rounded-xl">
-                            <FileText className="h-5 w-5 text-pink-400" />
+                            <FileText className="h-5 w-5 text-teal-400" />
                         </div>
                         <div>
-                            <h3 className="font-bold text-[#000000] truncate max-w-[200px]">{surat.asal_instansi}</h3>
+                            <h3 className="font-bold text-[#000000] truncate max-w-[170px]">{surat.asal_instansi}</h3>
                             <p className="text-xs text-[#000000] capitalize">{surat.tujuan_jabatan?.replace(/-/g, ' ')}</p>
                         </div>
                     </div>
@@ -235,7 +222,7 @@ const AdminDaftarSuratMasuk = () => {
                 <div className="space-y-3 mb-4">
                     <div className="flex items-start gap-2">
                         <MessageSquare className="h-4 w-4 text-[#000000] mt-0.5 flex-shrink-0" />
-                        <p className="text-sm text-[#000000] line-clamp-2">
+                        <p className="text-sm text-[#000000] truncate max-w-[170px]">
                             {surat.perihal || surat.keterangan || 'Tidak ada keterangan'}
                         </p>
                     </div>
@@ -310,27 +297,30 @@ const AdminDaftarSuratMasuk = () => {
                     count={totalSurat}
                     icon={Mail}
                     bgColor="bg-white"
-                    textColor="text-[#000000]"
-                    iconBg="bg-gradient-to-br from-[#f6339a] to-[#e02c88]"
-                    borderColor="border-[#e5e7eb]"
+                    textColor="text-black"
+                    iconBg="bg-white"
+                    iconColor="text-teal-400"
+                    borderColor="border-slate-200"
                 />
                 <StatCard
                     title="Belum Dibaca"
                     count={belumDibaca}
                     icon={Clock}
                     bgColor="bg-white"
-                    textColor="text-[#000000]"
+                    textColor="text-black"
                     iconBg="bg-gray-500"
-                    borderColor="border-[#e5e7eb]"
+                    borderColor="border-slate-200"
+                    iconColor="text-white"
                 />
                 <StatCard
                     title="Sudah Dibaca"
                     count={sudahDibaca}
                     icon={CheckCircle}
-                    bgColor="bg-white"
-                    textColor="text-[#000000]"
-                    iconBg="bg-gradient-to-br from-[#4CAF50] to-[#2E7D32]"
-                    borderColor="border-[#e5e7eb]"
+                    bgColor="bg-black"
+                    textColor="text-white"
+                    iconBg="bg-white"
+                    iconColor="text-black"
+                    borderColor="border-slate-200"
                 />
             </div>
 

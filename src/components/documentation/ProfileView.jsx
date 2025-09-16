@@ -121,7 +121,7 @@ const ProfileView = ({
   };
   
   return (
-    <div className="max-w-4xl mx-auto mb-10 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
+    <div className="max-w-4xl mx-auto mb-20 bg-gradient-to-br from-gray-50 to-gray-100 min-h-screen">
       {/* Profile Header */}
       <div className="mb-8 bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-200 p-6 md:p-8">
         <div className="flex flex-col md:flex-row md:items-center md:space-x-8 space-y-6 md:space-y-0">

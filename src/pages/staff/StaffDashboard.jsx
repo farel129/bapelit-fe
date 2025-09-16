@@ -194,9 +194,9 @@ const StaffDashboard = () => {
 
             <div className="flex flex-col lg:flex-row items-center justify-between relative z-10">
               <div className='flex items-center gap-x-5'>
-                <img src={Avatar} alt="" className='absolute h-50 w-50 right-0 top-0 object-cover opacity-80 hover:opacity-100 transition-opacity duration-300' />
+                <img src={Avatar} alt="" className='absolute h-50 w-50 right-0 top-0 object-cover' />
                 <div className='space-y-2'>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-[#2E2A27] to-[#6D4C41] bg-clip-text text-transparent">
+                  <h1 className="text-xl font-bold text-black">
                     Dashboard
                   </h1>
                   <div className='flex items-center gap-x-2 group'>
@@ -244,9 +244,9 @@ const StaffDashboard = () => {
             icon={Clock}
             bgColor="bg-white"
             textColor="text-black"
-            iconBg="bg-pink-400"
+            iconBg="bg-teal-400"
             iconColor="text-white"
-            borderColor="border-pink-400"
+            borderColor="border-teal-400"
           />
           <StatCard
             title="Selesai"
@@ -255,7 +255,7 @@ const StaffDashboard = () => {
             bgColor="bg-black"
             textColor="text-white"
             iconBg="bg-white"
-            iconColor="text-pink-400"
+            iconColor="text-teal-400"
             borderColor="border-slate-200"
           />
         </div>
@@ -351,11 +351,11 @@ const StaffDashboard = () => {
         {/* Data List — GANTI JADI TABEL MIRIP KABIDDASHBOARD */}
         {disposisiList.length === 0 ? (
           <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm text-center py-16 px-6">
-            <FileText className="h-12 w-12 text-[#6D4C41] mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#2E2A27]">
+            <FileText className="h-12 w-12 text-teal-400 mx-auto mb-4" />
+            <h3 className="text-xl font-bold text-black">
               {searchInstansi || filterStatus ? 'Tidak Ada Hasil' : 'Tidak Ada Disposisi'}
             </h3>
-            <p className="text-[#6D4C41] mt-2">
+            <p className="text-black mt-2">
               {searchInstansi || filterStatus
                 ? 'Tidak ditemukan disposisi yang sesuai dengan kriteria pencarian'
                 : 'Belum ada disposisi yang tersedia untuk saat ini'

@@ -21,14 +21,14 @@ const DisposisiHeader = ({
   // Helper function untuk cek kondisi tombol
   const canAcceptDisposisi = () => disposisi && 
     disposisi.status === 'dibaca' && 
-    disposisi.status_dari_kabid !== 'diterima' && 
-    disposisi.status_dari_kabid !== 'diteruskan';
+    disposisi.status_dari_sekretaris !== 'diterima' && 
+    disposisi.status_dari_sekretaris !== 'diteruskan';
 
-  const canForwardDisposisi = () => disposisi && disposisi.status_dari_kabid === 'diterima';
+  const canForwardDisposisi = () => disposisi && disposisi.status_dari_sekretaris === 'diterima';
   
   const canGiveFeedback = () => disposisi && 
     !disposisi.has_feedback && 
-    (disposisi.status_dari_kabid === 'diterima' || disposisi.status === 'diproses');
+    (disposisi.status_dari_sekretaris === 'diterima' || disposisi.status === 'diproses');
 
   return (
     <div className="mb-4">
@@ -72,7 +72,7 @@ const DisposisiHeader = ({
           {disposisi && (
             <div className="flex flex-col items-center lg:items-end space-y-4">
               {/* Status Badge */}
-              <StatusBadge status={disposisi.status_dari_kabid} />
+              <StatusBadge status={disposisi.status_dari_sekretaris} />
 
               {/* Tombol Aksi */}
               <div className="flex flex-col sm:flex-row gap-2">

@@ -85,9 +85,9 @@ const Leaderboard = () => {
           <div className="relative z-10">
             <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl mb-4 shadow-lg transform hover:scale-110 transition-all duration-300 bg-white"
               style={{ border: '2px solid #e5e7eb' }}>
-              <BarChart3 className="w-8 h-8 text-pink-400" />
+              <BarChart3 className="w-8 h-8 text-teal-400" />
             </div>
-            <h1 className="text-xl md:text-2xl font-bold mb-1 text-black">
+            <h1 className="text-lg font-bold mb-1 text-black">
               Papan Disposisi
             </h1>
             <p className="text-base max-w-3xl mx-auto font-medium leading-relaxed text-[#6b7280]">
@@ -186,7 +186,7 @@ const Leaderboard = () => {
                             className="h-full rounded-full transition-all duration-1500 ease-out"
                             style={{
                               width: `${progressWidth}%`,
-                              background: 'linear-gradient(135deg, #f6339a, #e51b8c)',
+                              background: 'linear-gradient(135deg, #00d5be, #000)',
                               boxShadow: 'inset 0 1px 2px rgba(255,255,255,0.3)'
                             }}
                           ></div>
@@ -198,7 +198,7 @@ const Leaderboard = () => {
 
                       {/* Count */}
                       <div className="text-center sm:text-right flex-shrink-0">
-                        <span className="text-xl font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent">
+                        <span className="text-lg font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent">
                           {item.jumlah_disposisi}
                         </span>
                         <div className="text-xs uppercase tracking-wider font-medium text-[#6b7280] mt-1">
@@ -233,7 +233,7 @@ const Leaderboard = () => {
         {/* Enhanced Footer Stats — Match AdminJadwalAcara Style */}
         {leaderboardData.length > 0 && (
           <div className="mt-8 bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-6 max-w-2xl mx-auto">
-            <h3 className="text-xl font-bold text-center mb-6 text-[#000000]">
+            <h3 className="text-lg font-bold text-center mb-6 text-[#000000]">
               Statistik Keseluruhan
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2">

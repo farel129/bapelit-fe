@@ -326,7 +326,7 @@ const AdminBukuTamu = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-white rounded-xl shadow-lg">
-                <Calendar className="h-6 w-6 text-pink-400" />
+                <Calendar className="h-6 w-6 text-teal-400" />
               </div>
               <div>
                 <h1 className="text-lg font-bold text-[#000000]">Admin Buku Tamu</h1>
@@ -463,7 +463,7 @@ const AdminBukuTamu = () => {
                                   loadGuests(event.id);
                                   setView('guests');
                                 }}
-                                className="flex items-center justify-center gap-x-1 text-pink-400 hover:text-pink-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
+                                className="flex items-center justify-center gap-x-1 text-teal-400 hover:text-teal-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
                               >
                                 <Eye className="w-4 h-4" /> Lihat
                               </button>
@@ -571,11 +571,11 @@ const AdminBukuTamu = () => {
               <h2 className="text-xl font-semibold text-neutral-500 mb-4">Nama acara: <span className='text-black'>{currentEvent.nama_acara}</span></h2>
               <div className="flex flex-wrap gap-4 text-sm text-black">
                 <div className="flex items-center">
-                  <Calendar className="w-5 h-5 text-pink-400 mr-2" />
+                  <Calendar className="w-5 h-5 text-teal-400 mr-2" />
                   {formatDate(currentEvent.tanggal_acara)}
                 </div>
                 <div className="flex items-center">
-                  <MapPin className="w-5 h-5 text-pink-400 mr-2" />
+                  <MapPin className="w-5 h-5 text-teal-400 mr-2" />
                   {currentEvent.lokasi}
                 </div>
               </div>
@@ -689,7 +689,7 @@ const AdminBukuTamu = () => {
                                   setSelectedImage(guest.foto_kehadiran_tamu[0].file_url);
                                   setShowImageModal(true);
                                 }}
-                                className="flex items-center justify-center gap-x-1 text-pink-400 hover:text-pink-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
+                                className="flex items-center justify-center gap-x-1 text-teal-400 hover:text-teal-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
                               >
                                 <Image className="w-4 h-4" /> Lihat
                               </button>
@@ -748,7 +748,7 @@ const AdminBukuTamu = () => {
           <div className="space-y-4">
             <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 max-w-4xl mx-auto">
               <div className='flex gap-x-2 items-center mb-8'>
-                <div className='bg-white text-pink-400 p-3 flex justify-center items-center shadow-lg border border-slate-200 rounded-xl'>
+                <div className='bg-white text-teal-400 p-3 flex justify-center items-center shadow-lg border border-slate-200 rounded-xl'>
                   <Plus className='w-7 h-7' />
                 </div>
                 <div>

@@ -167,7 +167,7 @@ const KepalaFeedbackList = ({ suratId }) => {
                         index % 5 === 1 ? 'from-blue-100 to-cyan-100' :
                         index % 5 === 2 ? 'from-emerald-100 to-teal-100' :
                         index % 5 === 3 ? 'from-orange-100 to-red-100' :
-                        'from-pink-100 to-rose-100'
+                        'from-teal-100 to-rose-100'
                       } rounded-full flex items-center justify-center text-black font-bold text-sm shadow-lg ring-2 ring-white/50`}>
                         {feedback.users?.name?.charAt(0)?.toUpperCase() || 'U'}
                       </div>
@@ -209,7 +209,7 @@ const KepalaFeedbackList = ({ suratId }) => {
                   {feedback.feedback_notes && (
                     <div className="mb-6">
                       <h5 className="font-bold text-slate-800 mb-4 flex items-center gap-3">
-                        <div className="p-3 bg-pink-100 rounded-xl shadow-lg">
+                        <div className="p-3 bg-teal-100 rounded-xl shadow-lg">
                           <MessageSquare className="w-4 h-4 text-black" />
                         </div>
                         Catatan Feedback

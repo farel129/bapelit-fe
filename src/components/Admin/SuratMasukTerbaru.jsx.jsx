@@ -58,11 +58,11 @@ const SuratMasukTerbaru = () => {
         const styles = {
             // Belum Dibaca → HITAM (kontras tinggi, urgensi)
             pending: 'bg-black text-white border-2 border-gray-700',
-            // Sudah Dibaca → PINK BRAND (progress, selesai)
-            processed: 'bg-black text-white border-2 border-pink-600'
+            // Sudah Dibaca → teal BRAND (progress, selesai)
+            processed: 'bg-black text-white border-2 border-teal-600'
         };
         return (
-            <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${styles[status] || 'bg-gray-50 text-gray-600 border border-slate-200'}`}>
+            <span className={`px-3 py-1.5 rounded-full text-sm font-semibold ${styles[status] || 'bg-gray-50 text-black border border-slate-200'}`}>
                 {status === 'pending' ? 'belum dibaca' : status === 'processed' ? 'sudah dibaca' : status}
             </span>
         );
@@ -126,7 +126,7 @@ const SuratMasukTerbaru = () => {
 
     const handleConfirmDelete = async (id) => {
         try {
-            await api.delete(`/admin/surat-masuk/${id}`);
+            await api.delete(`/surat-masuk/${id}`);
             toast.success('Surat berhasil dihapus');
             closeDeleteModal();
             fetchAllData();
@@ -149,8 +149,8 @@ const SuratMasukTerbaru = () => {
     if (loading) {
         return (
             <div className="flex flex-col gap-y-2 items-center justify-center py-12">
-                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#f6339a]"></div>
-                <span className="ml-2 text-gray-700">Memuat surat masuk...</span>
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-teal-400"></div>
+                <span className="ml-2 text-black">Memuat surat masuk...</span>
             </div>
         );
     }
@@ -160,12 +160,12 @@ const SuratMasukTerbaru = () => {
             <div className="flex flex-col justify-center items-center py-12">
                 <AlertCircle className='w-12 h-12 text-red-500' />
                 <p className='font-bold text-lg text-red-500'>Error</p>
-                <p className='text-gray-700 mt-1 flex items-center gap-x-2'>
+                <p className='text-black mt-1 flex items-center gap-x-2'>
                     <AlertCircle className='w-4 h-4' /> server bermasalah
                 </p>
                 <button
                     onClick={fetchAllData}
-                    className="bg-gradient-to-br from-white/95 via-gray-50/90 to-gray-100/60 hover:bg-gray-50 border-2 border-gray-200 mt-3 text-sm font-semibold text-gray-800 shadow-lg py-3 px-6 rounded-xl items-center flex gap-x-2 transition-colors hover:border-gray-300"
+                    className="bg-gradient-to-br from-white/95 via-gray-50/90 to-gray-100/60 hover:bg-gray-50 border-2 border-gray-200 mt-3 text-sm font-semibold text-black shadow-lg py-3 px-6 rounded-xl items-center flex gap-x-2 transition-colors hover:border-gray-300"
                 >
                     <RefreshCcw className='w-4 h-4' />
                     Retry
@@ -178,9 +178,9 @@ const SuratMasukTerbaru = () => {
         <div className="flex w-full">
             {/* 🎨 Background & Card Utama - Gunakan palet baru yang lebih modern */}
             <div className="bg-gradient-to-br w-full from-white/95 via-gray-50/90 to-gray-100/60 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-gray-200 shadow-lg">
-                <div className="flex items-center space-x-3 p-5">
-                    <div className="w-3 h-8 bg-gradient-to-b from-[#f6339a] to-[#d11b8c] rounded-full shadow-sm"></div>
-                    <h3 className="text-lg font-bold text-gray-800 tracking-tight">Surat masuk terbaru</h3>
+                <div className="flex items-center space-x-1 p-5">
+                    <div className="w-1 h-5 bg-teal-400 rounded-full shadow-sm"></div>
+                    <h3 className="text-lg font-semibold text-black tracking-tight">Surat masuk terbaru</h3>
                 </div>
 
                 {/* Tabel Surat Masuk */}
@@ -188,19 +188,19 @@ const SuratMasukTerbaru = () => {
                     <table className="min-w-full divide-y divide-gray-200">
                         <thead className="bg-gradient-to-br from-gray-50/95 to-gray-100/50">
                             <tr>
-                                <th className="px-8 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-8 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">
                                     Asal Instansi
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">
                                     Tujuan
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">
                                     Status
                                 </th>
-                                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-left text-xs font-semibold text-black uppercase tracking-wider">
                                     Tanggal
                                 </th>
-                                <th className="px-6 py-4 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                <th className="px-6 py-4 text-right text-xs font-semibold text-black uppercase tracking-wider">
                                     Aksi
                                 </th>
                             </tr>
@@ -211,10 +211,10 @@ const SuratMasukTerbaru = () => {
                                     <td className="p-3">
                                         <div className="flex items-center">
                                             <div className="flex-shrink-0 h-10 w-10 border-2 border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100/50 rounded-xl flex items-center justify-center shadow-sm">
-                                                <Building2 className="h-5 w-5 text-gray-700" />
+                                                <Building2 className="h-5 w-5 text-black" />
                                             </div>
                                             <div className="ml-4">
-                                                <div className="flex items-center text-sm font-semibold text-gray-800">
+                                                <div className="flex items-center text-sm font-semibold text-black">
                                                     {surat.asal_instansi}
                                                 </div>
                                             </div>
@@ -222,7 +222,7 @@ const SuratMasukTerbaru = () => {
                                     </td>
                                     <td className="p-3">
                                         <div className="flex items-center">
-                                            <span className="text-sm text-gray-700 capitalize font-medium">
+                                            <span className="text-sm text-black capitalize font-medium">
                                                 {surat.tujuan_jabatan?.replace(/-/g, ' ')}
                                             </span>
                                         </div>
@@ -231,16 +231,16 @@ const SuratMasukTerbaru = () => {
                                         {getStatusBadge(surat.status)}
                                     </td>
                                     <td className="p-3">
-                                        <div className="flex items-center text-sm text-gray-700">
+                                        <div className="flex items-center text-sm text-black">
                                             {formatDate(surat.created_at)}
                                         </div>
                                     </td>
                                     <td className="p-3">
                                         <div className="flex items-center justify-end gap-2">
-                                            {/* Detail Button - Pink Brand */}
+                                            {/* Detail Button - teal Brand */}
                                             <button
                                                 onClick={() => setSelectedSurat(surat)}
-                                                className="inline-flex cursor-pointer hover:-translate-y-0.5 duration-300 items-center px-3 py-2 gap-x-1 text-sm font-semibold text-pink-400 bg-white rounded-xl shadow-lg transition-all"
+                                                className="inline-flex cursor-pointer hover:-translate-y-0.5 duration-300 items-center px-3 py-2 gap-x-1 text-sm font-semibold text-teal-400 bg-white rounded-xl shadow-lg transition-all"
                                                 title="Lihat Detail"
                                             >
                                                 <FileText className="h-3 w-3" />
@@ -279,10 +279,10 @@ const SuratMasukTerbaru = () => {
                     {suratData.length === 0 && (
                         <div className="text-center py-16 bg-white">
                             <div className="mx-auto h-24 w-24 bg-gradient-to-br from-gray-100/50 to-gray-200/20 rounded-2xl flex items-center justify-center mb-6 border-2 border-gray-200 shadow-sm">
-                                <FileText className="h-12 w-12 text-gray-700" />
+                                <FileText className="h-12 w-12 text-black" />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-800 mb-2">Belum ada surat masuk</h3>
-                            <p className="text-gray-700 max-w-sm mx-auto font-medium">
+                            <h3 className="text-lg font-bold text-black mb-2">Belum ada surat masuk</h3>
+                            <p className="text-black max-w-sm mx-auto font-medium">
                                 Surat masuk yang baru akan tampil di sini. Pastikan sistem sudah terhubung dengan baik.
                             </p>
                         </div>
@@ -293,16 +293,16 @@ const SuratMasukTerbaru = () => {
             {/* Delete Confirmation Modal */}
             {deleteModal.isOpen && (
                 <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-                    <div className="bg-gradient-to-br from-white/95 via-gray-50/90 to-gray-100/60 backdrop-blur-sm rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border-2 border-gray-200">
+                    <div className="bg-white backdrop-blur-sm rounded-2xl shadow-2xl max-w-md w-full mx-4 overflow-hidden border-2 border-gray-200">
                         {/* Header */}
                         <div className="p-6 pb-4">
                             <div className="flex items-center gap-4">
-                                <div className="flex-shrink-0 w-12 h-12 bg-gradient-to-br from-red-50 to-red-100 rounded-2xl flex items-center justify-center border-2 border-red-200">
-                                    <AlertTriangle className="w-6 h-6 text-red-500" />
+                                <div className="flex-shrink-0 w-12 h-12 bg-white rounded-2xl flex items-center justify-center border-2 border-gray-200">
+                                    <AlertTriangle className="w-6 h-6 text-teal-400" />
                                 </div>
                                 <div className="flex-1">
-                                    <h3 className="text-lg font-bold text-gray-800">Konfirmasi Hapus</h3>
-                                    <p className="text-sm text-gray-700 font-medium mt-1">
+                                    <h3 className="text-lg font-bold text-black">Konfirmasi Hapus</h3>
+                                    <p className="text-sm text-black font-medium mt-1">
                                         Tindakan ini tidak dapat dibatalkan
                                     </p>
                                 </div>
@@ -310,26 +310,26 @@ const SuratMasukTerbaru = () => {
                         </div>
                         {/* Content */}
                         <div className="px-6 pb-2">
-                            <div className="bg-gradient-to-br from-gray-50/90 to-gray-100/50 rounded-xl p-4 mb-4 border-2 border-gray-200">
-                                <p className="text-sm text-gray-700 font-medium mb-3">
+                            <div className="mb-4">
+                                <p className="text-sm text-black font-medium mb-3">
                                     Apakah Anda yakin ingin menghapus surat dari:
                                 </p>
                                 <div className="space-y-2">
                                     <div className="flex items-center gap-2 text-sm">
-                                        <Building2 className="w-4 h-4 text-gray-700" />
-                                        <span className="font-semibold text-gray-800">
+                                        <Building2 className="w-4 h-4 text-black" />
+                                        <span className="font-semibold text-black">
                                             {deleteModal.suratInfo?.asal_instansi}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm">
-                                        <User className="w-4 h-4 text-gray-700" />
-                                        <span className="text-gray-700 font-medium capitalize">
+                                        <User className="w-4 h-4 text-black" />
+                                        <span className="text-black font-medium capitalize">
                                             {deleteModal.suratInfo?.tujuan_jabatan?.replace(/-/g, ' ')}
                                         </span>
                                     </div>
                                     <div className="flex items-center gap-2 text-sm">
-                                        <Calendar className="w-4 h-4 text-gray-700" />
-                                        <span className="text-gray-700 font-medium">
+                                        <Calendar className="w-4 h-4 text-black" />
+                                        <span className="text-black font-medium">
                                             {formatDate(deleteModal.suratInfo?.created_at)}
                                         </span>
                                     </div>
@@ -337,10 +337,10 @@ const SuratMasukTerbaru = () => {
                             </div>
                         </div>
                         {/* Footer */}
-                        <div className="px-6 py-4 flex gap-3 justify-end bg-gradient-to-br from-gray-50/80 to-gray-100/40 border-t-2 border-gray-200">
+                        <div className="px-6 py-4 flex gap-3 justify-end bg-white">
                             <button
                                 onClick={closeDeleteModal}
-                                className="px-4 py-2.5 text-sm font-semibold text-gray-700 bg-gradient-to-br from-white/95 to-gray-50/80 hover:bg-gray-50 shadow-md border-2 border-gray-200 rounded-xl transition-all hover:border-gray-300"
+                                className="px-4 py-2.5 text-sm font-semibold text-black bg-gradient-to-br from-white/95 to-gray-50/80 hover:bg-gray-50 shadow-md border-2 border-gray-200 rounded-xl transition-all hover:border-gray-300"
                             >
                                 Batal
                             </button>
@@ -357,30 +357,30 @@ const SuratMasukTerbaru = () => {
 
             {/* Modal Detail Surat */}
             {selectedSurat && (
-                <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-60 flex items-center justify-center p-4">
+                <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-60 flex items-center justify-center p-4">
                     <div className="relative w-full max-w-2xl h-[90vh] overflow-y-auto">
                         {/* Background with elegant theme */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-white/95 via-gray-50/90 to-gray-100/60 backdrop-blur-sm rounded-2xl shadow-2xl border-2 border-gray-200"></div>
+                        <div className="absolute inset-0 bg-white rounded-2xl shadow-2xl border-2 border-gray-200"></div>
 
                         {/* Content */}
                         <div className="relative h-full overflow-y-auto rounded-2xl">
                             {/* Header */}
-                            <div className="sticky top-0 bg-gradient-to-br from-white/95 via-gray-50/85 to-gray-100/50 backdrop-blur-sm border-b-2 border-gray-200 px-8 py-6">
+                            <div className="sticky top-0 bg-white border-b-2 border-gray-200 p-4">
                                 <div className="flex items-center justify-between">
                                     <div className="flex items-center gap-3">
-                                        <div className="p-3 bg-gradient-to-br from-[#f6339a] to-[#d11b8c] rounded-xl shadow-md">
-                                            <FileText className="h-6 w-6 text-white" />
+                                        <div className="p-3 bg-white rounded-xl shadow-md">
+                                            <FileText className="h-6 w-6 text-teal-400" />
                                         </div>
                                         <div>
-                                            <h3 className="text-lg font-bold text-gray-800">Detail Surat Masuk</h3>
-                                            <p className="text-sm text-gray-700 font-medium">Informasi lengkap dokumen</p>
+                                            <h3 className="text-lg font-bold text-black">Detail Surat Masuk</h3>
+                                            <p className="text-sm text-black font-medium">Informasi lengkap dokumen</p>
                                         </div>
                                     </div>
                                     <button
                                         onClick={() => setSelectedSurat(null)}
                                         className="p-2.5 hover:bg-gradient-to-br hover:from-gray-50/80 hover:to-gray-100/30 rounded-xl transition-all duration-200 group border-2 border-transparent hover:border-gray-200"
                                     >
-                                        <X className="h-5 w-5 text-gray-700 group-hover:text-gray-800" />
+                                        <X className="h-5 w-5 text-black group-hover:text-black" />
                                     </button>
                                 </div>
                             </div>
@@ -396,101 +396,78 @@ const SuratMasukTerbaru = () => {
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                                     <div className="space-y-6">
                                         <div className="group">
-                                            <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
-                                                <FileText className="h-4 w-4 text-gray-700" />
+                                            <label className="flex items-center gap-2 text-sm font-bold text-black mb-3">
+                                                <FileText className="h-4 w-4 text-black" />
                                                 Nomor Surat
                                             </label>
-                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-l-4 border-gray-700 border-2">
-                                                <p className={`${selectedSurat.nomor_surat ? 'text-gray-800 font-semibold' : 'text-gray-600 italic font-medium'}`}>
+                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl ">
+                                                <p className={`${selectedSurat.nomor_surat ? 'text-black font-semibold' : 'text-black italic font-medium'}`}>
                                                     {selectedSurat.nomor_surat || 'akan muncul bila sudah diproses jabatan terkait'}
                                                 </p>
                                             </div>
                                         </div>
 
                                         <div className="group">
-                                            <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
-                                                <Building2 className="h-4 w-4 text-gray-700" />
+                                            <label className="flex items-center gap-2 text-sm font-bold text-black mb-3">
+                                                <Building2 className="h-4 w-4 text-black" />
                                                 Asal Instansi
                                             </label>
-                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-l-4 border-gray-700 border-2">
-                                                <p className="text-gray-800 font-semibold">{selectedSurat.asal_instansi}</p>
+                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl ">
+                                                <p className="text-black font-semibold">{selectedSurat.asal_instansi}</p>
                                             </div>
                                         </div>
 
                                         <div className="group">
-                                            <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
-                                                <User className="h-4 w-4 text-gray-700" />
+                                            <label className="flex items-center gap-2 text-sm font-bold text-black mb-3">
+                                                <User className="h-4 w-4 text-black" />
                                                 Tujuan Jabatan
                                             </label>
-                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-l-4 border-gray-700 border-2">
-                                                <p className="text-gray-800 font-semibold capitalize">{selectedSurat.tujuan_jabatan?.replace(/-/g, ' ')}</p>
+                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl ">
+                                                <p className="text-black font-semibold capitalize">{selectedSurat.tujuan_jabatan?.replace(/-/g, ' ')}</p>
                                             </div>
                                         </div>
                                     </div>
 
                                     <div className="space-y-6">
                                         <div className="group">
-                                            <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
-                                                <MessageSquare className="h-4 w-4 text-gray-700" />
-                                                Perihal
-                                            </label>
-                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-l-4 border-gray-700 border-2 ">
-                                                <p className={`${selectedSurat.perihal ? 'text-gray-800 font-semibold' : 'text-gray-600 italic font-medium'}`}>
-                                                    {selectedSurat.perihal || 'akan muncul bila sudah diproses jabatan terkait'}
-                                                </p>
-                                            </div>
-                                        </div>
-
-                                        <div className="group">
-                                            <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
-                                                <User className="h-4 w-4 text-gray-700" />
-                                                Dibuat oleh
-                                            </label>
-                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-l-4 border-gray-700 border-2 ">
-                                                <p className="text-gray-800 font-bold">{selectedSurat.users?.name}</p>
-                                                <p className="text-sm text-gray-700 font-medium">({selectedSurat.users?.jabatan})</p>
-                                            </div>
-                                        </div>
-
-                                        <div className="group">
-                                            <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
-                                                <Calendar className="h-4 w-4 text-gray-700" />
+                                            <label className="flex items-center gap-2 text-sm font-bold text-black mb-3">
+                                                <Calendar className="h-4 w-4 text-black" />
                                                 Tanggal Dibuat
                                             </label>
-                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-l-4 border-gray-700 border-2">
-                                                <p className="text-gray-800 font-semibold">{formatDate(selectedSurat.created_at)}</p>
+                                            <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl ">
+                                                <p className="text-black font-semibold">{formatDate(selectedSurat.created_at)}</p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Description */}
-                                <div className="mb-8">
-                                    <label className="flex items-center gap-2 text-sm font-bold text-gray-700 mb-3">
-                                        <FileText className="h-4 w-4 text-gray-800" />
+                                <div className="mb-4">
+                                    <label className="flex items-center gap-2 text-sm font-bold text-black mb-3">
+                                        <FileText className="h-4 w-4 text-black" />
                                         Keterangan
                                     </label>
                                     <div className="p-6 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-2 border-gray-200 shadow-md">
-                                        <p className="text-gray-800 leading-relaxed font-medium">{selectedSurat.keterangan}</p>
+                                        <p className="text-black leading-relaxed font-medium">{selectedSurat.keterangan}</p>
                                     </div>
                                 </div>
 
                                 {/* Processing Information */}
                                 {selectedSurat.processed_at && (
-                                    <div className="mb-8 p-6 bg-gradient-to-r from-pink-50 to-gray-50 rounded-xl border-2 border-pink-200 shadow-md">
-                                        <h4 className="font-bold text-gray-800 mb-4 flex items-center gap-2">
-                                            <CheckCircle className="h-5 w-5 text-pink-400" />
+                                    <div className="mb-8 p-6 bg-gradient-to-r from-teal-50 to-gray-50 rounded-xl border-2 border-teal-200 shadow-md">
+                                        <h4 className="font-bold text-black mb-4 flex items-center gap-2">
+                                            <CheckCircle className="h-5 w-5 text-teal-400" />
                                             Informasi Pemrosesan
                                         </h4>
                                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-sm font-bold text-gray-700 uppercase tracking-wide">Diproses oleh</label>
-                                                <p className="text-gray-800 font-bold">{selectedSurat.processed_user?.name}</p>
-                                                <p className="text-sm text-gray-700 font-medium">{selectedSurat.processed_user?.jabatan}</p>
+                                                <label className="text-sm font-bold text-black uppercase tracking-wide">Diproses oleh</label>
+                                                <p className="text-black font-bold">{selectedSurat.processed_user?.name}</p>
+                                                <p className="text-sm text-black font-medium">{selectedSurat.processed_user?.jabatan}</p>
                                             </div>
                                             <div>
-                                                <label className="text-sm font-bold text-gray-700 uppercase tracking-wide">Waktu Pemrosesan</label>
-                                                <p className="text-gray-800 font-semibold">{formatDate(selectedSurat.processed_at)}</p>
+                                                <label className="text-sm font-bold text-black uppercase tracking-wide">Waktu Pemrosesan</label>
+                                                <p className="text-black font-semibold">{formatDate(selectedSurat.processed_at)}</p>
                                             </div>
                                         </div>
                                     </div>
@@ -501,19 +478,19 @@ const SuratMasukTerbaru = () => {
                                     <div className="mb-8 space-y-4">
                                         {selectedSurat.disposisi_kepada && (
                                             <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-2 border-gray-200 shadow-sm">
-                                                <label className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-1 block">
+                                                <label className="text-sm font-bold text-black uppercase tracking-wide mb-1 block">
                                                     Disposisi Kepada
                                                 </label>
-                                                <p className="text-gray-800 font-bold">{selectedSurat.disposisi_kepada}</p>
+                                                <p className="text-black font-bold">{selectedSurat.disposisi_kepada}</p>
                                             </div>
                                         )}
 
                                         {selectedSurat.catatan && (
                                             <div className="p-4 bg-gradient-to-br from-gray-50/80 to-gray-100/40 rounded-xl border-2 border-gray-200 shadow-sm">
-                                                <label className="text-sm font-bold text-gray-700 uppercase tracking-wide mb-1 block">
+                                                <label className="text-sm font-bold text-black uppercase tracking-wide mb-1 block">
                                                     Catatan
                                                 </label>
-                                                <p className="text-gray-800 font-medium">{selectedSurat.catatan}</p>
+                                                <p className="text-black font-medium">{selectedSurat.catatan}</p>
                                             </div>
                                         )}
                                     </div>
@@ -527,7 +504,7 @@ const SuratMasukTerbaru = () => {
                                         <button
                                             onClick={() => handleDownloadPDF(selectedSurat.id, selectedSurat.nomor_surat)}
                                             disabled={isDownloading}
-                                            className="inline-flex text-sm items-center gap-2 bg-gradient-to-r from-[#f6339a] to-[#d11b8c] hover:from-[#d11b8c] hover:to-[#b01271] cursor-pointer text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 border-2 border-pink-400"
+                                            className="inline-flex text-sm items-center gap-2 bg-gradient-to-r from-teal-400 to-[#d11b8c] hover:from-[#d11b8c] hover:to-[#b01271] cursor-pointer text-white px-6 py-3 rounded-xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl disabled:opacity-50 disabled:cursor-not-allowed transform hover:scale-105 border-2 border-teal-400"
                                         >
                                             <Download className="h-4 w-4" />
                                             {isDownloading ? `Mengunduh... ${downloadProgress}%` : 'Download PDF'}
@@ -535,7 +512,7 @@ const SuratMasukTerbaru = () => {
                                     )}
                                     <button
                                         onClick={() => setSelectedSurat(null)}
-                                        className="inline-flex items-center gap-2 bg-gradient-to-br from-white/95 to-gray-50/80 hover:bg-gray-50 text-gray-700 hover:text-gray-800 px-6 py-3 rounded-xl font-semibold transition-all duration-200 border-2 border-gray-200 hover:border-gray-300 shadow-md hover:shadow-lg"
+                                        className="inline-flex items-center gap-2 bg-gradient-to-br from-white/95 to-gray-50/80 hover:bg-gray-50 text-black hover:text-black px-6 py-3 rounded-xl font-semibold transition-all duration-200 border-2 border-gray-200 hover:border-gray-300 shadow-md hover:shadow-lg"
                                     >
                                         Tutup
                                     </button>

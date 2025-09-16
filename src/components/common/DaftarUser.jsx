@@ -86,20 +86,20 @@ const DaftarUser = () => {
         <div className="flex items-center gap-x-3">
           <div className="h-8 w-1.5 bg-black rounded-full shadow-sm"></div>
           <div>
-            <h1 className="text-xl font-bold text-black">Daftar User</h1>
+            <h1 className="text-lg font-bold text-black">Daftar User</h1>
             <p className="text-sm text-gray-600">Daftar pengguna sistem</p>
           </div>
         </div>
         <button
           onClick={handleRefresh}
           disabled={refreshing}
-          className="bg-white hover:bg-gray-50 border border-gray-200 gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-pink-400"
+          className="bg-white hover:bg-gray-50 border border-gray-200 gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-teal-400"
         >
           <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
         </button>
       </div>
 
-      {/* Stat Cards — White + Black + Pink Accent */}
+      {/* Stat Cards — White + Black + teal Accent */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center justify-between">
@@ -107,39 +107,39 @@ const DaftarUser = () => {
               <p className="text-sm font-medium text-gray-600 opacity-80">Total User</p>
               <p className="text-lg font-bold text-black mt-2">{users.length}</p>
             </div>
-            <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
-              <Users className="w-6 h-6 text-pink-400" />
+            <div className="p-3 bg-teal-50 rounded-xl shadow-sm border border-teal-100">
+              <Users className="w-6 h-6 text-teal-400" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 opacity-80">Bidang Unik</p>
               <p className="text-lg font-bold text-black mt-2">{uniqueBidang.length}</p>
             </div>
-            <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
-              <Building className="w-6 h-6 text-pink-400" />
+            <div className="p-3 bg-teal-50 rounded-xl shadow-sm border border-teal-100">
+              <Building className="w-6 h-6 text-teal-400" />
             </div>
           </div>
         </div>
 
-        <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
+        <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-gray-600 opacity-80">Hasil Filter</p>
               <p className="text-lg font-bold text-black mt-2">{filteredUsers.length}</p>
             </div>
-            <div className="p-3 bg-pink-50 rounded-xl shadow-sm border border-pink-100">
-              <Filter className="w-6 h-6 text-pink-400" />
+            <div className="p-3 bg-teal-50 rounded-xl shadow-sm border border-teal-100">
+              <Filter className="w-6 h-6 text-teal-400" />
             </div>
           </div>
         </div>
       </div>
 
       {/* Search and Filter — GLASSMORPHISM WITH ONLY 3 COLORS */}
-      <div className="bg-white/80 backdrop-blur-sm p-6 rounded-2xl border border-gray-100 shadow-md mb-4">
+      <div className="bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-100 shadow-md mb-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -148,7 +148,7 @@ const DaftarUser = () => {
               placeholder="Cari nama atau email..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 text-sm shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 text-sm shadow-sm"
             />
           </div>
 
@@ -157,7 +157,7 @@ const DaftarUser = () => {
             <select
               value={filterBidang}
               onChange={(e) => setFilterBidang(e.target.value)}
-              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-pink-400 focus:border-transparent transition-all duration-200 text-sm appearance-none cursor-pointer shadow-sm"
+              className="w-full pl-10 pr-4 py-3 bg-white text-black border border-gray-200 rounded-xl focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 focus:border-transparent transition-all duration-200 text-sm appearance-none cursor-pointer shadow-sm"
             >
               <option value="" className="text-gray-600">Semua Bidang</option>
               {uniqueBidang.map(bidang => (
@@ -184,7 +184,7 @@ const DaftarUser = () => {
           </p>
         </div>
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-2">
           {filteredUsers.map((userData) => (
             <div 
               key={userData.id} 
@@ -203,9 +203,9 @@ const DaftarUser = () => {
 
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-black">{userData.name}</h3>
+                      <h3 className="font-semibold text-sm text-black">{userData.name}</h3>
                       {user && userData.id === user.id && (
-                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-pink-100 text-pink-800 border border-pink-200">
+                        <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold bg-teal-100 text-teal-800 border border-teal-200">
                           <Award className="w-3 h-3 mr-1" /> Anda
                         </span>
                       )}

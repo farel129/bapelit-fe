@@ -96,7 +96,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
           {/* Info Disposisi */}
           <div className="bg-white rounded-lg p-4 mb-6 border border-slate-200 shadow-sm">
             <h4 className="font-medium text-black mb-2 flex items-center gap-2">
-              <FileText className="w-4 h-4 text-pink-400" />
+              <FileText className="w-4 h-4 text-teal-400" />
               Disposisi yang akan diteruskan:
             </h4>
             <p className="text-sm text-black mb-1">
@@ -121,7 +121,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
               <select
                 value={selectedUserId}
                 onChange={(e) => setSelectedUserId(e.target.value)}
-                className="w-full px-3 py-2 bg-white backdrop-blur-sm border border-slate-200 text-black rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent shadow-sm"
+                className="w-full px-3 py-2 bg-white backdrop-blur-sm border border-slate-200 text-black rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent shadow-sm"
                 disabled={loading}
               >
                 <option value="" className="bg-white text-black">Pilih penerima</option>
@@ -149,7 +149,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
               onChange={(e) => setCatatan(e.target.value)}
               placeholder="Tambahkan catatan untuk penerima..."
               rows={3}
-              className="w-full px-3 py-2 focus:outline-none bg-white backdrop-blur-sm border border-slate-200 text-black placeholder-[#6D4C41]/60 rounded-lg focus:ring-2 focus:ring-pink-400 focus:border-transparent resize-none shadow-sm"
+              className="w-full px-3 py-2 focus:outline-none bg-white backdrop-blur-sm border border-slate-200 text-black placeholder-[#6D4C41]/60 rounded-lg focus:ring-2 focus:ring-teal-400 focus:border-transparent resize-none shadow-sm"
               disabled={loading}
             />
             <p className="text-xs text-black/70 mt-1">

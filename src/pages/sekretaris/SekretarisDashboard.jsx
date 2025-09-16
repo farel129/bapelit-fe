@@ -277,7 +277,7 @@ const SekretarisDashboard = () => {
 
             <div className="flex flex-col lg:flex-row items-center justify-between relative z-10">
               <div className='flex items-center gap-x-5'>
-                <img src={Avatar} alt="" className='absolute h-50 w-50 right-0 top-0 object-cover opacity-80 hover:opacity-100 transition-opacity duration-300' />
+                <img src={Avatar} alt="" className='absolute h-50 w-50 right-0 top-0 object-cover' />
                 <div className='space-y-2'>
                   <h1 className="text-xl font-bold bg-gradient-to-r from-[#2E2A27] to-[#6D4C41] bg-clip-text text-transparent">
                     Dashboard
