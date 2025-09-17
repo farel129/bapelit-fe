@@ -32,10 +32,10 @@ const KepalaStatistikDisposisi = () => {
 
     // === PALET WARNA WARNANI UNTUK SEMUA STATUS ===
     const colorPalette = [
-        '#EC4899',
-        '#00bba7',
+        '#00d5be',
+        '#00d5be',
         '#000000',
-        '#737373',
+        '#00d5be',
     ];
 
     const statusConfig = {

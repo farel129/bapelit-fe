@@ -1,217 +1,92 @@
-import { useEffect, useState } from "react";
-import { api } from "../../utils/api";
-import CreateDisposisiModal from "./CreateDisposisiModal";
-import ModalDetailSuratMasuk from "./ModalDetailSuratMasuk";
-import { Eye, Mail, CheckCircle, Clock, ChevronRight, RefreshCcw, FileText, Search, Filter, ChevronLeft } from "lucide-react";
-import toast from 'react-hot-toast';
-import LoadingSpinner from "../Ui/LoadingSpinner";
-import StatCard from "../Ui/StatCard";
+import React, { useState, useEffect } from 'react';
+import api from '../../utils/api';
+import { Calendar, FileText, CheckCircle, File as FileIcon, Search, Filter, Clock, Mail } from 'lucide-react';
+import LoadingSpinner from '../Ui/LoadingSpinner';
+import CreateDisposisiModal from './CreateDisposisiModal';
+import StatCard from '../Ui/StatCard';
+import isImageFile from '../../utils/isImageFile';
+import ImageModal from '../Ui/ImageModal';
 
 const SuratMasukList = () => {
   const [suratMasuk, setSuratMasuk] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [selectedSurat, setSelectedSurat] = useState(null);
-  const [viewDetailSurat, setViewDetailSurat] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
-  // Search and filter states
+
+  // ✅ State untuk Search & Filter
   const [searchTerm, setSearchTerm] = useState('');
-  const [selectedStatus, setSelectedStatus] = useState('');
-
-  // Pagination states
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [filterStatus, setFilterStatus] = useState('all'); // 'all', 'belum dibaca', 'sudah dibaca'
 
   useEffect(() => {
+    const fetchSuratMasuk = async () => {
+      try {
+        setLoading(true);
+        const response = await api.get('/surat-masuk/kepala');
+        setSuratMasuk(response.data.data || []);
+        setLoading(false);
+      } catch (err) {
+        setError(err.response?.data?.error || 'Gagal mengambil data surat masuk');
+        setLoading(false);
+      }
+    };
+
     fetchSuratMasuk();
   }, []);
 
-  const fetchSuratMasuk = async () => {
+  // ✅ Fungsi untuk menandai surat sebagai "sudah dibaca"
+  const handleMarkAsRead = async (id) => {
     try {
-      setLoading(true);
-      const response = await api.get('/surat-masuk/kepala');
-      setSuratMasuk(response.data.data || []);
-    } catch (error) {
-      console.error('Error fetching surat masuk:', error);
-      toast.error('Gagal memuat surat masuk: ' + (error.response?.data?.error || error.message));
-    } finally {
-      setLoading(false);
+      const response = await api.put(`/surat-masuk/kepala/${id}`);
+      setSuratMasuk(prev =>
+        prev.map(surat =>
+          surat.id === id ? { ...surat, ...response.data.data } : surat
+        )
+      );
+    } catch (err) {
+      console.error('Gagal menandai surat sebagai dibaca:', err);
+      alert('Gagal memperbarui status. Silakan coba lagi.');
     }
   };
 
-  const markAsRead = async (suratId) => {
-    try {
-      await api.put(`/surat-masuk/kepala/${suratId}`);
-      fetchSuratMasuk(); // Refresh list
-    } catch (error) {
-      console.error('Error marking as read:', error);
-      toast.error('Gagal menandai surat sebagai dibaca');
-    }
+  // ✅ Fungsi buka modal disposisi
+  const handleBuatDisposisi = (surat) => {
+    setSelectedSurat(surat);
+    setShowModal(true);
   };
 
-  const handleViewDetail = async (surat) => {
-    if (surat.status === 'belum dibaca') {
-      await markAsRead(surat.id);
-    }
-    setViewDetailSurat(surat);
+  const handleDisposisiSuccess = () => {
+    setSuratMasuk(prev =>
+      prev.map(surat =>
+        surat.id === selectedSurat.id
+          ? { ...surat, has_disposisi: true }
+          : surat
+      )
+    );
+
+    setShowModal(false);
+    setSelectedSurat(null);
   };
 
-  // Filter data berdasarkan search dan filter
-  const filteredSurat = suratMasuk.filter(surat => {
-    const matchSearch = searchTerm === '' ||
-      surat.asal_instansi?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      surat.keterangan?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      surat.tanggal_surat?.toLowerCase().includes(searchTerm.toLowerCase());
-
-    const matchStatus = selectedStatus === '' || surat.status === selectedStatus;
-
-    return matchSearch && matchStatus;
-  });
-
-  // Pagination calculations
-  const totalItems = filteredSurat.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentItems = filteredSurat.slice(startIndex, endIndex);
-
-  // Reset pagination when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, selectedStatus]);
-
-  // Pagination functions
-  const goToPage = (page) => {
-    setCurrentPage(page);
-  };
-
-  const goToPreviousPage = () => {
-    setCurrentPage(prev => Math.max(prev - 1, 1));
-  };
-
-  const goToNextPage = () => {
-    setCurrentPage(prev => Math.min(prev + 1, totalPages));
-  };
-
-  const changeItemsPerPage = (newItemsPerPage) => {
-    setItemsPerPage(newItemsPerPage);
-    setCurrentPage(1);
-  };
-
-  // Reset filters
-  const resetFilters = () => {
-    setSearchTerm('');
-    setSelectedStatus('');
-    setCurrentPage(1);
-  };
-
-  // Calculate statistics
   const totalSurat = suratMasuk.length;
   const belumDibaca = suratMasuk.filter(surat => surat.status === 'belum dibaca').length;
   const sudahDibaca = suratMasuk.filter(surat => surat.status === 'sudah dibaca').length;
 
-  // Pagination component
-  const Pagination = () => {
-    if (totalItems === 0) return null;
+  // ✅ Logika Filter & Search
+  const filteredSuratMasuk = suratMasuk.filter(surat => {
+    const matchesSearch =
+      surat.asal_instansi.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (surat.nomor_surat && surat.nomor_surat.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (surat.nomor_agenda && surat.nomor_agenda.toLowerCase().includes(searchTerm.toLowerCase()));
 
-    const getVisiblePages = () => {
-      const visiblePages = [];
-      const maxVisible = 5;
+    const matchesFilter =
+      filterStatus === 'all' ||
+      surat.status === filterStatus;
 
-      if (totalPages <= maxVisible) {
-        for (let i = 1; i <= totalPages; i++) {
-          visiblePages.push(i);
-        }
-      } else {
-        if (currentPage <= 3) {
-          for (let i = 1; i <= 4; i++) {
-            visiblePages.push(i);
-          }
-          visiblePages.push('...');
-          visiblePages.push(totalPages);
-        } else if (currentPage >= totalPages - 2) {
-          visiblePages.push(1);
-          visiblePages.push('...');
-          for (let i = totalPages - 3; i <= totalPages; i++) {
-            visiblePages.push(i);
-          }
-        } else {
-          visiblePages.push(1);
-          visiblePages.push('...');
-          for (let i = currentPage - 1; i <= currentPage + 1; i++) {
-            visiblePages.push(i);
-          }
-          visiblePages.push('...');
-          visiblePages.push(totalPages);
-        }
-      }
-
-      return visiblePages;
-    };
-
-    return (
-      <div className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border-2 border-[#EDE6E3]">
-        <div className="flex items-center gap-4">
-          <span className="text-sm font-medium">
-            Menampilkan {startIndex + 1} - {Math.min(endIndex, totalItems)} dari {totalItems} data
-          </span>
-
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Per halaman:</span>
-            <select
-              value={itemsPerPage}
-              onChange={(e) => changeItemsPerPage(Number(e.target.value))}
-              className="px-3 py-2 border border-[#EDE6E3] rounded-xl text-sm focus:ring-2 focus:ring-white focus:border-white bg-white text-black shadow-sm"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2">
-          {totalPages > 1 && (
-            <>
-              <button
-                onClick={goToPreviousPage}
-                disabled={currentPage === 1}
-                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
-
-              {getVisiblePages().map((page, index) => (
-                page === '...' ? (
-                  <span key={index} className="px-3 py-2 text-black">...</span>
-                ) : (
-                  <button
-                    key={index}
-                    onClick={() => goToPage(page)}
-                    className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${
-                      currentPage === page
-                        ? 'bg-black text-white border-[#EDE6E3]'
-                        : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-black hover:text-black'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              ))}
-
-              <button
-                onClick={goToNextPage}
-                disabled={currentPage === totalPages}
-                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </>
-          )}
-        </div>
-      </div>
-    );
-  };
+    return matchesSearch && matchesFilter;
+  });
 
   if (loading) {
     return (
@@ -221,197 +96,278 @@ const SuratMasukList = () => {
     );
   }
 
+  if (error) {
+    return (
+      <div className="text-center py-10">
+        <p className="text-red-600 font-medium">Server Down atau Gagal Memuat Data</p>
+      </div>
+    );
+  }
+
   return (
-    <div>
-      <div className="flex items-center justify-between mb-4">
-        <button
-          onClick={fetchSuratMasuk}
-          className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-white"
-        >
-          <RefreshCcw className="w-4 h-4" /> Refresh
-        </button>
-      </div>
+    <div className="min-h-screen">
+      <main className="">
 
-      {/* Stat Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-        <StatCard
-          title="Total Surat"
-          count={totalSurat}
-          icon={Mail}
-          bgColor="bg-white"
-          textColor="text-black"
-          iconBg="bg-teal-400"
-          iconColor='text-white'
-          borderColor="border-slate-200"
-        />
-        <StatCard
-          title="Belum Dibaca"
-          count={belumDibaca}
-          icon={Clock}
-          bgColor="bg-white"
-          textColor="text-black"
-          iconBg="bg-slate-200"
-          borderColor="border-slate-200"
-        />
-        <StatCard
-          title="Sudah Dibaca"
-          count={sudahDibaca}
-          icon={CheckCircle}
-          bgColor="bg-black"
-          textColor="text-white"
-          iconBg="bg-white"
-          iconColor='text-teal-400'
-          borderColor="border-slate-200"
-        />
-      </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+          <StatCard
+            title="Total Surat"
+            count={totalSurat}
+            icon={Mail}
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-white"
+            iconColor="text-teal-400"
+            borderColor="border-slate-200"
+          />
+          <StatCard
+            title="Belum Dibaca"
+            count={belumDibaca}
+            icon={Clock}
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-gray-500"
+            borderColor="border-slate-200"
+            iconColor="text-white"
+          />
+          <StatCard
+            title="Sudah Dibaca"
+            count={sudahDibaca}
+            icon={CheckCircle}
+            bgColor="bg-black"
+            textColor="text-white"
+            iconBg="bg-white"
+            iconColor="text-black"
+            borderColor="border-slate-200"
+          />
+        </div>
 
-      {/* Filters */}
-      <div className="p-3 shadow-lg rounded-2xl border-black/15 border">
+        {/* ✅ Search & Filter Bar */}
         <div className="mb-3">
-          <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
 
-            {/* Search */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
-                <input
-                  type="text"
-                  placeholder="Cari berdasarkan asal instansi, keterangan, atau tanggal..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black placeholder-black shadow-sm"
-                />
-              </div>
+            {/* Search Input */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Cari berdasarkan instansi, nomor surat, atau agenda..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 text-sm rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              />
             </div>
 
-            {/* Filter Status */}
-            <div className="w-full lg:w-48">
-              <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black z-10" />
-                <select
-                  value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black shadow-sm appearance-none"
-                >
-                  <option value="">Semua Status</option>
-                  <option value="belum dibaca">Belum Dibaca</option>
-                  <option value="sudah dibaca">Sudah Dibaca</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Reset */}
-            <div className="flex gap-2">
-              <button
-                onClick={resetFilters}
-                className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-black font-semibold shadow-sm hover:shadow-md"
+            {/* Filter Dropdown */}
+            <div className="flex items-center gap-2">
+              <Filter className="w-5 h-5 text-gray-600" />
+              <select
+                value={filterStatus}
+                onChange={(e) => setFilterStatus(e.target.value)}
+                className="px-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
               >
-                <Filter className="h-4 w-4" />
-                Reset
-              </button>
+                <option value="all">Semua Status</option>
+                <option value="belum dibaca">Belum Dibaca</option>
+                <option value="sudah dibaca">Sudah Dibaca</option>
+              </select>
             </div>
+
           </div>
         </div>
 
-        {/* Surat Masuk List - TABLE VERSION (NO SORTING) */}
-        {currentItems.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-            <FileText className="h-12 w-12 text-black mx-auto mb-4" />
-            <p className="text-black text-lg font-semibold">
-              {suratMasuk.length === 0 ? 'Tidak ada surat masuk' : 'Tidak ada surat yang sesuai filter'}
-            </p>
-            <p className="text-black mt-1">
-              {suratMasuk.length === 0 ? 'Belum ada surat masuk yang diterima' : 'Coba ubah filter pencarian'}
+        {filteredSuratMasuk.length === 0 ? (
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+              <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+              </svg>
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">Tidak Ada Surat yang Cocok</h3>
+            <p className="text-gray-500 text-lg max-w-md mx-auto">
+              Coba ubah kata kunci pencarian atau filter status.
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-            <table className="min-w-full divide-y divide-[#EDE6E3] bg-white rounded-2xl">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Asal Instansi</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Tanggal Surat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Diterima Tanggal</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Keterangan</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#EDE6E3]">
-                {currentItems.map((surat) => (
-                  <tr key={surat.id} className="hover:bg-[#FDFCFB] transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
-                      {surat.asal_instansi || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                      {surat.tanggal_surat || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                      {surat.diterima_tanggal || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        surat.status === 'sudah dibaca'
-                          ? 'bg-green-100 text-green-800 border border-green-200'
-                          : 'bg-slate-100 text-yellow-800 border border-slate-200'
-                      }`}>
-                        {surat.status}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 text-sm text-black max-w-xs truncate" title={surat.keterangan || '-'}>
-                      {surat.keterangan || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex flex-col gap-2">
-                        <button
-                          onClick={() => handleViewDetail(surat)}
-                          className="flex items-center justify-center gap-x-1 text-teal-400 hover:text-teal-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
-                        >
-                          <Eye className="w-4 h-4" /> Lihat
-                        </button>
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+            {filteredSuratMasuk.map((surat) => {
+              const isImage = (filename) => {
+                return filename.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/);
+              };
 
-                        {surat.has_disposisi ? (
-                          <span className="text-green-700 text-xs bg-green-50 px-3 py-1.5 rounded-xl border border-green-200 font-medium">
-                            ✓ Disposisi
-                          </span>
-                        ) : (
-                          <button
-                            onClick={() => setSelectedSurat(surat)}
-                            className="flex items-center justify-center gap-x-1 bg-black text-white text-sm font-medium px-3 py-2 rounded-xl hover:opacity-90 transition-all border border-slate-500"
-                          >
-                            <FileText className="w-4 h-4" />Buat Disposisi
-                          </button>
-                        )}
+              return (
+                <article
+                  key={surat.id}
+                  className="group relative bg-white space-y-3 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-slate-200"
+                >
+                  {/* Header */}
+                  <div className="border-b border-gray-50/50">
+                    <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                      <div className="flex-1">
+                        <h3 className="text-lg font-bold">
+                          {surat.asal_instansi}
+                        </h3>
+                        <p className="text-gray-600 text-sm leading-relaxed">
+                          <span className="font-medium text-gray-700">Nomor Surat:</span> {surat.nomor_surat || '-'} •{' '}
+                          <span className="font-medium text-gray-700">Nomor Agenda:</span> {surat.nomor_agenda || '-'}
+                        </p>
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <span className="inline-flex items-center px-4 py-2 bg-indigo-50 text-indigo-800 rounded-full text-sm font-medium shadow-sm">
+                        {new Date(surat.created_at).toLocaleDateString('id-ID', {
+                          day: 'numeric',
+                          month: 'long',
+                          year: 'numeric',
+                        })}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Metadata Grid */}
+                  <div className="bg-gray-50 p-4 rounded-xl">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                      <div className="flex items-start gap-2">
+                        <div className="flex-shrink-0 w-8 h-8 bg-indigo-100 rounded-lg flex items-center justify-center mt-0.5">
+                          <Calendar className="w-5 h-5 text-teal-400" />
+                        </div>
+                        <div>
+                          <p className="text-gray-500 font-medium">Tgl Surat</p>
+                          <p className="text-gray-800">{surat.tanggal_surat || '-'}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2">
+                        <div className="flex-shrink-0 w-8 h-8 bg-emerald-100 rounded-lg flex items-center justify-center mt-0.5">
+                          <Calendar className="w-5 h-5 text-teal-400" />
+                        </div>
+                        <div>
+                          <p className="text-gray-500 font-medium">Tgl Diterima</p>
+                          <p className="text-gray-800">{surat.diterima_tanggal}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex items-start gap-2">
+                        <div>
+                          <p className="text-gray-500 font-medium">Status</p>
+                          <p
+                            className={`px-2 py-1 rounded-full text-sm font-medium ${surat.status === 'sudah dibaca'
+                              ? 'bg-gray-100 text-gray-800'
+                              : surat.status === 'belum dibaca'
+                                ? 'bg-green-100 text-green-800'
+                                : 'bg-gray-100 text-gray-700'
+                              }`}
+                          >
+                            {surat.status || 'Tidak diketahui'}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Gallery Section */}
+                  {surat.photos && surat.photos.length > 0 && (
+                    <div className="p-4">
+                      <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                        <FileText className="w-5 h-5" />
+                        Lampiran: ({surat.photos.length})
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {surat.photos.map((photo) => {
+                          const isImage = isImageFile(photo);
+                          return (
+                            <div
+                              key={photo.id}
+                              onClick={() => {
+                                if (isImage) {
+                                  setSelectedImage(photo.url);
+                                } else {
+                                  window.open(photo.url, '_blank', 'noopener,noreferrer');
+                                }
+                              }}
+                              className="cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded"
+                            >
+                              {isImage ? (
+                                <img
+                                  src={photo.url}
+                                  alt={photo.filename}
+                                  className="w-20 h-20 object-cover group-hover:brightness-110 transition-transform duration-500 rounded-lg shadow-lg"
+                                  onError={(e) => {
+                                    e.target.src = 'https://via.placeholder.com/200?text=No+Image';
+                                  }}
+                                />
+                              ) : (
+                                <div className="text-[#D9534F] flex flex-col items-center justify-center w-20 h-20 bg-gray-100 rounded-lg">
+                                  <FileText className="w-8 h-8" />
+                                  <p className="text-xs font-bold mt-1 text-center break-words">
+                                    {photo.filename.split('.').pop()?.toUpperCase() || 'FILE'}
+                                  </p>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Keterangan */}
+                  <div className="border-t border-gray-50/50">
+                    <h4 className="text-sm font-semibold text-gray-800 mb-1 flex items-center gap-2">
+                      Keterangan:
+                    </h4>
+                    <p className="text-gray-700 leading-relaxed text-sm">
+                      {surat.keterangan ? (
+                        surat.keterangan
+                      ) : (
+                        <span className="text-gray-400 italic">Tidak ada keterangan tambahan.</span>
+                      )}
+                    </p>
+                  </div>
+
+                  {/* Tombol Aksi */}
+                  <div className="space-y-3">
+                    {surat.status === 'belum dibaca' && (
+                      <button
+                        onClick={() => handleMarkAsRead(surat.id)}
+                        className="inline-flex w-full justify-center items-center gap-2 px-4 py-3 bg-white border border-teal-400 hover:-translate-y-0.5 cursor-pointer text-teal-400 rounded-full text-sm font-medium shadow transition-colors duration-200"
+                      >
+                        <CheckCircle className="w-4 h-4" />
+                        Tandai Sudah Dibaca
+                      </button>
+                    )}
+
+                    {surat.has_disposisi ? (
+                      <div className="inline-flex w-full justify-center items-center gap-2 px-4 py-3 bg-gray-100 text-gray-600 rounded-full text-sm font-medium cursor-not-allowed">
+                        <FileIcon className="w-4 h-4" />
+                        Disposisi sudah dibuat
+                      </div>
+                    ) : (
+                      <button
+                        onClick={() => handleBuatDisposisi(surat)}
+                        className="inline-flex w-full justify-center items-center gap-2 px-4 py-3 bg-white border border-black hover:-translate-y-0.5 cursor-pointer text-black rounded-full text-sm font-medium shadow transition-colors duration-200"
+                      >
+                        <FileIcon className="w-4 h-4" />
+                        Buat Disposisi
+                      </button>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
         )}
-      </div>
+      </main>
 
-      {/* Pagination */}
-      {totalItems > 0 && <Pagination />}
-
-      {selectedSurat && (
+      {/* ✅ Render Modal jika showModal true */}
+      {showModal && selectedSurat && (
         <CreateDisposisiModal
           surat={selectedSurat}
-          onClose={() => setSelectedSurat(null)}
-          onSuccess={() => {
-            setSelectedSurat(null);
-            fetchSuratMasuk();
-          }}
+          onClose={() => setShowModal(false)}
+          onSuccess={handleDisposisiSuccess}
         />
       )}
 
-      {viewDetailSurat && (
-        <ModalDetailSuratMasuk
-          surat={viewDetailSurat}
-          onClose={() => setViewDetailSurat(null)}
-        />
-      )}
+      <ImageModal
+        selectedImage={selectedImage}
+        setSelectedImage={setSelectedImage}
+      />
     </div>
   );
 };

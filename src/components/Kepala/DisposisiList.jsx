@@ -122,9 +122,9 @@ const DisposisiList = () => {
   const formatDate = (dateString) => {
     if (!dateString) return '-';
     return new Date(dateString).toLocaleDateString('id-ID', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric'
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
     });
   };
 
@@ -140,42 +140,42 @@ const DisposisiList = () => {
   const StatusBadge = ({ status }) => {
     const getStatusColor = (status) => {
       switch (status) {
-        case 'belum dibaca': return 'bg-slate-100 text-yellow-800 border border-slate-200';
-        case 'dibaca': return 'bg-blue-100 text-blue-800 border border-blue-200';
+        case 'belum dibaca': return 'bg-green-100 text-green-800';
+        case 'dibaca': return 'bg-blue-100 text-blue-800';
         case 'dalam proses':
-        case 'diproses': return 'bg-yellow-100 text-yellow-800 border border-yellow-200';
-        case 'selesai': return 'bg-green-100 text-green-800 border border-green-200';
-        default: return 'bg-gray-100 text-gray-800 border border-gray-200';
+        case 'diproses': return 'bg-yellow-100 text-yellow-800';
+        case 'selesai': return 'bg-gray-100 text-gray-800';
+        default: return 'bg-gray-100 text-gray-800';
       }
     };
 
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getStatusColor(status)}`}>
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(status)}`}>
         {status}
       </span>
     );
   };
 
-  // === SIFAT BADGE (DIUBAH SESUAI PALET STANDAR) ===
+  // === SIFAT BADGE (DIUBAH SESUAI PALET STANDAR SURAT MASUK) ===
   const SifatBadge = ({ sifat }) => {
     const getSifatColor = (sifat) => {
       switch (sifat) {
-        case 'Sangat Segera': return 'bg-red-100 text-red-800 border border-red-200';
-        case 'Segera': return 'bg-orange-100 text-orange-800 border border-orange-200';
-        case 'Biasa': return 'bg-blue-100 text-blue-800 border border-blue-200';
-        case 'Rahasia': return 'bg-purple-100 text-purple-800 border border-purple-200';
-        default: return 'bg-gray-100 text-gray-800 border border-gray-200';
+        case 'Sangat Segera': return 'bg-red-100 text-red-800';
+        case 'Segera': return 'bg-orange-100 text-orange-800';
+        case 'Biasa': return 'bg-blue-100 text-blue-800';
+        case 'Rahasia': return 'bg-purple-100 text-purple-800';
+        default: return 'bg-gray-100 text-gray-800';
       }
     };
 
     return (
-      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getSifatColor(sifat)}`}>
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSifatColor(sifat)}`}>
         {sifat}
       </span>
     );
   };
 
-  // === PAGINATION COMPONENT (SAMA SEPERTI SURAT MASUK LIST) ===
+  // === PAGINATION COMPONENT (GAYA MINIMALIS & SESUAI SURAT MASUK) ===
   const Pagination = () => {
     if (totalItems === 0) return null;
 
@@ -215,106 +215,99 @@ const DisposisiList = () => {
     };
 
     return (
-      <div className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border-2 border-[#EDE6E3]">
-        <div className="flex items-center gap-4">
-          <span className="text-sm font-medium">
-            Menampilkan {startIndex + 1} - {Math.min(endIndex, totalItems)} dari {totalItems} data
-          </span>
-
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium">Per halaman:</span>
-            <select
-              value={itemsPerPage}
-              onChange={(e) => changeItemsPerPage(Number(e.target.value))}
-              className="px-3 py-2 border border-[#EDE6E3] rounded-xl text-sm focus:ring-2 focus:ring-white focus:border-white bg-white text-black shadow-sm"
-            >
-              <option value={5}>5</option>
-              <option value={10}>10</option>
-              <option value={25}>25</option>
-              <option value={50}>50</option>
-            </select>
-          </div>
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mt-6">
+        <div className="text-sm text-gray-700">
+          Menampilkan {startIndex + 1} - {Math.min(endIndex, totalItems)} dari {totalItems} data
         </div>
 
         <div className="flex items-center gap-2">
-          {totalPages > 1 && (
-            <>
-              <button
-                onClick={goToPreviousPage}
-                disabled={currentPage === 1}
-                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-              >
-                <ChevronLeft className="h-4 w-4" />
-              </button>
+          <select
+            value={itemsPerPage}
+            onChange={(e) => changeItemsPerPage(Number(e.target.value))}
+            className="px-3 py-2 border border-gray-300 rounded-full text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none"
+          >
+            <option value={5}>5/hal</option>
+            <option value={10}>10/hal</option>
+            <option value={25}>25/hal</option>
+            <option value={50}>50/hal</option>
+          </select>
 
-              {getVisiblePages().map((page, index) => (
-                page === '...' ? (
-                  <span key={index} className="px-3 py-2 text-black">...</span>
-                ) : (
-                  <button
-                    key={index}
-                    onClick={() => goToPage(page)}
-                    className={`px-3 py-2 rounded-xl transition-colors font-semibold shadow-sm border ${
-                      currentPage === page
-                        ? 'bg-black text-white border-[#EDE6E3]'
-                        : 'border-[#EDE6E3] hover:bg-[#FDFCFB] text-black hover:text-black'
-                    }`}
-                  >
-                    {page}
-                  </button>
-                )
-              ))}
+          <div className="flex items-center gap-1">
+            <button
+              onClick={goToPreviousPage}
+              disabled={currentPage === 1}
+              className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </button>
 
-              <button
-                onClick={goToNextPage}
-                disabled={currentPage === totalPages}
-                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
-              >
-                <ChevronRight className="h-4 w-4" />
-              </button>
-            </>
-          )}
+            {getVisiblePages().map((page, index) =>
+              page === '...' ? (
+                <span key={index} className="px-3 py-1">...</span>
+              ) : (
+                <button
+                  key={index}
+                  onClick={() => goToPage(page)}
+                  className={`px-3 py-1 rounded-full text-sm font-medium transition ${
+                    currentPage === page
+                      ? 'bg-black text-white'
+                      : 'bg-white text-black hover:bg-gray-100 border border-gray-300'
+                  }`}
+                >
+                  {page}
+                </button>
+              )
+            )}
+
+            <button
+              onClick={goToNextPage}
+              disabled={currentPage === totalPages}
+              className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+            >
+              <ChevronRight className="h-4 w-4" />
+            </button>
+          </div>
         </div>
       </div>
     );
   };
 
-  // === DELETE MODAL (DISAMAKAN DENGAN GAYA STANDAR) ===
+  // === DELETE MODAL (GAYA CARD & BUTTON SESUAI SURAT MASUK) ===
   const DeleteModal = () => {
     if (!showDeleteModal || !selectedDisposisi) return null;
 
     return (
-      <div className="fixed inset-0 bg-black bg-opacity-20 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-xl max-w-md w-full border-2 border-[#EDE6E3]">
+      <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50 p-4">
+        <div className="bg-white rounded-2xl shadow-xl max-w-md w-full border border-slate-200">
           <div className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 bg-gradient-to-br from-[#D9534F] to-[#B52B27] rounded-xl shadow-md">
-                  <Trash2 className="h-5 w-5 text-white" />
+                <div className="p-2 bg-red-100 rounded-full">
+                  <Trash2 className="h-5 w-5 text-red-600" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold text-black">Konfirmasi Hapus</h3>
-                  <p className="text-sm font-medium text-black opacity-80">Tindakan ini tidak dapat dibatalkan</p>
+                  <h3 className="text-lg font-bold text-gray-900">Konfirmasi Hapus</h3>
+                  <p className="text-sm text-gray-500">Tindakan ini tidak dapat dibatalkan</p>
                 </div>
               </div>
               <button
                 onClick={closeDeleteModal}
-                className="p-2 hover:bg-[#FDFCFB] rounded-xl transition-colors border border-[#EDE6E3]"
+                className="p-2 hover:bg-gray-100 rounded-full transition"
               >
-                <X className="h-5 w-5 text-black" />
+                <X className="h-5 w-5 text-gray-600" />
               </button>
             </div>
 
             <div className="mb-6">
-              <p className="text-black font-semibold mb-4">
+              <p className="text-gray-800 font-medium mb-3">
                 Apakah Anda yakin ingin menghapus disposisi ini?
               </p>
-              <div className="bg-[#FDFCFB] p-4 rounded-xl border border-[#EDE6E3] shadow-sm">
-                <p className="font-semibold text-black">{selectedDisposisi.perihal}</p>
-                <p className="text-sm text-black opacity-80 mt-1">Nomor: {selectedDisposisi.nomor_surat}</p>
-                <p className="text-sm text-black opacity-80">Dari: {selectedDisposisi.asal_instansi}</p>
+              <div className="bg-gray-50 p-4 rounded-xl border border-gray-200">
+                <p className="font-semibold text-gray-900">{selectedDisposisi.perihal}</p>
+                <p className="text-sm text-gray-600 mt-1">Nomor: {selectedDisposisi.nomor_surat}</p>
+                <p className="text-sm text-gray-600">Dari: {selectedDisposisi.asal_instansi}</p>
               </div>
-              <p className="text-red-700 text-sm mt-3 font-semibold">
+              <p className="text-red-600 text-xs mt-3">
                 <strong>Peringatan:</strong> Tindakan ini tidak dapat dibatalkan. Status surat akan diubah menjadi belum didisposisi.
               </p>
             </div>
@@ -322,7 +315,7 @@ const DisposisiList = () => {
             <div className="flex justify-end gap-3">
               <button
                 onClick={closeDeleteModal}
-                className="px-4 py-2.5 text-black border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] font-semibold transition-all shadow-sm"
+                className="px-4 py-2.5 text-gray-700 border border-gray-300 rounded-full hover:bg-gray-50 font-medium transition"
                 disabled={deleteLoading === selectedDisposisi.id}
               >
                 Batal
@@ -330,10 +323,10 @@ const DisposisiList = () => {
               <button
                 onClick={() => handleDelete(selectedDisposisi.id)}
                 disabled={deleteLoading === selectedDisposisi.id}
-                className={`px-4 py-2.5 rounded-xl font-semibold transition-all shadow-md border border-[#EDE6E3] flex items-center gap-2 ${
+                className={`px-4 py-2.5 rounded-full font-medium text-white transition flex items-center gap-2 ${
                   deleteLoading === selectedDisposisi.id
-                    ? 'bg-gradient-to-br from-[#D9534F] to-[#B52B27] text-white cursor-not-allowed opacity-75'
-                    : 'bg-gradient-to-br from-[#D9534F] to-[#B52B27] text-white hover:from-[#B52B27] hover:to-[#8B0000] hover:-translate-y-0.5 hover:shadow-lg'
+                    ? 'bg-red-400 cursor-not-allowed opacity-75'
+                    : 'bg-red-500 hover:bg-red-600'
                 }`}
               >
                 {deleteLoading === selectedDisposisi.id ? (
@@ -364,220 +357,238 @@ const DisposisiList = () => {
   }
 
   return (
-    <div>
-      {/* Header */}
-      <div className="flex items-center justify-between mb-4">
-        <button
-          onClick={fetchDisposisi}
-          className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-white"
-        >
-          <RefreshCcw className="w-4 h-4" /> Refresh
-        </button>
-      </div>
+    <div className="min-h-screen">
+      <main className="">
 
-      {/* Stat Cards (Sesuai Gaya Surat Masuk List) */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <StatCard
-          title="Total Disposisi"
-          count={totalDisposisi}
-          icon={Archive}
-          bgColor="bg-white"
-          textColor="text-black"
-          iconBg="bg-teal-400"
-          borderColor="border-slate-200"
-          iconColor="text-white"
-        />
-        <StatCard
-          title="Belum Dibaca"
-          count={belumDibaca}
-          icon={Clock}
-          bgColor="bg-white"
-          textColor="text-black"
-          iconBg="bg-slate-200"
-          borderColor="border-slate-200"
-          iconColor="text-black"
-        />
-        <StatCard
-          title="Diproses"
-          count={diproses}
-          icon={FileText}
-          bgColor="bg-white"
-          textColor="text-black"
-          iconBg="bg-neutral-500"
-          borderColor="border-slate-200"
-          iconColor="text-white"
-        />
-        <StatCard
-          title="Selesai"
-          count={selesai}
-          icon={CheckCircle}
-          bgColor="bg-black"
-          textColor="text-white"
-          iconBg="bg-white"
-          borderColor="border-slate-200"
-          iconColor="text-teal-400"
-        />
-      </div>
+        {/* Header Refresh */}
+        <div className="flex items-center justify-between mb-6">
+          <button
+            onClick={fetchDisposisi}
+            className="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-full hover:bg-gray-50 text-sm font-medium shadow-sm transition"
+          >
+            <RefreshCcw className="w-4 h-4" /> Refresh
+          </button>
+        </div>
 
-      {/* Filters */}
-      <div className="p-3 shadow-lg rounded-2xl border-black/15 border">
-        <div className="mb-3">
-          <div className="flex flex-col lg:flex-row gap-4">
+        {/* Stat Cards — Disesuaikan Gaya SuratMasukList */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+          <StatCard
+            title="Total Disposisi"
+            count={totalDisposisi}
+            icon={Archive}
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-teal-400"
+            borderColor="border-slate-200"
+            iconColor="text-white"
+          />
+          <StatCard
+            title="Belum Dibaca"
+            count={belumDibaca}
+            icon={Clock}
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-green-100"
+            borderColor="border-slate-200"
+            iconColor="text-green-800"
+          />
+          <StatCard
+            title="Diproses"
+            count={diproses}
+            icon={FileText}
+            bgColor="bg-white"
+            textColor="text-black"
+            iconBg="bg-yellow-100"
+            borderColor="border-slate-200"
+            iconColor="text-yellow-800"
+          />
+          <StatCard
+            title="Selesai"
+            count={selesai}
+            icon={CheckCircle}
+            bgColor="bg-black"
+            textColor="text-white"
+            iconBg="bg-white"
+            borderColor="border-slate-200"
+            iconColor="text-teal-400"
+          />
+        </div>
 
-            {/* Search */}
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-black" />
-                <input
-                  type="text"
-                  placeholder="Cari berdasarkan perihal, nomor surat, instansi, atau jabatan..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black placeholder-black shadow-sm"
-                />
-              </div>
+        {/* Filters — Disesuaikan Gaya SuratMasukList */}
+        <div className="mb-4">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+
+            {/* Search Input */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Cari berdasarkan perihal, nomor surat, instansi, atau jabatan..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 text-sm rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              />
             </div>
 
             {/* Filter Sifat */}
-            <div className="w-full lg:w-48">
-              <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black z-10" />
-                <select
-                  value={selectedSifat}
-                  onChange={(e) => setSelectedSifat(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black shadow-sm appearance-none"
-                >
-                  <option value="">Semua Sifat</option>
-                  <option value="Sangat Segera">Sangat Segera</option>
-                  <option value="Segera">Segera</option>
-                  <option value="Rahasia">Rahasia</option>
-                  <option value="Biasa">Biasa</option>
-                </select>
-              </div>
+            <div className="flex items-center gap-2">
+              <Filter className="w-5 h-5 text-gray-600" />
+              <select
+                value={selectedSifat}
+                onChange={(e) => setSelectedSifat(e.target.value)}
+                className="px-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              >
+                <option value="">Semua Sifat</option>
+                <option value="Sangat Segera">Sangat Segera</option>
+                <option value="Segera">Segera</option>
+                <option value="Rahasia">Rahasia</option>
+                <option value="Biasa">Biasa</option>
+              </select>
             </div>
 
             {/* Filter Status */}
-            <div className="w-full lg:w-48">
-              <div className="relative">
-                <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-black z-10" />
-                <select
-                  value={selectedStatus}
-                  onChange={(e) => setSelectedStatus(e.target.value)}
-                  className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-white focus:border-white text-black shadow-sm appearance-none"
-                >
-                  <option value="">Semua Status</option>
-                  <option value="belum dibaca">Belum Dibaca</option>
-                  <option value="dibaca">Dibaca</option>
-                  <option value="diproses">Dalam Proses</option>
-                  <option value="selesai">Selesai</option>
-                </select>
-              </div>
+            <div className="flex items-center gap-2">
+              <Filter className="w-5 h-5 text-gray-600" />
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="px-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              >
+                <option value="">Semua Status</option>
+                <option value="belum dibaca">Belum Dibaca</option>
+                <option value="dibaca">Dibaca</option>
+                <option value="diproses">Dalam Proses</option>
+                <option value="selesai">Selesai</option>
+              </select>
             </div>
 
-            {/* Reset */}
-            <div className="flex gap-2">
-              <button
-                onClick={resetFilters}
-                className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-black font-semibold shadow-sm hover:shadow-md"
-              >
-                <Filter className="h-4 w-4" />
-                Reset
-              </button>
-            </div>
+            {/* Reset Button */}
+            <button
+              onClick={resetFilters}
+              className="px-4 py-2.5 text-gray-700 border border-gray-300 rounded-full hover:bg-gray-50 font-medium transition flex items-center gap-2"
+            >
+              <RotateCcw className="h-4 w-4" /> Reset
+            </button>
+
           </div>
         </div>
 
-        {/* Disposisi List - CARD VERSION (TETAP KONSISTEN DENGAN SURAT MASUK) */}
+        {/* Disposisi List — CARD LAYOUT (SEPERTI SURAT MASUK) */}
         {currentItems.length === 0 ? (
-          <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-            <FileText className="h-12 w-12 text-black mx-auto mb-4" />
-            <p className="text-black text-lg font-semibold">
-              {disposisi.length === 0 ? 'Belum ada disposisi' : 'Tidak ada disposisi yang sesuai filter'}
-            </p>
-            <p className="text-black mt-1">
-              {disposisi.length === 0 ? 'Belum ada disposisi yang dibuat' : 'Coba ubah filter pencarian'}
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+              <FileText className="w-10 h-10 text-gray-300" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
+              {disposisi.length === 0 ? 'Belum ada disposisi' : 'Tidak ada disposisi yang cocok'}
+            </h3>
+            <p className="text-gray-500 max-w-md mx-auto">
+              {disposisi.length === 0
+                ? 'Belum ada disposisi yang dibuat. Silakan buat disposisi baru.'
+                : 'Coba ubah kata kunci pencarian atau filter status.'
+              }
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-            <table className="min-w-full divide-y divide-[#EDE6E3] bg-white rounded-2xl">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Nomor Surat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Asal Instansi</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Disposisi Kepada</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Tanggal Dibuat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Sifat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-black uppercase tracking-wider">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#EDE6E3]">
-                {currentItems.map((item) => (
-                  <tr key={item.id} className="hover:bg-[#FDFCFB] transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-black">
-                      {item.nomor_surat || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                      {item.asal_instansi || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
-                      {item.disposisi_kepada_jabatan || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-black">
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+            {currentItems.map((item) => (
+              <article
+                key={item.id}
+                className="group relative bg-white space-y-3 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-slate-200"
+              >
+                {/* Header */}
+                <div className="border-b border-gray-50/50 pb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-900">
+                        {item.perihal || 'Tanpa Perihal'}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        <span className="font-medium text-gray-700">Nomor Surat:</span> {item.nomor_surat || '-'} •{' '}
+                        <span className="font-medium text-gray-700">Dari:</span> {item.asal_instansi || '-'}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center px-4 py-2 bg-indigo-50 text-indigo-800 rounded-full text-sm font-medium shadow-sm">
                       {formatDate(item.created_at)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <SifatBadge sifat={item.sifat} />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <StatusBadge status={item.status} />
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex flex-col gap-2">
-                        <button
-                          onClick={() => window.location.href = `/kepala/disposisi/${item.id}`}
-                          className="flex items-center justify-center gap-x-1 text-teal-400 hover:text-teal-700 text-sm font-medium bg-white px-3 py-2 border border-[#EDE6E3] rounded-xl hover:shadow-sm transition-all"
-                        >
-                          <Eye className="w-4 h-4" /> Lihat
-                        </button>
+                    </span>
+                  </div>
+                </div>
 
-                        <button
-                          onClick={() => openDeleteModal(item)}
-                          disabled={deleteLoading === item.id}
-                          className={`flex items-center justify-center gap-x-1 text-white text-sm font-medium px-3 py-2 rounded-xl transition-all ${
-                            deleteLoading === item.id
-                              ? 'bg-red-400 opacity-75 cursor-not-allowed'
-                              : 'bg-red-400 hover:-translate-y-0.5 hover:shadow-lg'
-                          }`}
-                        >
-                          {deleteLoading === item.id ? (
-                            <>
-                              <Loader className="h-4 w-4 animate-spin" />
-                              Hapus
-                            </>
-                          ) : (
-                            <>
-                              <Trash2 className="w-4 h-4" />
-                              Hapus
-                            </>
-                          )}
-                        </button>
+                {/* Metadata Grid */}
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                    <div className="flex items-start gap-2">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mt-0.5">
+                        <User className="w-5 h-5 text-teal-400" />
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <div>
+                        <p className="text-gray-500 font-medium">Disposisi Kepada</p>
+                        <p className="text-gray-800">{item.disposisi_kepada_jabatan || '-'}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mt-0.5">
+                        <AlertCircle className="w-5 h-5 text-teal-400" />
+                      </div>
+                      <div>
+                        <p className="text-gray-500 font-medium">Sifat</p>
+                        <SifatBadge sifat={item.sifat || 'Biasa'} />
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <div>
+                        <p className="text-gray-500 font-medium">Status</p>
+                        <StatusBadge status={item.status || 'belum dibaca'} />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tombol Aksi */}
+                <div className="space-y-3 pt-3 border-t border-gray-50/50">
+                  <button
+                    onClick={() => window.location.href = `/kepala/disposisi/${item.id}`}
+                    className="inline-flex w-full justify-center items-center gap-2 px-4 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-full text-sm font-medium shadow transition-colors duration-200"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Lihat Detail
+                  </button>
+
+                  <button
+                    onClick={() => openDeleteModal(item)}
+                    disabled={deleteLoading === item.id}
+                    className={`inline-flex w-full justify-center items-center gap-2 px-4 py-3 rounded-full text-sm font-medium shadow transition-colors duration-200 ${
+                      deleteLoading === item.id
+                        ? 'bg-red-400 text-white cursor-not-allowed opacity-75'
+                        : 'bg-white border border-red-400 hover:-translate-y-0.5 text-red-400'
+                    }`}
+                  >
+                    {deleteLoading === item.id ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                        Menghapus...
+                      </>
+                    ) : (
+                      <>
+                        <Trash2 className="w-4 h-4" />
+                        Hapus Disposisi
+                      </>
+                    )}
+                  </button>
+                </div>
+              </article>
+            ))}
           </div>
         )}
-      </div>
 
-      {/* Pagination */}
-      {totalItems > 0 && <Pagination />}
+        {/* Pagination */}
+        {totalItems > 0 && <Pagination />}
 
-      {/* Delete Confirmation Modal */}
-      <DeleteModal />
+        {/* Delete Confirmation Modal */}
+        <DeleteModal />
+      </main>
     </div>
   );
 };

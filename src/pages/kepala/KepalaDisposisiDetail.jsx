@@ -14,7 +14,7 @@ import {
     CheckCircle,
     Clock,
     File,
-    Image,
+    Image as ImageIcon,
     ExternalLink,
     History,
     UserCircle,
@@ -22,6 +22,8 @@ import {
 } from 'lucide-react';
 import { api } from '../../utils/api';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
+import isImageFile from '../../utils/isImageFile'; // ✅ Import utilitas deteksi gambar
+import ImageModal from '../../components/Ui/ImageModal'; // ✅ Import komponen modal gambar
 
 const KepalaDisposisiDetail = () => {
     const { id } = useParams();
@@ -35,7 +37,7 @@ const KepalaDisposisiDetail = () => {
     const [error, setError] = useState(null);
     const [feedbackError, setFeedbackError] = useState(null);
     const [logsError, setLogsError] = useState(null);
-    const [selectedImage, setSelectedImage] = useState(null);
+    const [selectedImage, setSelectedImage] = useState(null); // ✅ Untuk ImageModal
 
     const fetchDisposisiDetail = async () => {
         try {
@@ -127,7 +129,7 @@ const KepalaDisposisiDetail = () => {
         const type = fileType?.toLowerCase() || filename?.split('.').pop()?.toLowerCase();
 
         if (['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(type)) {
-            return <Image className="h-5 w-5" />;
+            return <ImageIcon className="h-5 w-5" />;
         }
         return <File className="h-5 w-5" />;
     };
@@ -310,46 +312,48 @@ const KepalaDisposisiDetail = () => {
                             </div>
                         </div>
 
+                        {/* ✅ Lampiran Surat — Gunakan isImageFile & ImageModal */}
                         {disposisi?.photos && disposisi.photos.length > 0 && (
                             <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                                 <h2 className="text-lg font-semibold text-black mb-4 flex items-center gap-2">
-                                    <Image className="h-5 w-5 text-teal-400" />
+                                    <ImageIcon className="h-5 w-5 text-teal-400" />
                                     Lampiran Surat ({disposisi.photos.length})
                                 </h2>
 
-                                <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+                                <div className="flex flex-wrap gap-2">
                                     {disposisi.photos.map((photo, index) => {
-                                        const type = photo.type?.toLowerCase() || photo.filename?.split('.').pop()?.toLowerCase();
-                                        const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(type);
+                                        const isImage = isImageFile(photo); // ✅ Gunakan utilitas
 
                                         return (
                                             <div
                                                 key={photo.id}
-                                                className="cursor-pointer rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow"
+                                                className="cursor-pointer rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105"
                                                 onClick={() => {
                                                     if (isImage) {
                                                         setSelectedImage(photo.url);
                                                     } else {
-                                                        // Non-gambar: buka di tab baru
                                                         window.open(photo.url, '_blank', 'noopener,noreferrer');
                                                     }
                                                 }}
+                                                title={isImage ? "Klik untuk memperbesar gambar" : "Klik untuk membuka file"}
                                             >
-                                                <div className="w-full h-40 bg-white border-slate-200 shadow-lg flex items-center justify-center">
+                                                <div className="w-20 h-20 bg-white border border-slate-200 flex items-center justify-center">
                                                     {isImage ? (
                                                         <img
                                                             src={photo.url}
-                                                            alt={`Thumbnail ${index + 1}`}
+                                                            alt={`Lampiran ${index + 1}: ${photo.filename}`}
                                                             className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
                                                             onError={(e) => {
-                                                                e.target.src = 'https://via.placeholder.com/160x160?text=No+Image';
+                                                                e.target.src = 'https://via.placeholder.com/160x160/ffcccc/333333?text=🖼️+No+Image';
                                                                 e.target.className = "w-full h-full object-cover";
                                                             }}
                                                         />
                                                     ) : (
-                                                        <div className="text-teal-400 flex flex-col justify-center items-center">
-                                                            <FileText className='w-9 h-9' />
-                                                            <p className='font-bold text-lg mt-2 text-center'>File</p>
+                                                        <div className="text-gray-500 flex flex-col justify-center items-center p-2 text-center">
+                                                            <FileText className="w-8 h-8 mb-1" />
+                                                            <span className="text-xs font-medium break-words max-w-full">
+                                                                {photo.filename.split('.').pop()?.toUpperCase() || 'FILE'}
+                                                            </span>
                                                         </div>
                                                     )}
                                                 </div>
@@ -360,6 +364,7 @@ const KepalaDisposisiDetail = () => {
                             </div>
                         )}
 
+                        {/* ✅ Feedback dengan Lampiran — Gunakan isImageFile & ImageModal */}
                         <div className="bg-neutral-50 rounded-2xl shadow-lg border border-slate-200 p-4">
                             <h2 className="text-lg font-semibold text-black mb-4 flex items-center gap-2">
                                 <MessageSquare className="h-5 w-5 text-blue-600" />
@@ -402,25 +407,16 @@ const KepalaDisposisiDetail = () => {
                                                 </p>
                                             </div>
 
+                                            {/* ✅ Lampiran Feedback — Gunakan isImageFile & ImageModal */}
                                             {item.files && item.files.length > 0 && (
                                                 <div className="mt-4">
                                                     <label className="block text-xs font-medium text-gray-600 mb-3">
                                                         Lampiran ({item.files.length})
                                                     </label>
-                                                    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                                                    <div className="flex flex-wrap gap-2">
                                                         {item.files.map((file) => {
-                                                            // ✅ Bersihkan spasi di URL (solusi cepat & aman)
-                                                            const cleanUrl = file.url?.trim(); // ← Tambahkan ini!
-
-                                                            // 🔧 Deteksi gambar lebih robust
-                                                            let type;
-                                                            if (file.type && file.type.startsWith('image/')) {
-                                                                type = file.type.split('/')[1];
-                                                            } else {
-                                                                type = file.filename?.split('.').pop()?.toLowerCase();
-                                                            }
-
-                                                            const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(type);
+                                                            const cleanUrl = file.url?.trim();
+                                                            const isImage = isImageFile(file); // ✅ Gunakan utilitas
 
                                                             return (
                                                                 <div
@@ -428,29 +424,31 @@ const KepalaDisposisiDetail = () => {
                                                                     className="cursor-pointer rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all duration-200 hover:scale-105 aspect-square flex items-center justify-center bg-gray-50"
                                                                     onClick={() => {
                                                                         if (isImage) {
-                                                                            setSelectedImage(cleanUrl); // ← Gunakan cleanUrl!
+                                                                            setSelectedImage(cleanUrl);
                                                                         } else {
                                                                             window.open(cleanUrl, '_blank', 'noopener,noreferrer');
                                                                         }
                                                                     }}
                                                                     title={isImage ? "Klik untuk memperbesar gambar" : "Klik untuk membuka file"}
                                                                 >
-                                                                    <div className="w-full h-full bg-white flex items-center justify-center">
+                                                                    <div className="w-20 h-20 bg-white flex items-center justify-center">
                                                                         {isImage ? (
                                                                             <img
-                                                                                src={cleanUrl} // ← Gunakan cleanUrl!
-                                                                                alt={`Feedback file ${file.filename}`}
+                                                                                src={cleanUrl}
+                                                                                alt={`Lampiran: ${file.filename}`}
                                                                                 className="w-full h-full object-cover transition-transform duration-200 hover:scale-105"
                                                                                 onError={(e) => {
                                                                                     console.error('Gagal muat gambar:', cleanUrl);
-                                                                                    e.target.src = 'https://via.placeholder.com/160x160/ffcccc/333333?text=🖼️+GAGAL+MUAT';
+                                                                                    e.target.src = 'https://via.placeholder.com/160x160/ffcccc/333333?text=🖼️+Error';
                                                                                     e.target.className = "w-full h-full object-cover";
                                                                                 }}
                                                                             />
                                                                         ) : (
-                                                                            <div className="text-gray-500 flex flex-col justify-center items-center">
-                                                                                <FileText className='w-6 h-6' />
-                                                                                <p className='font-semibold mt-2'>File</p>
+                                                                            <div className="text-gray-500 flex flex-col justify-center items-center p-1 text-center">
+                                                                                <FileText className="w-6 h-6 mb-1" />
+                                                                                <span className="text-xs font-bold break-words max-w-full">
+                                                                                    {file.filename.split('.').pop()?.toUpperCase() || 'FILE'}
+                                                                                </span>
                                                                             </div>
                                                                         )}
                                                                     </div>
@@ -538,31 +536,12 @@ const KepalaDisposisiDetail = () => {
                     </div>
                 </div>
             </div>
-            {/* Modal Gambar Fullscreen */}
-            {selectedImage && (
-                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-md p-4">
-                    <div className="relative max-w-4xl mx-auto max-h-full w-full">
-                        <button
-                            onClick={() => setSelectedImage(null)}
-                            className="absolute top-4 right-4 text-white hover:text-gray-300 z-10 transition-colors"
-                            aria-label="Tutup modal"
-                        >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
 
-                        <img
-                            src={selectedImage}
-                            alt="Preview besar"
-                            className="max-w-full mx-auto max-h-[90vh] object-contain rounded-lg shadow-2xl"
-                            onError={(e) => {
-                                e.target.src = 'https://via.placeholder.com/800x600?text=Gambar+Tidak+Dapat+Ditampilkan';
-                            }}
-                        />
-                    </div>
-                </div>
-            )}
+            {/* ✅ Gunakan komponen ImageModal — konsisten di seluruh aplikasi */}
+            <ImageModal
+                selectedImage={selectedImage}
+                setSelectedImage={setSelectedImage}
+            />
         </div>
     );
 };

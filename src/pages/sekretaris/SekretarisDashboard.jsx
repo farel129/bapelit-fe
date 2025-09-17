@@ -155,35 +155,36 @@ const SekretarisDashboard = () => {
     }
   };
 
+  // ✅ STATUS BADGE — DISAMAKAN DENGAN GAYA SURAT MASUK
   const getStatusBadge = (status_dari_sekretaris) => {
     const statusConfig = {
       'belum dibaca': {
-        color: 'bg-red-100 text-red-800 border border-red-200',
+        color: 'bg-green-100 text-green-800',
         icon: AlertCircle,
         text: 'Belum Dibaca'
       },
       'dibaca': {
-        color: 'bg-yellow-100 text-yellow-800 border border-yellow-200',
+        color: 'bg-yellow-100 text-yellow-800',
         icon: AlertCircle,
         text: 'Sudah Dibaca'
       },
       'diteruskan': {
-        color: 'bg-purple-100 text-purple-800 border border-purple-200',
+        color: 'bg-purple-100 text-purple-800',
         icon: Clock,
         text: 'Diteruskan kebawahan'
       },
       'diterima': {
-        color: 'bg-green-100 text-green-800 border border-green-200',
+        color: 'bg-green-100 text-green-800',
         icon: CheckCircle,
         text: 'Diterima'
       },
       'diproses': {
-        color: 'bg-blue-100 text-blue-800 border border-blue-200',
+        color: 'bg-yellow-100 text-yellow-800',
         icon: Clock,
         text: 'Dalam Proses'
       },
       'selesai': {
-        color: 'bg-emerald-100 text-emerald-800 border border-emerald-200',
+        color: 'bg-gray-100 text-gray-800',
         icon: CheckCircle,
         text: 'Selesai'
       }
@@ -193,9 +194,28 @@ const SekretarisDashboard = () => {
     const IconComponent = config.icon;
 
     return (
-      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold ${config.color}`}>
+      <span className={`inline-flex items-center px-2 py-1 rounded-full text-xs font-medium ${config.color}`}>
         <IconComponent className="w-3 h-3 mr-1" />
         {config.text}
+      </span>
+    );
+  };
+
+  // ✅ SIFAT BADGE — DISAMAKAN DENGAN GAYA SURAT MASUK
+  const SifatBadge = ({ sifat }) => {
+    const getSifatColor = (sifat) => {
+      switch (sifat) {
+        case 'Sangat Segera': return 'bg-red-100 text-red-800';
+        case 'Segera': return 'bg-orange-100 text-orange-800';
+        case 'Rahasia': return 'bg-purple-100 text-purple-800';
+        case 'Biasa': return 'bg-blue-100 text-blue-800';
+        default: return 'bg-gray-100 text-gray-800';
+      }
+    };
+
+    return (
+      <span className={`px-2 py-1 rounded-full text-xs font-medium ${getSifatColor(sifat)}`}>
+        {sifat || '-'}
       </span>
     );
   };
@@ -238,7 +258,6 @@ const SekretarisDashboard = () => {
     }
   }, [filterStatus, searchInstansi, pagination.offset, allDisposisi]);
 
-
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -251,13 +270,13 @@ const SekretarisDashboard = () => {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="bg-white border-2 border-[#EDE6E3] rounded-2xl p-6 max-w-md mx-auto shadow-sm">
+          <div className="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto shadow-sm">
             <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
-            <h3 className="text-xl font-bold" style={{ color: '#2E2A27' }}>Terjadi Kesalahan</h3>
-            <p className="text-[#6D4C41] mb-4">{error}</p>
+            <h3 className="text-xl font-bold text-gray-900">Terjadi Kesalahan</h3>
+            <p className="text-gray-600 mb-4">{error}</p>
             <button
               onClick={fetchDisposisi}
-              className="bg-gradient-to-br from-[#D9534F] to-[#B52B27] hover:from-[#B52B27] hover:to-[#8B0000] text-white px-4 py-2.5 rounded-xl font-semibold transition-all shadow-md hover:shadow-lg border border-[#EDE6E3]"
+              className="bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-full font-medium transition shadow"
             >
               Coba Lagi
             </button>
@@ -268,30 +287,27 @@ const SekretarisDashboard = () => {
   }
 
   return (
-    <div className="min-h-screen p-5 rounded-3xl bg-white shadow-lg">
-      <div className="container mx-auto">
-        {/* Header — SAMA SEPERTI KABIDDASHBOARD */}
-        <div className="relative mb-6">
-          <div className="relative bg-gradient-to-br from-white/90 via-white/80 to-[#EDE6E3]/50 backdrop-blur-sm rounded-2xl p-6 border border-white/50 shadow-lg overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-0 hover:opacity-100 transition-opacity duration-700"></div>
+    <div className="min-h-screen">
+      <main className="p-4">
 
-            <div className="flex flex-col lg:flex-row items-center justify-between relative z-10">
+        {/* ✅ Header — DISAMAKAN DENGAN GAYA SURAT MASUK */}
+        <div className="relative mb-6">
+          <div className="relative bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
+            <div className="flex flex-col lg:flex-row items-center justify-between">
               <div className='flex items-center gap-x-5'>
-                <img src={Avatar} alt="" className='absolute h-50 w-50 right-0 top-0 object-cover' />
-                <div className='space-y-2'>
-                  <h1 className="text-xl font-bold bg-gradient-to-r from-[#2E2A27] to-[#6D4C41] bg-clip-text text-transparent">
-                    Dashboard
-                  </h1>
-                  <div className='flex items-center gap-x-2 group'>
-                    <UserCircle2 className='w-5 h-5 group-hover:scale-110 transition-transform duration-300' />
-                    <p className='text-sm font-medium'>{user?.name}</p>
+                <img src={Avatar} alt="Avatar" className='h-20 w-20 object-cover rounded-full border-4 border-white shadow-md' />
+                <div className='space-y-1'>
+                  <h1 className="text-2xl font-bold text-gray-900">Dashboard Sekretaris</h1>
+                  <div className='flex items-center gap-x-2'>
+                    <UserCircle2 className='w-5 h-5 text-gray-600' />
+                    <p className='text-sm font-medium text-gray-700'>{user?.name}</p>
                   </div>
-                  <div className='flex items-center gap-x-2 mb-5 group'>
-                    <Building2 className='w-5 h-5 group-hover:scale-110 transition-transform duration-300' />
-                    <p className='text-sm font-medium'>{user?.jabatan}</p>
+                  <div className='flex items-center gap-x-2'>
+                    <Building2 className='w-5 h-5 text-gray-600' />
+                    <p className='text-sm font-medium text-gray-700'>{user?.jabatan}</p>
                   </div>
-                  <div className="flex items-center space-x-2 text-xs font-medium" style={{ color: '#6D4C41' }}>
-                    <div className="w-2 h-2 bg-gradient-to-r from-green-400 to-green-600 rounded-full animate-pulse shadow-lg shadow-green-400/50"></div>
+                  <div className="flex items-center space-x-2 text-xs font-medium text-green-600">
+                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
                     <span>Live Updates</span>
                   </div>
                 </div>
@@ -300,16 +316,17 @@ const SekretarisDashboard = () => {
           </div>
         </div>
 
-        {/* Stat Cards — SAMA SEPERTI KABIDDASHBOARD */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
+        {/* ✅ Stat Cards — DISAMAKAN DENGAN GAYA SURAT MASUK */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
           <StatCard
             title="Total Disposisi"
             count={stats.total}
             icon={FileText}
             bgColor="bg-white"
             textColor="text-black"
-            iconBg="bg-white"
+            iconBg="bg-teal-400"
             borderColor="border-slate-200"
+            iconColor="text-white"
           />
           <StatCard
             title="Belum Dibaca"
@@ -317,9 +334,9 @@ const SekretarisDashboard = () => {
             icon={AlertCircle}
             bgColor="bg-white"
             textColor="text-black"
-            iconBg="bg-neutral-400"
-            iconColor="text-white"
+            iconBg="bg-green-100"
             borderColor="border-slate-200"
+            iconColor="text-green-800"
           />
           <StatCard
             title="Diproses"
@@ -327,9 +344,9 @@ const SekretarisDashboard = () => {
             icon={Clock}
             bgColor="bg-white"
             textColor="text-black"
-            iconBg="bg-pink-400"
-            iconColor="text-white"
-            borderColor="border-pink-400"
+            iconBg="bg-yellow-100"
+            borderColor="border-slate-200"
+            iconColor="text-yellow-800"
           />
           <StatCard
             title="Selesai"
@@ -338,90 +355,82 @@ const SekretarisDashboard = () => {
             bgColor="bg-black"
             textColor="text-white"
             iconBg="bg-white"
-            iconColor="text-pink-400"
             borderColor="border-slate-200"
+            iconColor="text-teal-400"
           />
         </div>
 
-        {/* Search and Filter Section — SAMA SEPERTI KABIDDASHBOARD */}
-        <div className="mb-4 p-6 shadow-lg rounded-2xl border-2 border-[#EDE6E3] bg-white">
-          <div className="mb-3">
-            <div className="flex flex-col lg:flex-row gap-2">
+        {/* ✅ Search and Filter Section — DISAMAKAN DENGAN GAYA SURAT MASUK */}
+        <div className="mb-6 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
+          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
 
-              {/* Search Bar — SAMA SEPERTI KABIDDASHBOARD */}
-              <div className="flex-1">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#6D4C41]" />
-                  <input
-                    type="text"
-                    placeholder="Cari berdasarkan instansi..."
-                    value={searchInput}
-                    onChange={(e) => handleSearchInput(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] placeholder-[#6D4C41] shadow-sm"
-                  />
-                  {searchInput && (
-                    <button
-                      onClick={clearSearch}
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 hover:bg-[#FDFCFB] rounded-r-xl transition-colors"
-                    >
-                      <X className="h-5 w-5 text-[#6D4C41]" />
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Filter Status — SAMA SEPERTI KABIDDASHBOARD */}
-              <div className="w-full lg:w-48">
-                <div className="relative">
-                  <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-[#6D4C41] z-10" />
-                  <select
-                    value={filterStatus}
-                    onChange={(e) => handleFilterChange(e.target.value)}
-                    className="w-full pl-10 pr-4 py-3 bg-white border border-[#EDE6E3] rounded-xl focus:ring-2 focus:ring-[#D4A373] focus:border-[#D4A373] text-[#2E2A27] shadow-sm appearance-none"
-                  >
-                    <option value="">Semua Status</option>
-                    <option value="belum dibaca">Belum Dibaca</option>
-                    <option value="diproses">Diproses</option>
-                    <option value="selesai">Selesai</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Reset Button — SAMA SEPERTI KABIDDASHBOARD */}
-              <div className="flex gap-2">
+            {/* Search Input */}
+            <div className="relative flex-1 max-w-md">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder="Cari berdasarkan instansi..."
+                value={searchInput}
+                onChange={(e) => handleSearchInput(e.target.value)}
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-300 text-sm rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              />
+              {searchInput && (
                 <button
-                  onClick={() => {
-                    setFilterStatus('');
-                    setSearchInstansi('');
-                    setSearchInput('');
-                    setPagination(prev => ({ ...prev, offset: 0 }));
-                  }}
-                  className="px-4 py-3 bg-white border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] transition-all flex items-center gap-2 text-[#2E2A27] font-semibold shadow-sm hover:shadow-md"
+                  onClick={clearSearch}
+                  className="absolute inset-y-0 right-0 flex items-center pr-3 hover:bg-gray-50 rounded-r-full transition-colors"
                 >
-                  <Filter className="h-4 w-4" />
-                  Reset
+                  <X className="h-5 w-5 text-gray-500" />
                 </button>
-              </div>
+              )}
             </div>
+
+            {/* Filter Status */}
+            <div className="flex items-center gap-2">
+              <Filter className="w-5 h-5 text-gray-600" />
+              <select
+                value={filterStatus}
+                onChange={(e) => handleFilterChange(e.target.value)}
+                className="px-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+              >
+                <option value="">Semua Status</option>
+                <option value="belum dibaca">Belum Dibaca</option>
+                <option value="diproses">Diproses</option>
+                <option value="selesai">Selesai</option>
+              </select>
+            </div>
+
+            {/* Reset Button */}
+            <button
+              onClick={() => {
+                setFilterStatus('');
+                setSearchInstansi('');
+                setSearchInput('');
+                setPagination(prev => ({ ...prev, offset: 0 }));
+              }}
+              className="px-4 py-2.5 text-gray-700 border border-gray-300 rounded-full hover:bg-gray-50 font-medium transition flex items-center gap-2"
+            >
+              <Filter className="h-4 w-4" /> Reset
+            </button>
+
           </div>
 
-          {/* Active Filters Display — SAMA SEPERTI KABIDDASHBOARD */}
+          {/* Active Filters Display */}
           {(filterStatus || searchInstansi) && (
-            <div className="mt-4 pt-4 border-t border-[#EDE6E3]">
+            <div className="mt-4 pt-4 border-t border-gray-200">
               <div className="flex flex-wrap items-center gap-3">
-                <span className="text-sm font-medium text-[#6D4C41]">Filter Aktif:</span>
+                <span className="text-sm font-medium text-gray-700">Filter Aktif:</span>
                 {filterStatus && (
-                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm">
+                  <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-sm font-medium">
                     <span>Status: {filterStatus}</span>
-                    <button onClick={() => handleFilterChange('')} className="hover:text-[#2E2A27]">
+                    <button onClick={() => handleFilterChange('')} className="hover:text-gray-700">
                       <X className="w-3 h-3" />
                     </button>
                   </div>
                 )}
                 {searchInstansi && (
-                  <div className="flex items-center gap-2 bg-white px-3 py-1.5 rounded-full text-sm font-medium border border-[#EDE6E3] shadow-sm">
+                  <div className="flex items-center gap-2 bg-gray-100 px-3 py-1.5 rounded-full text-sm font-medium">
                     <span>Instansi: "{searchInstansi}"</span>
-                    <button onClick={clearSearch} className="hover:text-[#2E2A27]">
+                    <button onClick={clearSearch} className="hover:text-gray-700">
                       <X className="w-3 h-3" />
                     </button>
                   </div>
@@ -431,14 +440,16 @@ const SekretarisDashboard = () => {
           )}
         </div>
 
-        {/* Data List — DISAMAKAN 100% DENGAN TABEL KABIDDASHBOARD */}
+        {/* ✅ Disposisi List — CARD LAYOUT (SEPERTI SURAT MASUK) */}
         {disposisiList.length === 0 ? (
-          <div className="bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm text-center py-16 px-6">
-            <FileText className="h-12 w-12 text-[#6D4C41] mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-[#2E2A27]">
+          <div className="text-center py-20">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+              <FileText className="w-10 h-10 text-gray-300" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-700 mb-2">
               {searchInstansi || filterStatus ? 'Tidak Ada Hasil' : 'Tidak Ada Disposisi'}
             </h3>
-            <p className="text-[#6D4C41] mt-2">
+            <p className="text-gray-500 max-w-md mx-auto">
               {searchInstansi || filterStatus
                 ? 'Tidak ditemukan disposisi yang sesuai dengan kriteria pencarian'
                 : 'Belum ada disposisi yang tersedia untuk saat ini'
@@ -446,97 +457,109 @@ const SekretarisDashboard = () => {
             </p>
           </div>
         ) : (
-          <div className="overflow-x-auto rounded-2xl border-2 border-[#EDE6E3] shadow-sm bg-white">
-            <table className="min-w-full divide-y divide-[#EDE6E3]">
-              <thead className="bg-gray-50">
-                <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Nomor Surat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Asal Instansi</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">No. Agenda</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Tanggal Surat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Sifat</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Status</th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-[#2E2A27] uppercase tracking-wider">Aksi</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-[#EDE6E3]">
-                {disposisiList.map((item) => (
-                  <tr key={item.id} className="hover:bg-[#FDFCFB] transition-colors">
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-[#2E2A27]">
-                      {item.nomor_surat || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2E2A27]">
-                      {item.asal_instansi || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2E2A27]">
-                      {item.nomor_agenda || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-[#2E2A27]">
+          <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+            {disposisiList.map((item) => (
+              <article
+                key={item.id}
+                className="group relative bg-white space-y-3 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-slate-200"
+              >
+                {/* Header */}
+                <div className="border-b border-gray-50/50 pb-3">
+                  <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+                    <div className="flex-1">
+                      <h3 className="text-lg font-bold text-gray-900">
+                        {item.perihal || 'Tanpa Perihal'}
+                      </h3>
+                      <p className="text-gray-600 text-sm leading-relaxed">
+                        <span className="font-medium text-gray-700">Nomor Surat:</span> {item.nomor_surat || '-'} •{' '}
+                        <span className="font-medium text-gray-700">Dari:</span> {item.asal_instansi || '-'}
+                      </p>
+                    </div>
+                    <span className="inline-flex items-center px-4 py-2 bg-indigo-50 text-indigo-800 rounded-full text-sm font-medium shadow-sm">
                       {item.tanggal_surat || '-'}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${item.sifat === 'Sangat Segera' ? 'bg-red-100 text-red-800 border-red-200' :
-                          item.sifat === 'Segera' ? 'bg-orange-100 text-orange-800 border-orange-200' :
-                            item.sifat === 'Rahasia' ? 'bg-purple-100 text-purple-800 border-purple-200' :
-                              item.sifat === 'Biasa' ? 'bg-blue-100 text-blue-800 border-blue-200' :
-                                'bg-gray-100 text-gray-800 border-gray-200'
-                        }`}>
-                        {item.sifat || '-'}
-                      </span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      {getStatusBadge(item.status_dari_sekretaris)}
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                      <div className="flex flex-col gap-2">
-                        <button
-                          onClick={() => viewDetail(item)}
-                          className="flex items-center justify-center gap-x-1 text-black text-sm shadow-lg font-medium bg-white px-3 py-2 border border-slate-200 rounded-xl hover:-translate-y-1 transition-all"
-                        >
-                          <Eye className="w-4 h-4" /> Lihat
-                        </button>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Metadata Grid */}
+                <div className="bg-gray-50 p-4 rounded-xl">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm">
+                    <div className="flex items-start gap-2">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center mt-0.5">
+                        <Building className="w-5 h-5 text-teal-400" />
                       </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+                      <div>
+                        <p className="text-gray-500 font-medium">Nomor Agenda</p>
+                        <p className="text-gray-800">{item.nomor_agenda || '-'}</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-lg flex items-center justify-center mt-0.5">
+                        <AlertCircle className="w-5 h-5 text-teal-400" />
+                      </div>
+                      <div>
+                        <p className="text-gray-500 font-medium">Sifat</p>
+                        <SifatBadge sifat={item.sifat} />
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2">
+                      <div>
+                        <p className="text-gray-500 font-medium">Status</p>
+                        {getStatusBadge(item.status_dari_sekretaris)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Tombol Aksi */}
+                <div className="space-y-3 pt-3 border-t border-gray-50/50">
+                  <button
+                    onClick={() => viewDetail(item)}
+                    className="inline-flex w-full justify-center items-center gap-2 px-4 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-full text-sm font-medium shadow transition-colors duration-200"
+                  >
+                    <Eye className="w-4 h-4" />
+                    Lihat Detail
+                  </button>
+                </div>
+              </article>
+            ))}
           </div>
         )}
 
-        {/* Pagination Component — SAMA SEPERTI KABIDDASHBOARD */}
+        {/* ✅ Pagination Component — DISAMAKAN DENGAN GAYA SURAT MASUK */}
         {disposisiList.length > 0 && (
-          <div className="flex items-center justify-between bg-white px-6 py-4 rounded-2xl shadow-sm border-2 border-[#EDE6E3] mt-8">
-            <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-[#2E2A27]">
-                Menampilkan {pagination.offset + 1} - {Math.min(pagination.offset + pagination.limit, pagination.total)} dari {pagination.total} data
-              </span>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-white p-4 rounded-2xl shadow-sm border border-slate-200 mt-6">
+            <div className="text-sm text-gray-700">
+              Menampilkan {pagination.offset + 1} - {Math.min(pagination.offset + pagination.limit, pagination.total)} dari {pagination.total} data
             </div>
 
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handlePageChange(Math.max(0, pagination.offset - pagination.limit))}
                 disabled={pagination.offset === 0}
-                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
-                <ChevronLeft className="h-4 w-4 text-[#2E2A27]" />
+                <ChevronLeft className="h-4 w-4" />
               </button>
 
-              <span className="px-3 py-2 text-[#2E2A27] font-medium bg-[#FDFCFB] rounded-xl border border-[#EDE6E3]">
+              <span className="px-3 py-1 text-gray-800 font-medium bg-gray-100 rounded-full border border-gray-300">
                 Halaman {Math.floor(pagination.offset / pagination.limit) + 1}
               </span>
 
               <button
                 onClick={() => handlePageChange(pagination.offset + pagination.limit)}
                 disabled={pagination.offset + pagination.limit >= pagination.total}
-                className="p-2 border border-[#EDE6E3] rounded-xl hover:bg-[#FDFCFB] disabled:opacity-50 disabled:cursor-not-allowed transition-colors shadow-sm"
+                className="p-2 border border-gray-300 rounded-full hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
-                <ChevronRight className="h-4 w-4 text-[#2E2A27]" />
+                <ChevronRight className="h-4 w-4" />
               </button>
             </div>
           </div>
         )}
-      </div>
+
+      </main>
     </div>
   );
 };
