@@ -5,6 +5,7 @@ import api from '../../utils/api';
 const JadwalAcara = () => {
     const [jadwalList, setJadwalList] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [expandedLocations, setExpandedLocations] = useState({}); // <-- STATE BARU UNTUK EXPAND LOKASI
 
     // State filter aktif (semua bisa diubah)
     const [filter, setFilter] = useState({
@@ -105,7 +106,7 @@ const JadwalAcara = () => {
                         <h1 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                             Jadwal Acara
                         </h1>
-                        <p className="text-gray-600 text-sm">Kelola dan pantau semua jadwal acara Anda</p>
+                        <p className="text-gray-600 text-sm">Jadwal acara kantor yang dibuat admin</p>
                     </div>
                 </div>
 
@@ -224,7 +225,7 @@ const JadwalAcara = () => {
                             </p>
                         </div>
                     ) : (
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
                             {jadwalList.map((jadwal) => (
                                 <div
                                     key={jadwal.id}
@@ -235,13 +236,13 @@ const JadwalAcara = () => {
                                         <div className="flex items-start justify-between mb-4">
                                             <div className="flex items-center gap-2">
                                                 <div className="relative">
-                                                    <div className="p-3 bg-gradient-to-br from-teal-300 to-teal-400 rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
-                                                        <Calendar className="h-5 w-5 text-white" />
+                                                    <div className="p-3 bg-white rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
+                                                        <Calendar className="h-4 w-4 text-teal-400" />
                                                     </div>
                                                     <div className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                                                 </div>
                                                 <div className="flex-1">
-                                                    <h3 className="font-bold text-gray-900 text-lg leading-tight mb-1 group-hover:text-teal-700 transition-colors duration-200">
+                                                    <h3 className="font-bold text-gray-900 text-sm mb-1 group-hover:text-teal-700 transition-colors duration-200">
                                                         {jadwal.nama_acara}
                                                     </h3>
                                                     <div className="flex items-center gap-2">
@@ -249,7 +250,6 @@ const JadwalAcara = () => {
                                                     </div>
                                                 </div>
                                             </div>
-                                            <ChevronRight className="h-5 w-5 text-gray-400 group-hover:text-teal-500 group-hover:translate-x-1 transition-all duration-200" />
                                         </div>
 
                                         {/* Enhanced Metadata */}
@@ -269,10 +269,40 @@ const JadwalAcara = () => {
                                                     {jadwal.waktu_selesai && ` - ${formatTime(jadwal.waktu_selesai)}`}
                                                 </span>
                                             </div>
-                                            <div className="flex items-center text-sm text-gray-600 bg-gray-50/80 rounded-lg px-3 py-2">
-                                                <MapPin className="h-4 w-4 mr-3 text-red-500 flex-shrink-0" />
-                                                <span className="font-medium truncate">{jadwal.lokasi}</span>
+
+                                            {/* Lokasi yang bisa di-expand */}
+                                            <div className="flex flex-col gap-2">
+                                                <div className="flex items-start justify-between bg-gray-50/80 rounded-lg px-3 py-2">
+                                                    <div className="flex items-start gap-3 flex-1">
+                                                        <MapPin className="h-4 w-4 mt-1 text-red-500 flex-shrink-0" />
+                                                        <span className={`font-medium text-sm text-gray-600 transition-all duration-200 ${expandedLocations[jadwal.id]
+                                                                ? 'whitespace-normal'
+                                                                : 'line-clamp-1'
+                                                            }`}>
+                                                            {jadwal.lokasi}
+                                                        </span>
+                                                    </div>
+                                                    {jadwal.lokasi && jadwal.lokasi.length > 50 && (
+                                                        <button
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setExpandedLocations(prev => ({
+                                                                    ...prev,
+                                                                    [jadwal.id]: !prev[jadwal.id]
+                                                                }));
+                                                            }}
+                                                            className="text-gray-400 hover:text-teal-500 transition-colors duration-200 flex-shrink-0 ml-2"
+                                                            aria-label={expandedLocations[jadwal.id] ? "Sembunyikan alamat" : "Lihat alamat lengkap"}
+                                                        >
+                                                            <ChevronRight
+                                                                className={`h-4 w-4 transition-transform duration-300 ${expandedLocations[jadwal.id] ? 'rotate-90' : 'rotate-0'
+                                                                    }`}
+                                                            />
+                                                        </button>
+                                                    )}
+                                                </div>
                                             </div>
+
                                             <div className="flex items-center text-sm text-gray-600 bg-gray-50/80 rounded-lg px-3 py-2">
                                                 <User className="h-4 w-4 mr-3 text-blue-500 flex-shrink-0" />
                                                 <span className="font-medium">{jadwal.pic_nama}</span>
