@@ -229,11 +229,11 @@ const AdminBukuTamu = () => {
   }, [guestSearch]);
 
   return (
-    <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
+    <div className="min-h-screen bg-white lg:p-5 rounded-3xl shadow-lg">
       {/* Modern Header — Tetap dipertahankan */}
-      <div className="bg-white shadow-lg border border-slate-200 rounded-2xl">
-        <div className="max-w-7xl mx-auto p-5 py-7">
-          <div className="flex justify-between items-center">
+      <div className="bg-white shadow-lg lg:border lg:border-slate-200 p-2 rounded-2xl lg:p-4">
+        <div className="">
+          <div className="flex lg:flex-row flex-col gap-4 justify-between items-center">
             <div className="flex items-center gap-3">
               <div className="p-3 bg-white rounded-xl shadow-lg">
                 <Calendar className="h-6 w-6 text-teal-400" />
@@ -243,10 +243,10 @@ const AdminBukuTamu = () => {
                 <p className="text-sm font-medium text-[#6b7280]">Kelola acara kantor dan data kehadiran tamu secara digital</p>
               </div>
             </div>
-            <div className="flex space-x-4">
+            <div className="flex flex-col lg:flex-row gap-3 w-full lg:w-fit">
               <button
                 onClick={() => setView('events')}
-                className={`px-6 py-3 rounded-xl font-semibold transition-colors duration-200 ${view === 'events'
+                className={`px-6 py-3 text-sm rounded-xl font-semibold transition-colors duration-200 ${view === 'events'
                   ? 'bg-black text-white shadow-lg hover:opacity-90'
                   : 'bg-white text-[#000000] hover:bg-gray-50 shadow-md border border-[#e5e7eb]'
                   }`}
@@ -255,7 +255,7 @@ const AdminBukuTamu = () => {
               </button>
               <button
                 onClick={() => setView('create')}
-                className={`px-6 py-3 rounded-xl font-semibold inline-flex items-center transition-colors duration-200 ${view === 'create'
+                className={`px-6 py-3 rounded-xl text-sm font-semibold inline-flex items-center transition-colors duration-200 ${view === 'create'
                   ? 'bg-black text-white shadow-lg hover:opacity-90'
                   : 'bg-white text-[#000000] hover:bg-gray-50 shadow-md border border-[#e5e7eb]'
                   }`}
@@ -268,7 +268,7 @@ const AdminBukuTamu = () => {
         </div>
       </div>
 
-      <div className="mt-5">
+      <div className="mt-2">
         {/* Events View — TABEL DENGAN STYLE SURATMASUKLIST */}
         <BukuTamuView
           view={view}
