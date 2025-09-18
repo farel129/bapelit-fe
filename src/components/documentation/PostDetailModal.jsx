@@ -128,13 +128,13 @@ const PostDetailModal = ({
                                     <>
                                         <button
                                             onClick={prevImage}
-                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-all duration-200"
+                                            className="absolute left-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur-sm hover:bg-black rounded-full flex items-center justify-center text-white transition-all duration-200"
                                         >
                                             <ChevronLeft className="w-5 h-5" />
                                         </button>
                                         <button
                                             onClick={nextImage}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-black bg-opacity-50 hover:bg-opacity-70 rounded-full flex items-center justify-center text-white transition-all duration-200"
+                                            className="absolute right-4 top-1/2 -translate-y-1/2 w-8 h-8 bg-black/50 backdrop-blur-sm hover:bg-black rounded-full flex items-center justify-center text-white transition-all duration-200"
                                         >
                                             <ChevronRight className="w-5 h-5" />
                                         </button>

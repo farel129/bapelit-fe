@@ -128,11 +128,7 @@ const ProfileView = ({
           {/* Profile Picture */}
           <div className="flex justify-center md:justify-start">
             <div className="relative">
-              <div className="w-24 h-24 md:w-32 md:h-32 rounded-full flex items-center justify-center text-white text-2xl md:text-3xl font-bold shadow-lg border-2 border-gray-200"
-                   style={{
-                     background: 'linear-gradient(135deg, #f6339a, #e51b8c)',
-                     color: '#ffffff'
-                   }}>
+              <div className="w-20 h-20 md:w-30 md:h-30 rounded-full flex items-center justify-center text-white text-2xl md:text-3xl font-bold shadow-lg border-2 border-gray-200 bg-teal-400">
                 {isOwnProfile ? user.name.charAt(0).toUpperCase() : 'U'}
               </div>
               {/* Story ring effect — simplified for consistency */}
@@ -143,14 +139,14 @@ const ProfileView = ({
           {/* Profile Info */}
           <div className="flex-1 text-center md:text-left">
             <div className="flex flex-col md:flex-row md:items-center md:space-x-4 mb-4">
-              <h1 className="text-2xl font-semibold text-[#000000] mb-2 md:mb-0">
+              <h1 className="text-lg font-semibold text-[#000000] mb-2 md:mb-0">
                 {isOwnProfile ? user.name : 'Profil Pengguna'}
               </h1>
               {isOwnProfile && (
                 <div className="flex justify-center md:justify-start space-x-2 mt-3 md:mt-0">
                   <button
                     onClick={() => setShowCreatePost(true)}
-                    className="px-4 py-2 bg-black hover:opacity-90 text-white rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-1"
+                    className="px-4 py-2 bg-black text-sm hover:opacity-90 text-white rounded-xl font-medium transition-all duration-200 shadow-sm hover:shadow-md flex items-center gap-1"
                   >
                     <Plus className="w-4 h-4" />
                     Tambah Post
@@ -197,7 +193,7 @@ const ProfileView = ({
       <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
         {/* Tab Navigation */}
         <div className="flex justify-center border-b border-gray-200">
-          <button className="flex items-center space-x-1 py-4 px-6 text-[#000000] text-sm font-semibold tracking-wider uppercase border-b-2 border-[#f6339a]">
+          <button className="flex items-center space-x-1 py-4 px-6 text-[#000000] text-sm font-semibold tracking-wider uppercase border-b-2 border-teal-400">
             <Grid3X3 className="w-4 h-4" />
             <span>Postingan</span>
           </button>
@@ -264,13 +260,13 @@ const ProfileView = ({
                         loadingPostId === post.id ? 'pointer-events-none' : ''
                       }`}>
                         <div className="flex items-center space-x-4 text-white">
-                          <div className="flex items-center bg-white bg-opacity-80 backdrop-blur-sm px-2 py-1 rounded-full">
-                            <Heart className="w-4 h-4 mr-1 fill-current text-red-500" />
-                            <span className="text-xs font-semibold text-[#000000]">{post.likes_count || post.recent_likes || 0}</span>
+                          <div className="flex items-center bg-black bg-opacity-80 backdrop-blur-sm px-2 py-1 rounded-full">
+                            <Heart className="w-4 h-4 mr-1 fill-current text-white" />
+                            <span className="text-xs font-semibold text-white">{post.likes_count || post.recent_likes || 0}</span>
                           </div>
-                          <div className="flex items-center bg-white bg-opacity-80 backdrop-blur-sm px-2 py-1 rounded-full">
-                            <MessageCircle className="w-4 h-4 mr-1 text-[#6b7280]" />
-                            <span className="text-xs font-semibold text-[#000000]">{post.comments_count || 0}</span>
+                          <div className="flex items-center bg-black bg-opacity-80 backdrop-blur-sm px-2 py-1 rounded-full">
+                            <MessageCircle className="w-4 h-4 mr-1 text-white" />
+                            <span className="text-xs font-semibold text-white">{post.comments_count || 0}</span>
                           </div>
                         </div>
                       </div>
