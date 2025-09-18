@@ -197,16 +197,16 @@ const AdminBuatSuratMasuk = () => {
   return (
     <div className='min-h-screen'>
       {/* Single Form */}
-      <form onSubmit={handleSubmit} className="space-y-5">
+      <form onSubmit={handleSubmit} className="space-y-3">
         {/* Data Surat Masuk Section */}
-        <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-md hover:shadow-lg transition-all duration-300">
-          <h2 className="text-lg font-bold mb-6 flex items-center">
-            <div className="p-2.5 bg-white rounded-xl shadow-md mr-3">
+        <div className="bg-white p-4 rounded-2xl border-2 border-[#EDE6E3] shadow-md hover:shadow-lg transition-all duration-300">
+          <h2 className="text-base font-semibold mb-6 flex items-center">
+            <div className="p-2.5 bg-white rounded-xl shadow-md mr-1">
               <Building2 className="w-5 h-5 text-teal-400" />
             </div>
             Data Surat Masuk
           </h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-4">
             <div>
               <label className="block text-sm font-semibold mb-2">
                 Asal Instansi <span className="text-red-500">*</span>
@@ -308,7 +308,7 @@ const AdminBuatSuratMasuk = () => {
 
         {/* Upload Foto Section */}
         <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-md hover:shadow-lg transition-all duration-300">
-          <h2 className="text-lg font-bold mb-6 flex items-center" style={{ color: '#2E2A27' }}>
+          <h2 className="text-base font-semibold mb-6 flex items-center" style={{ color: '#2E2A27' }}>
             <div className="p-2.5 bg-white rounded-xl shadow-md mr-3">
               <Camera className="w-5 h-5 text-teal-400" />
             </div>
@@ -326,7 +326,7 @@ const AdminBuatSuratMasuk = () => {
           {selectedFiles.length === 0 ? (
             <label htmlFor="photos" className="block text-center p-12 border-2 border-dashed border-[#EDE6E3] rounded-xl cursor-pointer hover:bg-[#FDFCFB] hover:border-teal-400 transition-all duration-300">
               <Upload className="w-10 h-10 mx-auto mb-4" style={{ color: '#6D4C41' }} />
-              <p className="font-bold" style={{ color: '#2E2A27' }}>Klik untuk upload file</p>
+              <p className="font-semibold" style={{ color: '#2E2A27' }}>Klik untuk upload file</p>
               <p className="text-sm" style={{ color: '#6D4C41' }}>JPEG, PNG, GIF, WEBP, PDF (maks 5MB)</p>
             </label>
           ) : (
@@ -471,7 +471,7 @@ const AdminBuatSuratMasuk = () => {
                   <div className="absolute -top-1 -right-1 w-4 h-4 bg-green-400 rounded-full animate-pulse"></div>
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold" style={{ color: '#2E2A27' }}>
+                  <h3 className="text-base font-semibold" style={{ color: '#2E2A27' }}>
                     Tutorial Interaktif
                   </h3>
                   <p className="text-sm mt-1" style={{ color: '#6D4C41' }}>Buat Surat dan Lembar Disposisi</p>
@@ -511,7 +511,7 @@ const AdminBuatSuratMasuk = () => {
                     </div>
                   </div>
                   <div className="space-y-4">
-                    <h4 className="text-lg font-bold" style={{ color: '#2E2A27' }}>
+                    <h4 className="text-base font-semibold" style={{ color: '#2E2A27' }}>
                       {steps[currentStep].title}
                     </h4>
                     <p className="leading-relaxed max-w-md mx-auto" style={{ color: '#6D4C41' }}>

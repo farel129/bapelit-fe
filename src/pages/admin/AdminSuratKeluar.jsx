@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Mail, FileText, Plus, List, RefreshCcw } from 'lucide-react';
+import { Mail, FileText, Plus, List, RefreshCcw, LetterText } from 'lucide-react';
 import AdminBuatSuratKeluar from '../../components/Admin/AdminBuatSuratKeluar';
 import AdminDaftarSuratKeluar from '../../components/Admin/AdminDaftarSuratKeluar';
 
@@ -11,9 +11,11 @@ const AdminSuratKeluar = () => {
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-x-3">
-                    <div className="h-8 w-1.5 bg-teal-400 rounded-full shadow-sm"></div>
+                   <div className='p-3 bg-white text-teal-400 rounded-xl shadow-lg'>
+                    <LetterText className='w-5 h-5' />
+                   </div>
                     <div>
-                        <h1 className="text-xl font-bold">Surat Keluar</h1>
+                        <h1 className="text-lg font-bold">Surat Keluar</h1>
                         <p className="text-sm font-medium">Arsip digital untuk surat keluar</p>
                     </div>
                 </div>

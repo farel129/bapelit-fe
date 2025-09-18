@@ -362,9 +362,9 @@ const AdminJadwalAcara = () => {
   }, [showRecommendations]);
 
   return (
-    <div className="min-h-screen bg-gray-50 p-5">
+    <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
       {/* Header Section — DIPERBARUI dengan gaya glassmorphism */}
-      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-6 mb-3">
+      <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-3 mb-3">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="relative">
@@ -374,7 +374,7 @@ const AdminJadwalAcara = () => {
               <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-emerald-400 to-emerald-500 rounded-full animate-pulse"></div>
             </div>
             <div>
-              <h1 className="text-lg font-semibold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              <h1 className="text-lg font-bold">
                 Jadwal Acara
               </h1>
               <p className="text-gray-600 text-sm">Kelola jadwal acara instansi dengan efisien</p>
@@ -382,7 +382,7 @@ const AdminJadwalAcara = () => {
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+            className="inline-flex items-center gap-2 bg-black text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
           >
             <Plus className="w-4 h-4" />
             Tambah Jadwal
