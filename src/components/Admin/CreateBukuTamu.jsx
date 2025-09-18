@@ -224,8 +224,6 @@ const CreateBukuTamu = ({
                             </div>
                         </form>
                     </div>
-
-                    {/* ❌ QR Code di bawah form dihapus sepenuhnya — hanya tampil dalam mode full screen */}
                 </div>
             )}
         </div>

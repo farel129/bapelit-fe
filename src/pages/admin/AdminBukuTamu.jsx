@@ -186,9 +186,45 @@ const AdminBukuTamu = () => {
   };
 
   const copyToClipboard = (text) => {
-    navigator.clipboard.writeText(text);
-    showSuccess('Tersalin!', 'Link berhasil disalin ke clipboard.');
-  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    // Modern browser (HTTPS / localhost)
+    navigator.clipboard.writeText(text)
+      .then(() => {
+        showSuccess('Tersalin!', 'Link berhasil disalin ke clipboard.');
+      })
+      .catch(err => {
+        console.error('Gagal menyalin via clipboard API:', err);
+        fallbackCopyTextToClipboard(text);
+      });
+  } else {
+    // Fallback untuk browser lama / non-secure context
+    fallbackCopyTextToClipboard(text);
+  }
+};
+
+const fallbackCopyTextToClipboard = (text) => {
+  const textArea = document.createElement("textarea");
+  textArea.value = text;
+  textArea.style.position = "fixed";  // Agar tidak scroll halaman
+  textArea.style.opacity = "0";       // Invisible
+  document.body.appendChild(textArea);
+  textArea.focus();
+  textArea.select();
+
+  try {
+    const successful = document.execCommand('copy');
+    if (successful) {
+      showSuccess('Tersalin!', 'Link berhasil disalin ke clipboard.');
+    } else {
+      showError('Gagal Menyalin', 'Tidak dapat menyalin teks. Silakan salin manual.');
+    }
+  } catch (err) {
+    console.error('Fallback gagal:', err);
+    showError('Gagal Menyalin', 'Browser tidak mendukung fitur salin. Silakan salin manual.');
+  }
+
+  document.body.removeChild(textArea);
+};
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString('id-ID', {
