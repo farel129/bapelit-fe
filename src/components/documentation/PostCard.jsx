@@ -131,24 +131,6 @@ const PostCard = ({
         );
     };
 
-    // Debug function to log post data
-    const debugPostData = () => {
-        console.log('Post data:', post);
-        console.log('Post files:', post.files);
-        if (post.files && post.files.length > 0) {
-            post.files.forEach((file, index) => {
-                console.log(`File ${index}:`, file);
-                console.log(`File URL ${index}:`, file.file_url);
-                console.log(`File mime type ${index}:`, file.mime_type);
-            });
-        }
-    };
-
-    // Call debug function (remove in production)
-    React.useEffect(() => {
-        debugPostData();
-    }, [post]);
-
     // Check permissions
     const canEdit = canEditPost(post, user);
     const canDelete = canDeletePost(post, user);
@@ -402,9 +384,6 @@ const PostCard = ({
                             ) : (
                                 <MessageCircle className="w-6 h-6" />
                             )}
-                        </button>
-                        <button className="text-gray-700 hover:text-gray-500 transition-colors duration-200 transform hover:scale-110">
-                            <Send className="w-6 h-6" />
                         </button>
                     </div>
                     <button className="text-gray-700 hover:text-gray-500 transition-colors duration-200 transform hover:scale-110">

@@ -9,6 +9,8 @@ import {
   Loader2,
   CheckCircle,
   Loader,
+  ArrowLeft,
+  ArrowRight,
 } from 'lucide-react';
 
 // Success Modal Component — Disesuaikan style AdminJadwalAcara
@@ -57,6 +59,9 @@ const CreatePostModal = ({
     { id: 4, name: 'hiburan', label: 'Hiburan' }
   ];
 
+  // Mobile step state
+  const [mobileStep, setMobileStep] = useState('upload'); // 'upload' or 'details'
+
   // Simplified state - hanya satu source of truth
   const [postData, setPostData] = useState({
     caption: '',
@@ -88,6 +93,7 @@ const CreatePostModal = ({
       setFilePreviews([]);
       setIsLoading(false);
       setShowSuccessModal(false);
+      setMobileStep('upload');
     }
   }, [showCreatePost, defaultCategory]);
 
@@ -250,12 +256,12 @@ const CreatePostModal = ({
 
       // Show success modal instead of alert
       setShowSuccessModal(true);
-      
+
       // Close create post modal after a short delay
       setTimeout(() => {
         setShowCreatePost(false);
       }, 500);
-      
+
     } catch (error) {
       console.error("Error creating post:", error);
       alert("Gagal membuat post. Silakan coba lagi.");
@@ -274,11 +280,24 @@ const CreatePostModal = ({
     setShowSuccessModal(false);
   }, []);
 
+  const handleMobileNext = useCallback(() => {
+    if (postData.files.length === 0) {
+      alert("Minimal 1 file harus diunggah");
+      return;
+    }
+    setMobileStep('details');
+  }, [postData.files.length]);
+
+  const handleMobileBack = useCallback(() => {
+    setMobileStep('upload');
+  }, []);
+
   if (!showCreatePost) return null;
 
   return (
     <>
-      <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+      {/* Desktop Modal */}
+      <div className="hidden fixed inset-0 bg-black/60 backdrop-blur-sm lg:flex items-center justify-center p-4 z-50">
         <div className="bg-white rounded-2xl w-full max-w-4xl shadow-2xl overflow-hidden border border-gray-200">
           {/* Header */}
           <div className="relative px-6 py-4 border-b border-gray-100">
@@ -340,11 +359,10 @@ const CreatePostModal = ({
                         {postData.files.map((file, index) => (
                           <div
                             key={`${file.name}-${index}`} // Better key
-                            className={`relative flex-shrink-0 cursor-pointer rounded-lg border-2 transition-all ${
-                              selectedFileIndex === index
-                                ? 'border-[#f6339a] ring-2 ring-[#f6339a]/20'
+                            className={`relative flex-shrink-0 cursor-pointer rounded-lg border-2 transition-all ${selectedFileIndex === index
+                                ? 'border-teal-400 ring-2 ring-teal-400/20'
                                 : 'border-gray-200 hover:border-gray-300'
-                            }`}
+                              }`}
                             onClick={() => setSelectedFileIndex(index)}
                           >
                             <div className="w-16 h-16 bg-gray-50 rounded-md overflow-hidden">
@@ -417,7 +435,7 @@ const CreatePostModal = ({
                     placeholder="Masukan caption..."
                     value={postData.caption}
                     onChange={handleCaptionChange}
-                    className="w-full h-32 text-[#000000] placeholder-[#6b7280] resize-none focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent transition-all text-sm leading-relaxed"
+                    className="w-full h-32 text-[#000000] placeholder-[#6b7280] resize-none focus:outline-none focus:ring-2 focus:ring-teal-400 p-3 rounded-2xl focus:border-transparent transition-all text-sm leading-relaxed"
                     maxLength={2200}
                     disabled={isLoading}
                   />
@@ -433,7 +451,7 @@ const CreatePostModal = ({
                     <select
                       value={postData.kategori}
                       onChange={handleCategoryChange}
-                      className="w-full p-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent transition-all text-[#000000] text-sm"
+                      className="w-full p-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all text-[#000000] text-sm"
                       disabled={isLoading}
                     >
                       {categories.map(cat => (
@@ -451,7 +469,7 @@ const CreatePostModal = ({
                       placeholder="Contoh: #olahraga #liburan #makanan"
                       value={postData.tags}
                       onChange={handleTagsChange}
-                      className="w-full p-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-[#f6339a] focus:border-transparent transition-all text-[#000000] placeholder-[#6b7280] text-sm"
+                      className="w-full p-3 bg-white border border-[#e5e7eb] rounded-xl focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-transparent transition-all text-[#000000] placeholder-[#6b7280] text-sm"
                       disabled={isLoading}
                     />
                     <p className="text-xs text-[#6b7280] mt-1">Pisahkan tags dengan spasi</p>
@@ -499,10 +517,293 @@ const CreatePostModal = ({
         </div>
       </div>
 
+      {/* Mobile Full Screen */}
+      <div className="lg:hidden fixed inset-0 bg-white z-50 flex flex-col">
+        {/* Mobile Header */}
+        <header className="px-4 py-3 border-b border-gray-200 flex items-center justify-between bg-white">
+          {mobileStep === 'upload' ? (
+            <>
+              <button
+                onClick={handleClose}
+                disabled={isLoading}
+                className="p-2 hover:bg-gray-100 rounded-full text-gray-700 hover:text-gray-900 transition-colors duration-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+              <h1 className="text-base font-semibold text-gray-900">Upload Media</h1>
+              <button
+                onClick={handleMobileNext}
+                disabled={postData.files.length === 0}
+                className="text-teal-400 font-medium transition-colors duration-200 disabled:opacity-50"
+              >
+                Lanjut
+              </button>
+            </>
+          ) : (
+            <>
+              <button
+                onClick={handleMobileBack}
+                disabled={isLoading}
+                className="p-2 hover:bg-gray-100 rounded-full text-gray-700 hover:text-gray-900 transition-colors duration-200"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h1 className="text-lg font-semibold text-gray-900">Buat Post</h1>
+              <button
+                onClick={handleSave}
+                disabled={isLoading || !postData.caption.trim()}
+                className="text-teal-400 font-medium hover:text-teal-500 transition-colors duration-200 disabled:opacity-50"
+              >
+                {isLoading ? 'Posting...' : 'Bagikan'}
+              </button>
+            </>
+          )}
+        </header>
+
+        {/* Mobile Content */}
+        <div className="flex-1 overflow-y-auto">
+          {mobileStep === 'upload' ? (
+            // Upload Step
+            <div className="p-4 space-y-4">
+              {/* Main Preview Area */}
+              {postData.files.length > 0 ? (
+                <div className="bg-black rounded-xl overflow-hidden aspect-square relative">
+                  {filePreviews[selectedFileIndex]?.type === 'image' && filePreviews[selectedFileIndex]?.url ? (
+                    <img
+                      src={filePreviews[selectedFileIndex].url}
+                      alt={`Preview ${selectedFileIndex + 1}`}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        console.error('Image load error:', e);
+                        e.target.style.display = 'none';
+                      }}
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-900 flex flex-col items-center justify-center text-white">
+                      <FileText className="w-16 h-16 mb-4 opacity-75" />
+                      <span className="text-sm font-medium opacity-75">
+                        {postData.files[selectedFileIndex]?.name || 'File PDF'}
+                      </span>
+                    </div>
+                  )}
+
+                  {/* File counter */}
+                  {postData.files.length > 1 && (
+                    <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
+                      {selectedFileIndex + 1}/{postData.files.length}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="aspect-square border-2 border-dashed p-4 border-gray-300 rounded-xl flex flex-col items-center justify-center bg-gray-50">
+                  <Camera className="w-16 h-16 text-gray-400 mb-4" />
+                  <p className="text-sm text-gray-600 text-center mb-2">Belum ada media dipilih</p>
+                  <p className="text-xs text-gray-400 text-center">Tap tombol di bawah untuk menambahkan foto atau PDF</p>
+                </div>
+              )}
+
+              {/* File Thumbnails */}
+              {postData.files.length > 0 && (
+                <div className="space-y-3">
+                  <div className="flex space-x-2 overflow-x-auto pt-2">
+                    {postData.files.map((file, index) => (
+                      <div
+                        key={`${file.name}-${index}`}
+                        className={`relative flex-shrink-0 cursor-pointer rounded-lg border-2 transition-all ${selectedFileIndex === index
+                            ? 'border-blue-500 ring-2 ring-blue-500/20'
+                            : 'border-gray-200'
+                          }`}
+                        onClick={() => setSelectedFileIndex(index)}
+                      >
+                        <div className="w-20 h-20 bg-gray-50 rounded-md">
+                          {filePreviews[index]?.type === 'image' && filePreviews[index]?.url ? (
+                            <img
+                              src={filePreviews[index].url}
+                              alt={`Thumb ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-50 flex items-center justify-center">
+                              <FileText className="w-6 h-6 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            removeFile(index);
+                          }}
+                          className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 text-white rounded-full flex items-center justify-center shadow-sm"
+                          aria-label="Hapus file"
+                          disabled={isLoading}
+                        >
+                          <Trash2 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Upload Button */}
+              {postData.files.length < 5 && (
+                <label
+                  htmlFor="mobile-file-upload"
+                  className="w-full py-3 px-6 bg-black text-white rounded-xl text-sm font-medium text-center cursor-pointer hover:bg-black/60 transition-colors duration-200 flex items-center justify-center"
+                >
+                  <Plus className="w-5 h-5 mr-2" />
+                  {postData.files.length === 0 ? 'Pilih Media' : `Tambah Media (${postData.files.length}/5)`}
+                </label>
+              )}
+            </div>
+          ) : (
+            // Details Step
+            <div className="p-4 space-y-6">
+              {/* Selected Media Preview */}
+              <div className="bg-black rounded-xl overflow-hidden aspect-square relative">
+                {filePreviews[selectedFileIndex]?.type === 'image' && filePreviews[selectedFileIndex]?.url ? (
+                  <img
+                    src={filePreviews[selectedFileIndex].url}
+                    alt="Selected preview"
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-gray-900 flex flex-col items-center justify-center text-white">
+                    <FileText className="w-16 h-16 mb-4 opacity-75" />
+                    <span className="text-sm font-medium opacity-75">
+                      {postData.files[selectedFileIndex]?.name || 'File PDF'}
+                    </span>
+                  </div>
+                )}
+
+                {/* File counter for details */}
+                {postData.files.length > 1 && (
+                  <div className="absolute top-4 right-4 bg-black bg-opacity-50 text-white px-2 py-1 rounded-full text-xs">
+                    {selectedFileIndex + 1}/{postData.files.length}
+                  </div>
+                )}
+              </div>
+
+              {/* Form Fields */}
+              <div className="space-y-4">
+                {/* Caption */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Caption</label>
+                  <div className="relative">
+                    <textarea
+                      placeholder="Tulis caption untuk post Anda..."
+                      value={postData.caption}
+                      onChange={handleCaptionChange}
+                      className="w-full h-32 p-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-sm leading-relaxed resize-none"
+                      maxLength={2200}
+                      disabled={isLoading}
+                    />
+                    <div className="absolute bottom-2 right-2 text-xs text-gray-500">
+                      {postData.caption.length}/2200
+                    </div>
+                  </div>
+                </div>
+
+                {/* Category */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Kategori</label>
+                  <select
+                    value={postData.kategori}
+                    onChange={handleCategoryChange}
+                    className="w-full p-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 text-sm"
+                    disabled={isLoading}
+                  >
+                    {categories.map(cat => (
+                      <option key={cat.id} value={cat.name}>
+                        {cat.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Tags */}
+                <div>
+                  <label className="block text-sm font-semibold text-gray-900 mb-2">Tags</label>
+                  <input
+                    type="text"
+                    placeholder="Contoh: #olahraga #liburan #makanan"
+                    value={postData.tags}
+                    onChange={handleTagsChange}
+                    className="w-full p-3 bg-white border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all text-gray-900 placeholder-gray-500 text-sm"
+                    disabled={isLoading}
+                  />
+                  <p className="text-xs text-gray-500 mt-1">Pisahkan tags dengan spasi</p>
+                </div>
+              </div>
+
+              {/* File Thumbnails in Details */}
+              {postData.files.length > 1 && (
+                <div className="space-y-2">
+                  <label className="block text-sm font-semibold text-gray-900">Media ({postData.files.length})</label>
+                  <div className="flex space-x-2 overflow-x-auto pb-2">
+                    {postData.files.map((file, index) => (
+                      <div
+                        key={`${file.name}-${index}`}
+                        className={`relative flex-shrink-0 cursor-pointer rounded-lg border-2 transition-all ${selectedFileIndex === index
+                            ? 'border-blue-500 ring-2 ring-blue-500/20'
+                            : 'border-gray-200'
+                          }`}
+                        onClick={() => setSelectedFileIndex(index)}
+                      >
+                        <div className="w-16 h-16 bg-gray-50 rounded-md overflow-hidden">
+                          {filePreviews[index]?.type === 'image' && filePreviews[index]?.url ? (
+                            <img
+                              src={filePreviews[index].url}
+                              alt={`Thumb ${index + 1}`}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.target.style.display = 'none';
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full bg-gray-50 flex items-center justify-center">
+                              <FileText className="w-4 h-4 text-gray-400" />
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Mobile Loading Overlay */}
+        {isLoading && (
+          <div className="absolute inset-0 bg-white bg-opacity-75 flex items-center justify-center z-10">
+            <div className="text-center">
+              <Loader className="w-8 h-8 animate-spin text-black mx-auto mb-2" />
+              <p className="text-sm text-gray-600">Memposting...</p>
+            </div>
+          </div>
+        )}
+
+        {/* Hidden file input for mobile */}
+        <input
+          type="file"
+          multiple
+          accept="image/*,.pdf"
+          onChange={handleLocalFileUpload}
+          className="hidden"
+          id="mobile-file-upload"
+          disabled={isLoading}
+        />
+      </div>
+
       {/* Success Modal */}
-      <SuccessModal 
-        isVisible={showSuccessModal} 
-        onClose={handleSuccessModalClose} 
+      <SuccessModal
+        isVisible={showSuccessModal}
+        onClose={handleSuccessModalClose}
       />
     </>
   );

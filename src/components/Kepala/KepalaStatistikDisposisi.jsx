@@ -279,7 +279,7 @@ const KepalaStatistikDisposisi = () => {
             </div>
 
             {/* Summary Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <div className="">
                 <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
                     <div className="flex items-center gap-3 mb-4">
                         <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
@@ -302,37 +302,8 @@ const KepalaStatistikDisposisi = () => {
                     </div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
-                            <FileText className="h-5 w-5 text-black" />
-                        </div>
-                        <div>
-                            <h3 className="text-base font-bold text-black">Informasi Data</h3>
-                            <p className="text-sm font-medium text-black opacity-80">Ringkasan data disposisi</p>
-                        </div>
-                    </div>
-                    <div className="space-y-4">
-                        <div className="flex items-center justify-between">
-                            <span className="font-medium text-black">Total Disposisi</span>
-                            <span className="font-semibold text-black">{stats.statistik_status.total.toLocaleString('id-ID')}</span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="font-medium text-black">Tingkat Penyelesaian</span>
-                            <span className="font-semibold text-black">
-                                {stats.statistik_status.total > 0
-                                    ? ((stats.statistik_status.selesai / stats.statistik_status.total) * 100).toFixed(1)
-                                    : 0}%
-                            </span>
-                        </div>
-                        <div className="flex items-center justify-between">
-                            <span className="font-medium text-black">Perlu Tindakan</span>
-                            <span className="font-semibold text-black">
-                                {(stats.statistik_status.belum_dibaca || 0) + (stats.statistik_status.diproses || 0)}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+                
+                
             </div>
         </div>
     );
