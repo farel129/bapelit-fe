@@ -7,7 +7,7 @@ const AdminSuratMasuk = () => {
     const [activeTab, setActiveTab] = useState('buat');
 
     return (
-        <div className="min-h-screen p-2 lg:p-5 rounded-3xl bg-white">
+        <div className="min-h-screen">
             {/* Header */}
             <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center gap-x-3">

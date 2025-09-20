@@ -197,8 +197,8 @@ function AdminTambahUser() {
   const roleOptions = getRoleOptions();
 
   return (
-    <div className="min-h-screen mb-5 flex justify-center items-center p-4 md:p-6 bg-gradient-to-br from-gray-50 to-gray-100">
-      <div className="max-w-6xl w-full">
+    <div className="min-h-screen">
+      <div className="max-w-6xl w-full m-auto">
 
         <div className="flex flex-col lg:flex-row gap-8 p-8 bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200">
           <div className="flex-1 bg-white rounded-2xl shadow-lg border border-gray-200 p-6 hover:shadow-xl transition-all duration-300">

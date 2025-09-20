@@ -13,7 +13,7 @@ const FeedbackBawahan = ({
     return (
         <div>
             {disposisi.diteruskan_kepada_user_id && (
-                <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+                <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-2 md:p-6">
                     <div className="flex items-center mb-4">
                         <div className="p-3 bg-black rounded-xl shadow-lg mr-3">
                             <User className="w-5 h-5 text-white" />
@@ -106,13 +106,13 @@ const FeedbackBawahan = ({
                                                                     window.open(file.url, '_blank', 'noopener,noreferrer');
                                                                 }
                                                             }}
-                                                            className="w-32 h-32 cursor-pointer"
+                                                            className="w-20 md:w-32 h-20 md:h-32 cursor-pointer"
                                                         >
                                                             {file.type && file.type.startsWith('image/') ? (
                                                                 <img
                                                                     src={file.url}
                                                                     alt={file.filename}
-                                                                    className="w-32 h-32 object-cover"
+                                                                    className="w-20 md:w-32 h-20 md:h-32 object-cover"
                                                                     loading="lazy"
                                                                 />
                                                             ) : (

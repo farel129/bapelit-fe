@@ -80,9 +80,9 @@ const DaftarUser = () => {
   }
 
   return (
-    <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
+    <div className="min-h-screen">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-x-3">
           <div className="h-8 w-1.5 bg-black rounded-full shadow-sm"></div>
           <div>
@@ -95,12 +95,12 @@ const DaftarUser = () => {
           disabled={refreshing}
           className="bg-white hover:bg-gray-50 border border-gray-200 gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-teal-400"
         >
-          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} /> Refresh
+          <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
         </button>
       </div>
 
       {/* Stat Cards — White + Black + teal Accent */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
         <div className="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 hover:shadow-lg hover:-translate-y-1 transition-all duration-300">
           <div className="flex items-center justify-between">
             <div>
@@ -139,7 +139,7 @@ const DaftarUser = () => {
       </div>
 
       {/* Search and Filter — GLASSMORPHISM WITH ONLY 3 COLORS */}
-      <div className="bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-100 shadow-md mb-4">
+      <div className="bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-gray-100 shadow-md mb-2">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -175,7 +175,7 @@ const DaftarUser = () => {
       {/* User List */}
       {filteredUsers.length === 0 ? (
         <div className="text-center py-16 bg-white rounded-2xl border border-gray-100 shadow-sm">
-          <Users className="w-16 h-16 text-gray-400 mx-auto mb-4" />
+          <Users className="w-16 h-16 text-gray-400 mx-auto mb-2" />
           <p className="text-black text-lg font-semibold">
             {searchTerm || filterBidang ? 'Tidak ada hasil pencarian' : 'Tidak ada user'}
           </p>
@@ -188,7 +188,7 @@ const DaftarUser = () => {
           {filteredUsers.map((userData) => (
             <div 
               key={userData.id} 
-              className="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+              className="bg-white p-2 md:p-5 rounded-2xl border border-gray-100 shadow-sm hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
               style={user && userData.id === user.id ? { borderLeft: '4px solid #ec4899', boxShadow: '0 10px 25px rgba(0,0,0,0.03)' } : {}}
             >
               <div className="flex items-center justify-between">

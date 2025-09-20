@@ -212,10 +212,10 @@ const KepalaDisposisiDetail = () => {
     }
 
     return (
-        <div className="min-h-screen bg-white rounded-3xl shadow-lg p-5">
+        <div className="min-h-screen">
             <div className="">
 
-                <div className="mb-6">
+                <div className="mb-2 bg-white shadow-lg rounded-2xl md:p-5 p-3">
                     <button
                         onClick={() => navigate(-1)}
                         className="flex items-center gap-2 text-gray-600 hover:text-black mb-4 transition-colors"

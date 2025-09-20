@@ -108,7 +108,7 @@ const SuratMasukList = () => {
     <div className="min-h-screen">
       <main className="">
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2 mb-2">
           <StatCard
             title="Total Surat"
             count={totalSurat}
@@ -142,8 +142,8 @@ const SuratMasukList = () => {
         </div>
 
         {/* ✅ Search & Filter Bar */}
-        <div className="mb-3">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+        <div className="mb-2 bg-white p-5 rounded-2xl shadow-lg">
+          <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
 
             {/* Search Input */}
             <div className="relative flex-1 max-w-md">
@@ -176,7 +176,7 @@ const SuratMasukList = () => {
 
         {filteredSuratMasuk.length === 0 ? (
           <div className="text-center py-20">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-2">
               <svg className="w-10 h-10 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
               </svg>
@@ -187,7 +187,7 @@ const SuratMasukList = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
             {filteredSuratMasuk.map((surat) => {
               const isImage = (filename) => {
                 return filename.toLowerCase().match(/\.(jpg|jpeg|png|gif|webp)$/);
@@ -196,7 +196,7 @@ const SuratMasukList = () => {
               return (
                 <article
                   key={surat.id}
-                  className="group relative bg-white space-y-3 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-slate-200"
+                  className="group relative bg-white space-y-2 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-slate-200"
                 >
                   {/* Header */}
                   <div className="border-b border-gray-50/50">
@@ -264,7 +264,7 @@ const SuratMasukList = () => {
                   {/* Gallery Section */}
                   {surat.photos && surat.photos.length > 0 && (
                     <div className="p-4">
-                      <h3 className="text-sm font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                      <h3 className="text-sm font-semibold text-gray-900 mb-2 flex items-center gap-2">
                         <FileText className="w-5 h-5" />
                         Lampiran: ({surat.photos.length})
                       </h3>
@@ -322,7 +322,7 @@ const SuratMasukList = () => {
                   </div>
 
                   {/* Tombol Aksi */}
-                  <div className="space-y-3">
+                  <div className="space-y-2">
                     {surat.status === 'belum dibaca' && (
                       <button
                         onClick={() => handleMarkAsRead(surat.id)}

@@ -448,54 +448,7 @@ const PostCard = ({
                             </div>
                         ))}
                     </div>
-                )}
-
-                {/* Add Comment */}
-                <div className="flex items-start space-x-3 pt-2 border-t border-gray-100">
-                    <div className="w-6 h-6 bg-gradient-to-br from-purple-500 via-teal-400 to-orange-400 rounded-full p-0.5 flex-shrink-0 mt-1">
-                        <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
-                            <span className="text-xs font-semibold text-gray-700">
-                                {user?.name?.charAt(0).toUpperCase() || 'U'}
-                            </span>
-                        </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                        <textarea
-                            placeholder="Tambah komentar..."
-                            value={localComment}
-                            onChange={(e) => setLocalComment(e.target.value)}
-                            className="w-full text-sm bg-transparent placeholder-gray-500 focus:outline-none disabled:opacity-50 resize-none border-none p-0 min-h-[20px] max-h-24 overflow-y-auto"
-                            onKeyPress={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                    e.preventDefault();
-                                    if (!isSubmittingComment && localComment.trim()) {
-                                        handleCommentSubmit(post.id);
-                                    }
-                                }
-                            }}
-                            disabled={isSubmittingComment}
-                            rows={1}
-                        />
-                        {localComment.trim() && (
-                            <div className="flex justify-end mt-1">
-                                <button
-                                    onClick={() => handleCommentSubmit(post.id)}
-                                    className="text-sm font-semibold text-blue-500 hover:text-blue-700 transition-colors duration-200 disabled:opacity-50 flex items-center"
-                                    disabled={isSubmittingComment}
-                                >
-                                    {isSubmittingComment ? (
-                                        <>
-                                            <Loader2 className="w-3 h-3 animate-spin mr-1" />
-                                            Mengirim...
-                                        </>
-                                    ) : (
-                                        'Kirim'
-                                    )}
-                                </button>
-                            </div>
-                        )}
-                    </div>
-                </div>
+                )}                
             </div>
         </article>
     );

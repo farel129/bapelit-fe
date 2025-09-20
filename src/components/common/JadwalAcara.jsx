@@ -108,10 +108,10 @@ const JadwalAcara = () => {
     };
 
     return (
-        <div className="min-h-screen bg-white rounded-3xl p-5">
+        <div className="min-h-screen">
             {/* Header Section */}
-            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-4 mb-4">
-                <div className="flex items-center gap-2 mb-4">
+            <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-4 mb-2">
+                <div className="flex items-center gap-2 mb-3">
                     <div className="relative">
                         <div className="p-3 bg-white rounded-xl shadow-lg">
                             <Calendar className="h-6 w-6 text-teal-400" />
@@ -205,7 +205,7 @@ const JadwalAcara = () => {
                             className="bg-white/90 backdrop-blur-sm rounded-2xl border border-gray-200/50 shadow-lg overflow-hidden animate-pulse"
                         >
                             <div className="p-4">
-                                <div className="flex items-center gap-2 mb-4">
+                                <div className="flex items-center gap-2 mb-2">
                                     <div className="w-12 h-12 bg-gradient-to-br from-gray-200 to-gray-300 rounded-xl"></div>
                                     <div className="flex-1 space-y-2">
                                         <div className="h-5 bg-gradient-to-r from-gray-200 to-gray-300 rounded-lg w-3/4"></div>
@@ -229,7 +229,7 @@ const JadwalAcara = () => {
                 <>
                     {jadwalList.length === 0 ? (
                         <div className="text-center py-20 bg-white/80 backdrop-blur-xl rounded-3xl border border-gray-200/50 shadow-xl">
-                            <div className="relative inline-block mb-4">
+                            <div className="relative inline-block mb-2">
                                 <Calendar className="h-20 w-20 text-gray-300 mx-auto" />
                                 <div className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-gray-300 to-gray-400 rounded-full"></div>
                             </div>
@@ -250,7 +250,7 @@ const JadwalAcara = () => {
                                     >
                                         <div className="p-4">
                                             {/* Header */}
-                                            <div className="flex items-start justify-between mb-4">
+                                            <div className="flex items-start justify-between mb-2">
                                                 <div className="flex items-center gap-2">
                                                     <div className="relative">
                                                         <div className="p-3 bg-white rounded-xl shadow-md group-hover:shadow-lg transition-shadow duration-300">
@@ -270,7 +270,7 @@ const JadwalAcara = () => {
                                             </div>
 
                                             {/* Metadata */}
-                                            <div className="space-y-2 mb-4">
+                                            <div className="space-y-2 mb-2">
                                                 <div className="flex items-center text-sm text-gray-600 bg-gray-50/80 rounded-lg px-3 py-2">
                                                     <Calendar className="h-4 w-4 mr-3 text-teal-500 flex-shrink-0" />
                                                     <span className="font-medium">
@@ -328,7 +328,7 @@ const JadwalAcara = () => {
 
                                             {/* Deskripsi */}
                                             {jadwal.deskripsi && (
-                                                <div className="mb-4">
+                                                <div className="mb-2">
                                                     <p className="text-sm text-gray-600 bg-gradient-to-r from-slate-50/80 to-gray-50/80 p-4 rounded-xl border border-gray-100 line-clamp-2 leading-relaxed">
                                                         {jadwal.deskripsi}
                                                     </p>
@@ -336,7 +336,7 @@ const JadwalAcara = () => {
                                             )}
 
                                             {/* Priority Badge */}
-                                            <div className="flex items-center justify-between mb-4">
+                                            <div className="flex items-center justify-between mb-2">
                                                 <span className={`px-3 py-1.5 rounded-full text-xs font-bold ${getPriorityStyle(jadwal.prioritas)} shadow-md`}>
                                                     {jadwal.prioritas?.toUpperCase()}
                                                 </span>

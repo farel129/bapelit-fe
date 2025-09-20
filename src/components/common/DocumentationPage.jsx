@@ -408,7 +408,7 @@ const DocumentationPage = () => {
     }
 
     return (
-        <div className="min-h-screen lg:p-5 p-2">
+        <div className="min-h-screen">
             <Navbar
                 user={user}
                 currentPage={currentPage}

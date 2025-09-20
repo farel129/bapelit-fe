@@ -14,7 +14,8 @@ import {
   UserCircle2,
   ChevronLeft,
   ChevronRight,
-  Filter
+  Filter,
+  LayoutDashboard
 } from 'lucide-react';
 import { staffDisposisiService } from '../../services/staffDisposisiService';
 import Avatar from '../../assets/img/adminrobot.png';
@@ -166,9 +167,9 @@ const StaffDashboard = () => {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <div className="bg-white border border-slate-200 rounded-2xl p-6 max-w-md mx-auto shadow-sm">
-            <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-4" />
+            <AlertCircle className="w-12 h-12 text-red-600 mx-auto mb-2" />
             <h3 className="text-xl font-bold text-gray-900">Terjadi Kesalahan</h3>
-            <p className="text-gray-600 mb-4">{error}</p>
+            <p className="text-gray-600 mb-2">{error}</p>
             <button
               onClick={fetchDisposisi}
               className="bg-red-500 hover:bg-red-600 text-white px-4 py-2.5 rounded-full font-medium transition shadow"
@@ -240,34 +241,25 @@ const StaffDashboard = () => {
     <div className="min-h-screen">
       <main className="p-4">
 
-        {/* ✅ Header — DISAMAKAN DENGAN GAYA SURAT MASUK */}
-        <div className="relative mb-6">
-          <div className="relative bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
-            <div className="flex flex-col lg:flex-row items-center justify-between">
-              <div className='flex items-center gap-x-5'>
-                <img src={Avatar} alt="Avatar" className='h-20 w-20 object-cover rounded-full border-4 border-white shadow-md' />
-                <div className='space-y-1'>
-                  <h1 className="text-2xl font-bold text-gray-900">Dashboard Staff</h1>
-                  <div className='flex items-center gap-x-2'>
-                    <UserCircle2 className='w-5 h-5 text-gray-600' />
-                    <p className='text-sm font-medium text-gray-700'>{user?.name}</p>
-                  </div>
-                  <div className='flex items-center gap-x-2'>
-                    <Building2 className='w-5 h-5 text-gray-600' />
-                    <p className='text-sm font-medium text-gray-700'>{user?.jabatan}</p>
-                  </div>
-                  <div className="flex items-center space-x-2 text-xs font-medium text-green-600">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span>Live Updates</span>
-                  </div>
-                </div>
+        <div className="relative bg-gradient-to-bl from-teal-500 via-teal-300 to-teal-400 rounded-2xl p-5 border border-slate-200 shadow-lg mb-2">
+          <div className='flex justify-between items-center gap-x-5'>
+            <div className='space-y-2'>
+              <h1 className="text-2xl font-bold text-white">Dashboard Staff</h1>
+              <div className='flex items-center gap-x-2'>
+                <UserCircle2 className='w-5 h-5 text-white' />
+                <p className='text-sm font-medium text-white'>{user?.name}</p>
+              </div>
+              <div className='flex items-center gap-x-2'>
+                <Building2 className='w-5 h-5 text-white' />
+                <p className='text-sm font-medium text-white'>{user?.jabatan}</p>
               </div>
             </div>
+            <LayoutDashboard className='text-white w-20 h-20' />
           </div>
         </div>
 
         {/* ✅ Stat Cards — DISAMAKAN DENGAN GAYA SURAT MASUK */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
           <StatCard
             title="Total Disposisi"
             count={stats.total}
@@ -311,7 +303,7 @@ const StaffDashboard = () => {
         </div>
 
         {/* ✅ Search and Filter Section — DISAMAKAN DENGAN GAYA SURAT MASUK */}
-        <div className="mb-6 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
+        <div className="mb-2 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
 
             {/* Search Input */}
@@ -393,7 +385,7 @@ const StaffDashboard = () => {
         {/* ✅ Disposisi List — CARD LAYOUT (SEPERTI SURAT MASUK) */}
         {disposisiList.length === 0 ? (
           <div className="text-center py-20">
-            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-4">
+            <div className="inline-flex items-center justify-center w-20 h-20 bg-gray-100 rounded-full mb-2">
               <FileText className="w-10 h-10 text-gray-300" />
             </div>
             <h3 className="text-lg font-semibold text-gray-700 mb-2">
@@ -407,11 +399,11 @@ const StaffDashboard = () => {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-1 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-2">
             {disposisiList.map((item) => (
               <article
                 key={item.id}
-                className="group relative bg-white space-y-3 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-slate-200"
+                className="group relative bg-white space-y-2 rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 overflow-hidden border border-slate-200"
               >
                 {/* Header */}
                 <div className="border-b border-gray-50/50 pb-3">
@@ -464,7 +456,7 @@ const StaffDashboard = () => {
                 </div>
 
                 {/* Tombol Aksi */}
-                <div className="space-y-3 pt-3 border-t border-gray-50/50">
+                <div className="space-y-2 pt-3 border-t border-gray-50/50">
                   <button
                     onClick={() => handleViewDetail(item.id)}
                     className="inline-flex w-full justify-center items-center gap-2 px-4 py-3 bg-teal-500 hover:bg-teal-600 text-white rounded-full text-sm font-medium shadow transition-colors duration-200"

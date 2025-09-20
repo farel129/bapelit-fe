@@ -20,6 +20,7 @@ const AdminDaftarSuratMasuk = () => {
   // State untuk pencarian dan filter
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   // Fetch data dari API
   useEffect(() => {
@@ -274,7 +275,7 @@ const AdminDaftarSuratMasuk = () => {
 
         {/* ✅ Search and Filter Section — DISAMAKAN DENGAN GAYA SURAT MASUK */}
         <div className="mb-6 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
-          <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+          <div className="flex gap-4 items-center">
 
             {/* Search Input */}
             <div className="relative flex-1 max-w-md">
@@ -297,29 +298,65 @@ const AdminDaftarSuratMasuk = () => {
             </div>
 
             {/* Filter Status */}
-            <div className="flex items-center gap-2">
-              <Filter className="w-5 h-5 text-gray-600" />
-              <select
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-                className="px-4 py-2.5 border border-gray-300 rounded-full focus:ring-2 focus:ring-indigo-500 focus:border-transparent outline-none transition"
+            <div className="relative flex items-center">
+              <button
+                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+                className="p-2 rounded-full hover:bg-gray-100 transition focus:outline-none"
+                aria-label="Filter status"
               >
-                <option value="all">Semua Status</option>
-                <option value="belum dibaca">Belum Dibaca</option>
-                <option value="sudah dibaca">Sudah Dibaca</option>
-              </select>
+                <Filter className="w-5 h-5 text-gray-600" />
+              </button>
+
+              {/* Dropdown */}
+              {isDropdownOpen && (
+                <div className="absolute top-full mt-2 right-0 bg-white border border-gray-300 rounded-lg shadow-lg z-10 w-48">
+                  <div className="py-1">
+                    <button
+                      onClick={() => {
+                        setStatusFilter("all");
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 hover:bg-gray-100 ${statusFilter === "all" ? "bg-indigo-50 text-indigo-700" : "text-gray-800"
+                        }`}
+                    >
+                      Semua Status
+                    </button>
+                    <button
+                      onClick={() => {
+                        setStatusFilter("belum dibaca");
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 hover:bg-gray-100 ${statusFilter === "belum dibaca" ? "bg-indigo-50 text-indigo-700" : "text-gray-800"
+                        }`}
+                    >
+                      Belum Dibaca
+                    </button>
+                    <button
+                      onClick={() => {
+                        setStatusFilter("sudah dibaca");
+                        setIsDropdownOpen(false);
+                      }}
+                      className={`block w-full text-left px-4 py-2 hover:bg-gray-100 ${statusFilter === "sudah dibaca" ? "bg-indigo-50 text-indigo-700" : "text-gray-800"
+                        }`}
+                    >
+                      Sudah Dibaca
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
 
-            {/* Clear Filters Button */}
-            {(searchTerm || statusFilter !== 'all') && (
-              <button
-                onClick={clearFilters}
-                className="px-4 py-2.5 text-gray-700 border border-gray-300 rounded-full hover:bg-gray-50 font-medium transition flex items-center gap-2"
-              >
-                <X className="h-4 w-4" /> Reset
-              </button>
-            )}
+
           </div>
+          {/* Clear Filters Button */}
+          {(searchTerm || statusFilter !== 'all') && (
+            <button
+              onClick={clearFilters}
+              className="px-4 py-2.5 text-gray-700 border mt-3 border-gray-300 rounded-full hover:bg-gray-50 font-medium transition flex items-center gap-2"
+            >
+              <X className="h-4 w-4" /> Reset
+            </button>
+          )}
 
           {/* Results Info */}
           <div className="flex items-center justify-between text-sm text-gray-600 mt-4">
@@ -365,7 +402,7 @@ const AdminDaftarSuratMasuk = () => {
             <p className="text-gray-500">Belum ada surat masuk yang tersedia.</p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {filteredData.map((surat) => {
               return (
                 <article

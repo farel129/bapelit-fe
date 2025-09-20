@@ -46,17 +46,17 @@ const KepalaDashboard = () => {
   }, [activeTab]);
 
   return (
-    <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
+    <div className="min-h-screen">
       {/* Mobile Header */}
       <div className=" z-20 backdrop-blur-xl bg-white/95 border-b border-slate-200 shadow-lg rounded-2xl">
         <div className="p-4">
           {/* Title and Description - Mobile Optimized */}
-          <div className="flex items-start space-x-3 mb-4">
+          <div className="flex items-start space-x-3 mb-2">
             <div className="p-2.5 sm:p-3 bg-white rounded-xl sm:rounded-2xl shadow-lg flex-shrink-0">
               <Mail className="w-5 h-5 sm:w-6 sm:h-6 text-teal-400" />
             </div>
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg lg:text-xl font-bold text-black truncate">
+              <h1 className="text-lg md:text-xl font-bold text-black truncate">
                 Dashboard Kepala Kantor
               </h1>
               <p className="text-xs sm:text-sm text-black mt-1 line-clamp-2">
@@ -112,7 +112,7 @@ const KepalaDashboard = () => {
                     <button
                       key={tab.id}
                       onClick={() => setActiveTab(tab.id)}
-                      className={`relative flex items-center space-x-3 cursor-pointer px-4 lg:px-6 py-3 lg:py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
+                      className={`relative flex items-center space-x-3 cursor-pointer px-4 md:px-6 py-3 md:py-3.5 rounded-xl font-semibold text-sm transition-all duration-300 ${
                         activeTab === tab.id
                           ? 'bg-white text-[#2E2A27] shadow-md border border-[#EDE6E3] scale-[1.02]'
                           : 'text-slate-500 hover:text-[#2E2A27] hover:bg-gray-50 hover:shadow-sm'
@@ -128,7 +128,7 @@ const KepalaDashboard = () => {
                       
                       {/* Active indicator for desktop */}
                       {activeTab === tab.id && (
-                        <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 lg:w-10 h-1 rounded-full transition-all duration-300 ${
+                        <div className={`absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-8 md:w-10 h-1 rounded-full transition-all duration-300 ${
                           tab.id === 'surat-masuk' ? 'bg-gradient-to-r from-[#D4A373] to-teal-400' :
                           tab.id === 'disposisi-saya' ? 'bg-gradient-to-r from-[#4CAF50] to-[#2E7D32]' :
                           'bg-gradient-to-r from-[#D9534F] to-[#B52B27]'
@@ -144,7 +144,7 @@ const KepalaDashboard = () => {
       </div>
 
       {/* Content Area - Mobile Optimized */}
-      <div className="py-4">
+      <div className="mt-2">
         <div className="transition-all duration-300">
           <div className="transition-all duration-300">
             {activeTab === 'surat-masuk' && <SuratMasukList />}

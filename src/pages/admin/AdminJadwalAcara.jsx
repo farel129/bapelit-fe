@@ -362,10 +362,10 @@ const AdminJadwalAcara = () => {
   }, [showRecommendations]);
 
   return (
-    <div className="min-h-screen bg-white p-5 rounded-3xl shadow-lg">
+    <div className="min-h-screen">
       {/* Header Section — DIPERBARUI dengan gaya glassmorphism */}
       <div className="bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl border border-white/20 p-3 mb-3">
-        <div className="flex justify-between items-center">
+        <div className="md:flex space-y-2 justify-between items-center">
           <div className="flex items-center gap-3">
             <div className="relative">
               <div className="p-3 bg-white rounded-xl shadow-lg">
@@ -382,7 +382,7 @@ const AdminJadwalAcara = () => {
           </div>
           <button
             onClick={() => setShowForm(true)}
-            className="inline-flex items-center gap-2 bg-black text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
+            className="inline-flex items-center gap-2 bg-black w-full md:w-fit justify-center text-white px-5 py-3 rounded-xl text-sm font-semibold transition-all duration-300 shadow-md hover:shadow-lg"
           >
             <Plus className="w-4 h-4" />
             Tambah Jadwal
@@ -460,7 +460,7 @@ const AdminJadwalAcara = () => {
 
       {/* Jadwal List */}
       {loading && !showForm ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
           {[...Array(limit)].map((_, index) => (
             <div
               key={index}
@@ -504,7 +504,7 @@ const AdminJadwalAcara = () => {
             </div>
           ) : (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-2">
+              <div className="grid grid-cols-1  md:grid-cols-2 gap-2">
                 {jadwalList.map((jadwal) => (
                   <div
                     key={jadwal.id}

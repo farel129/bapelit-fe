@@ -98,9 +98,9 @@ const KepalaStatistikDisposisi = () => {
     if (error) {
         return (
             <div className="text-center py-12 bg-white rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-                <AlertCircle className="h-12 w-12 text-black mx-auto mb-4" />
+                <AlertCircle className="h-12 w-12 text-black mx-auto mb-2" />
                 <p className="text-black font-semibold mb-2">Terjadi Kesalahan</p>
-                <p className="text-black text-sm mb-6">{error}</p>
+                <p className="text-black text-sm mb-2">{error}</p>
                 <button
                     onClick={fetchStatistik}
                     className="bg-gradient-to-br from-teal-400 to-teal-600 hover:from-teal-600 hover:to-teal-700 text-white px-4 py-2.5 rounded-xl text-sm font-semibold transition-all shadow-md hover:shadow-lg border border-[#EDE6E3]"
@@ -128,7 +128,7 @@ const KepalaStatistikDisposisi = () => {
     return (
         <div>
             {/* Header */}
-            <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center justify-between mb-2">
                 <button
                     onClick={fetchStatistik}
                     className="bg-white hover:bg-[#FDFCFB] border-2 border-[#EDE6E3] gap-x-2 flex items-center text-black px-5 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 shadow-sm hover:shadow-md hover:border-white"
@@ -138,7 +138,7 @@ const KepalaStatistikDisposisi = () => {
             </div>
 
             {/* Stat Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-4">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-2 mb-2">
                 <StatCard
                     title="Total Disposisi"
                     count={stats.statistik_status.total.toLocaleString('id-ID')}
@@ -182,11 +182,11 @@ const KepalaStatistikDisposisi = () => {
             </div>
 
             {/* Charts Section */}
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 mb-4">
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-2 mb-2">
                 {/* Bar Chart */}
                 <div className="bg-white rounded-2xl shadow-sm p-4 border-2 border-[#EDE6E3]">
-                    <div className="flex items-center justify-between mb-6">
-                        <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
                             <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
                                 <Activity className="h-5 w-5 text-black" />
                             </div>
@@ -231,8 +231,8 @@ const KepalaStatistikDisposisi = () => {
 
                 {/* Pie Chart */}
                 <div className="bg-white rounded-2xl shadow-sm p-4 border-2 border-[#EDE6E3]">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
+                    <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-2">
                             <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
                                 <Eye className="h-5 w-5 text-black" />
                             </div>
@@ -281,7 +281,7 @@ const KepalaStatistikDisposisi = () => {
             {/* Summary Cards */}
             <div className="">
                 <div className="bg-white p-6 rounded-2xl border-2 border-[#EDE6E3] shadow-sm">
-                    <div className="flex items-center gap-3 mb-4">
+                    <div className="flex items-center gap-2 mb-2">
                         <div className="p-2.5 bg-slate-200 rounded-xl shadow-md">
                             <TrendingUp className="h-5 w-5 text-black" />
                         </div>
@@ -290,7 +290,7 @@ const KepalaStatistikDisposisi = () => {
                             <p className="text-sm font-medium text-black opacity-80">Persentase berdasarkan status</p>
                         </div>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-2">
                         {Object.entries(stats.persentase_status)
                             .filter(([key]) => key !== 'total' && key !== 'diteruskan')
                             .map(([key, percentage]) => (

@@ -22,17 +22,17 @@ const MyFeedback = ({
     return (
         <div>
             {feedbackList.length > 0 && (
-                <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+                <div className="bg-gradient-to-bl from-teal-100 via-teal-50 to-teal-200 rounded-2xl shadow-md border-2 border-slate-200 p-2 md:p-6">
                     <div className="flex items-center mb-4">
                         <div className="p-3 bg-white rounded-xl shadow-md mr-3">
                             <MessageSquare className="w-6 h-6 text-teal-400" />
                         </div>
                         <div>
                             <h3 className="font-semibold" >Feedback yang Telah Dikirim</h3>
-                            <p className="text-sm font-medium" >Riwayat tanggapan yang telah Anda berikan</p>
+                            <p className="text-xs font-medium" >Riwayat tanggapan yang telah Anda berikan</p>
                         </div>
                     </div>
-                    <div className="space-y-6">
+                    <div className="space-y-3">
                         {feedbackList.map((feedback) => (
                             <div key={feedback.id} className="bg-white rounded-xl p-6 border border-slate-200 shadow-sm">
                                 {/* Header Feedback */}
@@ -83,7 +83,7 @@ const MyFeedback = ({
                                 </div>
                                 {/* Jika sedang dalam mode edit untuk feedback ini */}
                                 {editingFeedbackId === feedback.id ? (
-                                    <div className="space-y-6">
+                                    <div className="space-y-3">
                                         {feedbackError && (
                                             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-2xl shadow-sm">
                                                 <div className="flex items-center">
@@ -92,7 +92,7 @@ const MyFeedback = ({
                                                 </div>
                                             </div>
                                         )}
-                                        <form onSubmit={handleEditFeedbackSubmit} className="space-y-6">
+                                        <form onSubmit={handleEditFeedbackSubmit} className="space-y-3">
                                             <div>
                                                 <label className="block text-sm font-semibold mb-3" >
                                                     Catatan Feedback *
@@ -149,7 +149,7 @@ const MyFeedback = ({
                                                                     <div className="p-2 bg-slate-600 rounded-lg mr-3">
                                                                         <FileText className="w-4 h-4 text-white" />
                                                                     </div>
-                                                                    <span className="font-medium" >{file.filename}</span>
+                                                                    <span className="font-medium truncate max-w-[140px]" >{file.filename}</span>
                                                                 </div>
                                                                 <button
                                                                     type="button"
@@ -251,7 +251,7 @@ const MyFeedback = ({
                                                                     }
                                                                 }}
                                                             >
-                                                                <div className="w-32 h-32 bg-white border-slate-200 shadow-lg flex items-center justify-center">
+                                                                <div className="md:w-32 md:h-32 h-20 w-20 bg-white border-slate-200 shadow-lg flex items-center justify-center">
                                                                     {isImage ? (
                                                                         <img
                                                                             src={file.url}

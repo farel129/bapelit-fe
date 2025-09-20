@@ -60,7 +60,7 @@ export const DisposisiContentSection = ({disposisi, onImageClick}) => {
                     }
                   }}
                 >
-                  <div className="w-32 h-32 flex items-center justify-center bg-gray-50">
+                  <div className="w-20 md:w-32 h-20 md:h-32 flex items-center justify-center bg-gray-50">
                     {isImage ? (
                       <img
                         src={photo.url}

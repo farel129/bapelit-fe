@@ -371,10 +371,10 @@ const StaffDisposisiDetail = () => {
   }
 
   return (
-    <div className="min-h-screen p-4 lg:p-5 rounded-3xl bg-white shadow-lg">
+    <div className="min-h-screen">
       <div className="">
         {/* Header Section */}
-        <div className="mb-4">
+        <div className="mb-4 bg-white shadow-lg md:p-5 p-3 rounded-2xl">
           <button
             onClick={() => navigate(-1)}
             className="group inline-flex items-center mb-3"
@@ -383,9 +383,9 @@ const StaffDisposisiDetail = () => {
             <span className="font-semibold">Kembali</span>
           </button>
           <div className="px-4 mb-4">
-            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-2">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
               <div className="flex-1">
-                <h1 className="lg:text-lg text-lg font-bold">Detail Disposisi</h1>
+                <h1 className="md:text-lg text-lg font-bold">Detail Disposisi</h1>
                 <p className="text-sm font-medium mt-1">Kelola dan berikan feedback terhadap disposisi yang diterima</p>
                 <button
                   onClick={handleDownloadPDF}
@@ -409,7 +409,7 @@ const StaffDisposisiDetail = () => {
                 </button>
               </div>
               {disposisi && (
-                <div className="flex flex-col items-center lg:items-end space-y-4">
+                <div className="flex flex-col items-center md:items-end space-y-4">
                   {getStatusBadge(disposisi.status_dari_bawahan)}
                   <div className="flex flex-col sm:flex-row gap-2">
                     {canAcceptDisposisi() && (
@@ -465,7 +465,7 @@ const StaffDisposisiDetail = () => {
           <div className="space-y-8">
             {/* Form Feedback */}
             {showFeedbackForm && !editingFeedbackId && (
-              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-3 md:p-6">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-white rounded-xl shadow-lg mr-1">
                     <MessageSquare className="w-6 h-6 text-teal-400" />
@@ -582,8 +582,8 @@ const StaffDisposisiDetail = () => {
             )}
 
             {/* Informasi Surat dan Disposisi */}
-            <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
+            <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-2 md:p-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {/* Informasi Surat */}
                 <div>
                   <div className="flex items-center mb-4">
@@ -762,7 +762,7 @@ const StaffDisposisiDetail = () => {
 
             {/* Feedback yang Telah Dikirim */}
             {feedbackList.length > 0 && (
-              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+              <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-2 md:p-6">
                 <div className="flex items-center mb-4">
                   <div className="p-3 bg-white rounded-xl shadow-md mr-3">
                     <MessageSquare className="w-6 h-6 text-teal-400" />

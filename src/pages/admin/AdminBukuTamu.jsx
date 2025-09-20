@@ -265,7 +265,7 @@ const fallbackCopyTextToClipboard = (text) => {
   }, [guestSearch]);
 
   return (
-    <div className="min-h-screen bg-white lg:p-5 rounded-3xl shadow-lg">
+    <div className="min-h-screen">
       {/* Modern Header — Tetap dipertahankan */}
       <div className="bg-white shadow-lg lg:border lg:border-slate-200 p-2 rounded-2xl lg:p-4">
         <div className="">

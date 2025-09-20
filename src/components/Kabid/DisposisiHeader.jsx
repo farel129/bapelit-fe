@@ -31,7 +31,7 @@ const DisposisiHeader = ({
     (disposisi.status_dari_kabid === 'diterima' || disposisi.status === 'diproses');
 
   return (
-    <div className="mb-4">
+    <div className="mb-2 p-4 bg-white rounded-2xl shadow-lg">
       <button
         onClick={() => navigate(-1)}
         className="group inline-flex items-center mb-3"
@@ -41,10 +41,10 @@ const DisposisiHeader = ({
       </button>
 
       <div className="px-4 mb-4">
-        <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-2">
+        <div className="flex flex-col md:flex-row md:justify-between md:items-start gap-2">
           <div className="flex-1">
-            <h1 className="lg:text-lg text-lg font-bold">Detail Disposisi</h1>
-            <p className="text-sm font-medium mt-1">Kelola dan berikan feedback terhadap disposisi yang diterima</p>
+            <h1 className="md:text-lg text-lg font-bold">Detail Disposisi</h1>
+            <p className="text-xs font-medium mt-1">Kelola dan berikan feedback terhadap disposisi yang diterima</p>
 
             <button
               onClick={onDownloadPDF}
@@ -70,7 +70,7 @@ const DisposisiHeader = ({
           </div>
 
           {disposisi && (
-            <div className="flex flex-col items-center lg:items-end space-y-4">
+            <div className="flex flex-col items-start mt-2 md:mt-0 md:items-end space-y-4">
               {/* Status Badge */}
               <StatusBadge status={disposisi.status_dari_kabid} />
 

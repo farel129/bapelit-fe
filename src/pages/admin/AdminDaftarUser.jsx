@@ -323,7 +323,7 @@ function AdminDaftarUser() {
   }
 
   return (
-    <div className="min-h-screen p-2 lg:p-5 bg-white shadow-lg rounded-3xl">
+    <div className="min-h-screen">
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-x-3">
@@ -385,7 +385,7 @@ function AdminDaftarUser() {
 
       {/* Search and Filter Section */}
       <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-4 mb-4">
-        <div className="flex items-center gap-3 mb-4">
+        <div className="flex flex-col md:flex-row items-center gap-3 mb-4">
           {/* Search Input */}
           <div className="flex-1 relative">
             <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-5 w-5 text-[#6b7280]" />

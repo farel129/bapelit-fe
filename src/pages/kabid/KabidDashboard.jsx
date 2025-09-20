@@ -15,7 +15,8 @@ import {
   UserCircle2,
   ChevronLeft,
   ChevronRight,
-  Filter
+  Filter,
+  LayoutDashboard
 } from 'lucide-react';
 import { api } from '../../utils/api';
 import { useAuth } from '../../contexts/AuthContext';
@@ -288,36 +289,26 @@ const KabidDashboard = () => {
 
   return (
     <div className="min-h-screen">
-      <main className="p-4">
-
-        {/* ✅ Header — DISAMAKAN DENGAN GAYA SURAT MASUK */}
-        <div className="relative mb-6">
-          <div className="relative bg-white rounded-2xl p-6 border border-slate-200 shadow-lg">
-            <div className="flex flex-col lg:flex-row items-center justify-between">
-              <div className='flex items-center gap-x-5'>
-                <img src={Avatar} alt="Avatar" className='h-20 w-20 object-cover rounded-full border-4 border-white shadow-md' />
-                <div className='space-y-1'>
-                  <h1 className="text-2xl font-bold text-gray-900">Dashboard Kabid</h1>
-                  <div className='flex items-center gap-x-2'>
-                    <UserCircle2 className='w-5 h-5 text-gray-600' />
-                    <p className='text-sm font-medium text-gray-700'>{user?.name}</p>
-                  </div>
-                  <div className='flex items-center gap-x-2'>
-                    <Building2 className='w-5 h-5 text-gray-600' />
-                    <p className='text-sm font-medium text-gray-700'>{user?.jabatan}</p>
-                  </div>
-                  <div className="flex items-center space-x-2 text-xs font-medium text-green-600">
-                    <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                    <span>Live Updates</span>
-                  </div>
-                </div>
+      <main className="">
+        <div className="relative bg-gradient-to-bl from-teal-500 via-teal-300 to-teal-400 rounded-2xl p-5 border border-slate-200 shadow-lg mb-2">
+          <div className='flex justify-between items-center gap-x-5'>
+            <div className='space-y-3'>
+              <h1 className="text-2xl font-bold text-white">Dashboard Kabid</h1>
+              <div className='flex items-center gap-x-2'>
+                <UserCircle2 className='w-5 h-5 text-white' />
+                <p className='text-sm font-medium text-white'>{user?.name}</p>
+              </div>
+              <div className='flex items-center gap-x-2'>
+                <Building2 className='w-5 h-5 text-white' />
+                <p className='text-sm font-medium text-white'>{user?.jabatan}</p>
               </div>
             </div>
+            <LayoutDashboard className='text-white w-20 h-20' />
           </div>
         </div>
 
         {/* ✅ Stat Cards — DISAMAKAN DENGAN GAYA SURAT MASUK */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-2">
           <StatCard
             title="Total Disposisi"
             count={stats.total}
@@ -361,7 +352,7 @@ const KabidDashboard = () => {
         </div>
 
         {/* ✅ Search and Filter Section — DISAMAKAN DENGAN GAYA SURAT MASUK */}
-        <div className="mb-6 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
+        <div className="mb-2 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
           <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center">
 
             {/* Search Input */}

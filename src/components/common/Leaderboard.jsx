@@ -50,7 +50,7 @@ const Leaderboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen flex items-center justify-center">
         <LoadingSpinner text='Memuat peringkat' />
       </div>
     );
@@ -58,7 +58,7 @@ const Leaderboard = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 bg-gradient-to-br from-gray-50 to-gray-100">
+      <div className="min-h-screen">
         <div className="bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl border border-gray-200 p-8 w-full max-w-md text-center">
           <div className="flex flex-col items-center space-y-4">
             <div className="w-16 h-16 rounded-xl flex items-center justify-center bg-red-50 shadow-lg">
@@ -79,7 +79,7 @@ const Leaderboard = () => {
 
   return (
     <div className="min-h-screen">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <div className="mx-auto">
         {/* Header with Consistent Style */}
         <div className="text-center mb-8 relative">
           <div className="relative z-10">
@@ -144,18 +144,15 @@ const Leaderboard = () => {
                 return (
                   <div
                     key={index}
-                    className={`p-6 transition-all duration-500 hover:shadow-lg ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
+                    className={`p-5 transition-all duration-500 hover:shadow-lg ${index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
                       }`}
                   >
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6">
+                    <div className="flex flex-col sm:flex-row items-start sm:items-center gap-5">
                       {/* Rank Badge */}
                       <div className={`w-16 h-16 flex-shrink-0 rounded-xl flex items-center justify-center ${rankBadge.bg} ${rankBadge.shadow}`}>
                         {IconComponent ? (
                           <>
                             <IconComponent className={`w-8 h-8 ${rankBadge.color}`} />
-                            {index === 0 && (
-                              <Star className="absolute -top-1 -right-1 w-4 h-4 text-amber-400 animate-pulse" />
-                            )}
                           </>
                         ) : (
                           <span className="text-sm font-bold text-[#000000]">{index + 1}</span>
@@ -197,14 +194,7 @@ const Leaderboard = () => {
                       </div>
 
                       {/* Count */}
-                      <div className="text-center sm:text-right flex-shrink-0">
-                        <span className="text-lg font-bold bg-gradient-to-r from-[#000000] to-[#6b7280] bg-clip-text text-transparent">
-                          {item.jumlah_disposisi}
-                        </span>
-                        <div className="text-xs uppercase tracking-wider font-medium text-[#6b7280] mt-1">
-                          Disposisi
-                        </div>
-                      </div>
+                      
                     </div>
 
                     {/* Progress Bar - Mobile */}
@@ -215,10 +205,10 @@ const Leaderboard = () => {
                       </div>
                       <div className="h-2 rounded-full overflow-hidden bg-gray-100 border border-gray-200">
                         <div
-                          className="h-full rounded-full transition-all duration-1500 ease-out"
+                          className="h-full rounded-full transition-all duration-1500 ease-out bg-teal4"
                           style={{
                             width: `${progressWidth}%`,
-                            background: 'linear-gradient(135deg, #f6339a, #e51b8c)'
+                            background: 'linear-gradient(135deg, #000000, #00d5be)'
                           }}
                         ></div>
                       </div>

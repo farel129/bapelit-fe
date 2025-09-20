@@ -63,7 +63,7 @@ const BukuTamuView = ({
       <main className="">
 
         {/* ✅ Search & Filter Section — Disesuaikan gaya SuratKeluar */}
-        <div className="mb-6 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
+        <div className="mb-2 p-4 bg-white rounded-2xl shadow-sm border border-slate-200">
           <div className="flex flex-col sm:flex-row gap-2 items-start sm:items-center">
 
             {/* Search Input */}

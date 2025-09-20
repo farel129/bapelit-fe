@@ -22,7 +22,7 @@ const MyFeedback = ({
     return (
         <div>
             {feedbackList.length > 0 && (
-                <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-6">
+                <div className="bg-gradient-to-br from-[#FDFCFB] via-white to-[#EDE6E3] rounded-2xl shadow-md border-2 border-slate-200 p-2 md:p-6">
                     <div className="flex items-center mb-4">
                         <div className="p-3 bg-white rounded-xl shadow-md mr-3">
                             <MessageSquare className="w-6 h-6 text-teal-400" />
@@ -251,7 +251,7 @@ const MyFeedback = ({
                                                                     }
                                                                 }}
                                                             >
-                                                                <div className="w-32 h-32 bg-white border-slate-200 shadow-lg flex items-center justify-center">
+                                                                <div className="w-20 md:w-32 h-20 md:h-32 bg-white border-slate-200 shadow-lg flex items-center justify-center">
                                                                     {isImage ? (
                                                                         <img
                                                                             src={file.url}

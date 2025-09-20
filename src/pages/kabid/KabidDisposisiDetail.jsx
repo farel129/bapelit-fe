@@ -370,7 +370,7 @@ const KabidDisposisiDetail = () => {
     );
   }
   return (
-    <div className="min-h-screen p-4 lg:p-5 rounded-3xl bg-white shadow-lg" >
+    <div className="min-h-screen" >
       <div className="">
         {/* Header Section */}
         <DisposisiHeader
@@ -409,7 +409,7 @@ const KabidDisposisiDetail = () => {
               editingFeedbackId={editingFeedbackId}
             />
             {/* Informasi Surat dan Disposisi */}
-            <div className="bg-gradient-to-bl from-gray-100 via-white to-gray-100 rounded-2xl shadow-md border-2 border-slate-200 p-6">
+            <div className="bg-gradient-to-bl from-gray-100 via-white to-gray-100 rounded-2xl shadow-md border-2 border-slate-200 p-2 md:p-6">
               <DisposisiInfoCard
                 disposisi={disposisi}
               />

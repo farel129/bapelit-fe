@@ -145,7 +145,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
                 onClick={() => setTipePenerusan('user')}
                 className={`flex-1 py-2 px-3 text-sm rounded-lg border transition-all duration-200 ${
                   tipePenerusan === 'user'
-                    ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white border-[#6D4C41] shadow-md'
+                    ? 'bg-teal-400 text-white  shadow-md'
                     : 'bg-white/60 backdrop-blur-sm text-black border-slate-200 hover:bg-white hover:shadow-sm'
                 }`}
               >
@@ -155,7 +155,7 @@ const ForwardModal = ({ isOpen, onClose, disposisi, onSuccess }) => {
                 onClick={() => setTipePenerusan('jabatan')}
                 className={`flex-1 py-2 px-3 text-sm rounded-lg border transition-all duration-200 ${
                   tipePenerusan === 'jabatan'
-                    ? 'bg-gradient-to-br from-[#D4A373] to-[#6D4C41] text-white border-[#6D4C41] shadow-md'
+                    ? 'bg-teal-400 text-white  shadow-md'
                     : 'bg-white/60 backdrop-blur-sm text-black border-slate-200 hover:bg-white hover:shadow-sm'
                 }`}
               >
