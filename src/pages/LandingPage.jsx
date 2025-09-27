@@ -171,9 +171,9 @@ const LandingPage = () => {
     >
       {/* Decorative Background Elements - Cocoa Latte Theme */}
       <div ref={backgroundRef} className='absolute inset-0 overflow-hidden pointer-events-none'>
-        <div className='absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-[#D4A373]/30 to-[#EDE6E3]/20 rounded-full blur-3xl'></div>
-        <div className='absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-[#6D4C41]/20 to-[#D4A373]/15 rounded-full blur-3xl'></div>
-        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-transparent via-[#EDE6E3]/20 to-transparent rounded-full'></div>
+        <div className='absolute -top-40 -right-40 w-96 h-96 bg-gradient-to-br from-teal-100/30 to-teal-200/20 rounded-full blur-3xl'></div>
+        <div className='absolute -bottom-40 -left-40 w-96 h-96 bg-gradient-to-tr from-teal-100/20 to-teal-200/15 rounded-full blur-3xl'></div>
+        <div className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-gradient-radial from-transparent via-teal-100/20 to-transparent rounded-full'></div>
       </div>
 
       {/* Header - Cocoa Latte Style */}
@@ -195,8 +195,8 @@ const LandingPage = () => {
               </span>
             </h1>
 
-            <h2 ref={subtitleRef} className='text-2xl lg:text-3xl font-semibold text-black tracking-wide'>
-              Management Sistem Surat
+            <h2 ref={subtitleRef} className='text-lg font-semibold text-black'>
+              Manajemen Arsip dan Gagasan Efisien untuk Sekretariat dan Staff Administrasi
             </h2>
           </div>
 

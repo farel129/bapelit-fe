@@ -87,7 +87,7 @@ const CreateBukuTamu = ({
 
                         <div className="text-center">
                             <div className="mb-6">
-                                <div className="w-16 h-16 bg-[#f6339a] rounded-full flex items-center justify-center mx-auto mb-4">
+                                <div className="w-16 h-16 bg-gradient-to-bl from-teal-400 to-teal-500 rounded-full flex items-center justify-center mx-auto mb-4">
                                     <QrCode className="w-8 h-8 text-white" />
                                 </div>
                                 <h3 className="text-xl font-bold text-[#000000] mb-2">QR Code Acara</h3>
