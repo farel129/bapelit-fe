@@ -9,7 +9,7 @@ const AdminSuratMasuk = () => {
     return (
         <div className="min-h-screen">
             {/* Header */}
-            <div className="flex items-center justify-between mb-8">
+            <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-x-3">
                     <div className='p-3 bg-white text-teal-400 rounded-xl shadow-lg'>
                         <BookPlus className='w-5 h-5' />
@@ -22,7 +22,7 @@ const AdminSuratMasuk = () => {
             </div>
 
             {/* Tab Navigation */}
-            <div className="flex space-x-1 mb-6 bg-white p-1 rounded-xl border-2 border-[#EDE6E3] shadow-sm">
+            <div className="flex space-x-1 mb-4 bg-white p-1 rounded-xl border-2 border-[#EDE6E3] shadow-sm">
                 <button
                     onClick={() => setActiveTab('buat')}
                     className={`flex items-center gap-x-2 px-4 py-2.5 rounded-lg text-sm font-semibold transition-all duration-200 ${activeTab === 'buat'
