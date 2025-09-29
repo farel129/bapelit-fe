@@ -1,4 +1,4 @@
-import { AlertCircle, CheckCircle } from "lucide-react";
+import { AlertCircle, CheckCircle, X } from "lucide-react";
 
 const Modal = ({ isOpen, onClose, children, title, type = 'default' }) => {
     if (!isOpen) return null;
