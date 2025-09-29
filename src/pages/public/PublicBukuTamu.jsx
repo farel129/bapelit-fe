@@ -89,7 +89,7 @@ const WelcomeSplash = ({ onComplete }) => {
             transform: 'translateY(30px)',
             transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
           }}
-          className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight"
+          className="text-3xl md:text-5xl font-bold text-black mb-2 tracking-tight"
         >
           Selamat Datang
         </h1>
@@ -102,14 +102,14 @@ const WelcomeSplash = ({ onComplete }) => {
             transform: 'translateY(20px)',
             transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
           }}
-          className="text-lg md:text-2xl text-slate-300 font-light"
+          className="text-lg md:text-2xl text-slate-900 font-light"
         >
-          di <span className="font-semibold text-white">Bapelitbangda Kota Tasikmalaya</span>
+          di <span className="font-semibold text-black">Bapelitbangda Kota Tasikmalaya</span>
         </p>
 
         {/* Decorative line */}
         <div className="mt-8 flex justify-center">
-          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-50 rounded-full"></div>
+          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-teal-500 to-transparent opacity-50 rounded-full"></div>
         </div>
       </div>
     </div>
