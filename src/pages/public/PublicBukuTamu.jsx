@@ -195,13 +195,6 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
     return (
         <div className="min-h-screen bg-gradient-to-bl from-gray-100 via-white to-gray-100">
             <div className="container mx-auto px-2 py-10">
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center justify-center w-20 h-20 bg-black rounded-full mb-4">
-                        <CheckCircle className="text-white" size={32} />
-                    </div>
-                    <h1 className="md:text-4xl text-3xl font-bold text-black mb-2">Buku Tamu Digital</h1>
-                    <p className="text-gray-600">Kehadiran Anda sudah tercatat</p>
-                </div>
                 <div className="max-w-2xl mx-auto">
                     <div className="bg-white rounded-xl shadow-lg md:p-8 p-4 border border-gray-200">
                         <div className="text-center">
