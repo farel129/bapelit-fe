@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
 import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, Plus, UserCircle2 } from 'lucide-react';
 import { guestBookAPI } from '../../utils/api';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
@@ -285,10 +285,20 @@ const PublikBukuTamu = () => {
         }
     }, [deviceId]);
 
-    useEffect(() => {
-        if (showWelcome && welcomeRef.current) {
+    useLayoutEffect(() => {
+        if (!showWelcome) return;
+
+        const el = welcomeRef.current;
+        if (!el) {
+            // Jika ref belum siap, coba sembunyikan setelah delay (fallback)
+            const fallback = setTimeout(() => setShowWelcome(false), 2500);
+            return () => clearTimeout(fallback);
+        }
+
+        // Coba jalankan GSAP
+        try {
             // Animasi masuk
-            gsap.fromTo(welcomeRef.current,
+            gsap.fromTo(el,
                 { opacity: 0, scale: 0.8, y: 20 },
                 {
                     opacity: 1,
@@ -299,9 +309,9 @@ const PublikBukuTamu = () => {
                 }
             );
 
-            // Set timeout untuk animasi keluar
+            // Animasi keluar setelah delay
             const timer = setTimeout(() => {
-                gsap.to(welcomeRef.current, {
+                gsap.to(el, {
                     opacity: 0,
                     scale: 0.9,
                     y: 10,
@@ -309,9 +319,14 @@ const PublikBukuTamu = () => {
                     ease: "power2.in",
                     onComplete: () => setShowWelcome(false)
                 });
-            }, 2500); // Tampil selama 2.5 detik
+            }, 2500);
 
             return () => clearTimeout(timer);
+        } catch (error) {
+            console.warn('GSAP animation failed, using fallback:', error);
+            // Fallback: langsung sembunyikan
+            const fallback = setTimeout(() => setShowWelcome(false), 2500);
+            return () => clearTimeout(fallback);
         }
     }, [showWelcome]);
 
@@ -506,12 +521,13 @@ const PublikBukuTamu = () => {
 
     if (showWelcome) {
         return (
-            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
                 <div
                     ref={welcomeRef}
-                    className="text-center px-6"
+                    className="text-center px-6 opacity-0"
+                    style={{ willChange: 'opacity, transform' }}
                 >
-                    <div className="inline-flex items-center justify-center w-24 h-24 bg-teal-500 rounded-full mb-6 animate-pulse">
+                    <div className="inline-flex items-center justify-center w-24 h-24 bg-teal-500 rounded-full mb-6">
                         <UserCircle2 className="text-white" size={48} />
                     </div>
                     <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
