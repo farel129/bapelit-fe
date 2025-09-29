@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, Plus, UserCircle2 } from 'lucide-react';
 import { guestBookAPI } from '../../utils/api';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 import Modal from './Modal';
+import gsap from 'gsap'; 
+
 
 // Device Submission Hook
 const useDeviceSubmission = () => {
@@ -162,6 +164,9 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
 
 // Main Component
 const PublikBukuTamu = () => {
+    const [showWelcome, setShowWelcome] = useState(true);
+    const welcomeRef = useRef(null);
+
     const [eventData, setEventData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
@@ -279,6 +284,36 @@ const PublikBukuTamu = () => {
             fetchEventData();
         }
     }, [deviceId]);
+
+    useEffect(() => {
+        if (showWelcome && welcomeRef.current) {
+            // Animasi masuk
+            gsap.fromTo(welcomeRef.current,
+                { opacity: 0, scale: 0.8, y: 20 },
+                {
+                    opacity: 1,
+                    scale: 1,
+                    y: 0,
+                    duration: 0.8,
+                    ease: "power3.out"
+                }
+            );
+
+            // Set timeout untuk animasi keluar
+            const timer = setTimeout(() => {
+                gsap.to(welcomeRef.current, {
+                    opacity: 0,
+                    scale: 0.9,
+                    y: 10,
+                    duration: 0.6,
+                    ease: "power2.in",
+                    onComplete: () => setShowWelcome(false)
+                });
+            }, 2500); // Tampil selama 2.5 detik
+
+            return () => clearTimeout(timer);
+        }
+    }, [showWelcome]);
 
     // 🔁 Simulasi progress saat submitting
     useEffect(() => {
@@ -467,6 +502,27 @@ const PublikBukuTamu = () => {
 
     if (alreadySubmitted && submissionData) {
         return <AlreadySubmitted eventData={eventData} submissionData={submissionData} />;
+    }
+
+    if (showWelcome) {
+        return (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
+                <div
+                    ref={welcomeRef}
+                    className="text-center px-6"
+                >
+                    <div className="inline-flex items-center justify-center w-24 h-24 bg-teal-500 rounded-full mb-6 animate-pulse">
+                        <UserCircle2 className="text-white" size={48} />
+                    </div>
+                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
+                        Selamat Datang
+                    </h1>
+                    <p className="text-teal-300 text-lg md:text-xl max-w-md mx-auto">
+                        di Bapelitbangda Kota Tasikmalaya
+                    </p>
+                </div>
+            </div>
+        );
     }
 
     return (
