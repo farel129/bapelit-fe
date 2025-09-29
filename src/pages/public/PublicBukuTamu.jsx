@@ -62,7 +62,7 @@ const WelcomeSplash = ({ onComplete }) => {
         transform: 'scale(1)',
         transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
       }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black"
     >
       <div className="text-center px-6">
         {/* Logo */}
@@ -76,7 +76,7 @@ const WelcomeSplash = ({ onComplete }) => {
           className="mb-8"
         >
           <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-2xl">
-            <Building className="text-slate-900" size={48} />
+            <Building className="text-teal-500" size={48} />
           </div>
         </div>
 
@@ -88,7 +88,7 @@ const WelcomeSplash = ({ onComplete }) => {
             transform: 'translateY(30px)',
             transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
           }}
-          className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight"
+          className="text-3xl md:text-5xl font-bold text-white mb-4 tracking-tight"
         >
           Selamat Datang
         </h1>
@@ -101,9 +101,9 @@ const WelcomeSplash = ({ onComplete }) => {
             transform: 'translateY(20px)',
             transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
           }}
-          className="text-xl md:text-2xl text-slate-300 font-light"
+          className="text-lg md:text-2xl text-slate-300 font-light"
         >
-          di <span className="font-semibold text-white">Bapelitbangda</span>
+          di <span className="font-semibold text-white">Bapelitbangda Kota Tasikmalaya</span>
         </p>
 
         {/* Decorative line */}
