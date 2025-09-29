@@ -42,7 +42,7 @@ const useDeviceSubmission = () => {
         const key = `${qrToken}_${deviceId}`;
         const submissionInfo = {
             submitted: true,
-            data: data,
+            data,
             timestamp: new Date().toISOString()
         };
         setSubmissionState(prev => new Map(prev).set(key, submissionInfo));
@@ -165,6 +165,7 @@ const PublikBukuTamu = () => {
     const [eventData, setEventData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
+    const [uploadProgress, setUploadProgress] = useState(0); // <-- tetap dipakai
     const [modal, setModal] = useState({ isOpen: false, type: 'default', title: '', message: '' });
     const [alreadySubmitted, setAlreadySubmitted] = useState(false);
     const [submissionData, setSubmissionData] = useState(null);
@@ -254,7 +255,6 @@ const PublikBukuTamu = () => {
                 setSubmissionData(response.submission);
             }
         } catch (error) {
-            // Hanya coba fallback jika error 404 (acara tidak ditemukan di checkDeviceSubmission)
             if (error.response?.status === 404) {
                 try {
                     const eventResponse = await guestBookAPI.getEventInfo(qrToken);
@@ -265,7 +265,6 @@ const PublikBukuTamu = () => {
                     );
                 }
             } else {
-                // Error jaringan/server lainnya
                 showModal('error', 'Gagal Memuat Data',
                     'Terjadi kesalahan saat menghubungi server. Periksa koneksi internet Anda.'
                 );
@@ -280,6 +279,25 @@ const PublikBukuTamu = () => {
             fetchEventData();
         }
     }, [deviceId]);
+
+    // 🔁 Simulasi progress saat submitting
+    useEffect(() => {
+        let interval;
+        if (submitting) {
+            setUploadProgress(0);
+            interval = setInterval(() => {
+                setUploadProgress(prev => {
+                    if (prev >= 90) {
+                        return 90; // jangan sampai 100% sebelum benar-benar selesai
+                    }
+                    return prev + Math.random() * 8 + 2; // naik acak 2–10%
+                });
+            }, 300);
+        } else {
+            setUploadProgress(0);
+        }
+        return () => clearInterval(interval);
+    }, [submitting]);
 
     const showModal = (type, title, message) => {
         setModal({ isOpen: true, type, title, message });
@@ -377,7 +395,6 @@ const PublikBukuTamu = () => {
 
             const response = await guestBookAPI.submitAttendance(qrToken, submitData);
 
-            // Gunakan markSubmitted untuk konsistensi state lokal
             const submissionInfo = markSubmitted(qrToken, deviceId, {
                 nama_lengkap: formData.nama_lengkap,
                 instansi: formData.instansi,
@@ -387,16 +404,19 @@ const PublikBukuTamu = () => {
                 photo_count: selectedFiles.length
             });
 
+            // Set progress ke 100% saat sukses
+            setUploadProgress(100);
+
             showModal('success', 'Berhasil!',
                 `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''}`
             );
 
-            // Tampilkan halaman "sudah submit" setelah delay
             setTimeout(() => {
                 setAlreadySubmitted(true);
                 setSubmissionData(submissionInfo.data);
             }, 2000);
         } catch (error) {
+            setUploadProgress(0); // reset saat error
             if (error.response?.status === 409) {
                 showModal('warning', 'Sudah Pernah Mengisi',
                     error.response.data.error || 'Anda sudah mengisi buku tamu untuk acara ini.'
@@ -620,6 +640,22 @@ const PublikBukuTamu = () => {
                                     </div>
                                 </div>
 
+                                {/* Progress Bar - tetap ditampilkan saat submitting */}
+                                {submitting && uploadProgress > 0 && (
+                                    <div className="space-y-2">
+                                        <div className="flex justify-between text-sm text-gray-600">
+                                            <span>Memproses...</span>
+                                            <span>{Math.min(100, Math.round(uploadProgress))}%</span>
+                                        </div>
+                                        <div className="w-full bg-gray-200 rounded-full h-2">
+                                            <div
+                                                className="bg-gradient-to-r from-teal-400 to-teal-600 h-2 rounded-full transition-all duration-300"
+                                                style={{ width: `${Math.min(100, uploadProgress)}%` }}
+                                            ></div>
+                                        </div>
+                                    </div>
+                                )}
+
                                 <div className="pt-4">
                                     <button
                                         type="button"
@@ -628,7 +664,10 @@ const PublikBukuTamu = () => {
                                         className="w-full bg-black text-white font-semibold py-4 px-6 rounded-xl hover:opacity-90 cursor-pointer focus:outline-none focus:ring-2 focus:ring-teal-400 focus:ring-offset-2 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
                                     >
                                         {submitting ? (
-                                            <LoadingSpinner size="sm" text="Menyimpan data..." />
+                                            <span className="flex items-center gap-2">
+                                                <Loader className="animate-spin" size={20} />
+                                                {uploadProgress >= 90 ? 'Menyimpan...' : 'Mengunggah...'}
+                                            </span>
                                         ) : (
                                             <>
                                                 <CheckCircle size={20} />
