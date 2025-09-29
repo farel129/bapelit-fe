@@ -1,41 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, TrendingUp, Plus, UserCircle2 } from 'lucide-react';
+import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, Plus, UserCircle2 } from 'lucide-react';
 import { guestBookAPI } from '../../utils/api';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
-
-// Modal Component
-const Modal = ({ isOpen, onClose, children, title, type = 'default' }) => {
-    if (!isOpen) return null;
-    const modalTypes = {
-        success: 'border-green-500 bg-green-50',
-        error: 'border-red-500 bg-red-50',
-        warning: 'border-yellow-500 bg-yellow-50',
-        default: 'border-gray-200 bg-white'
-    };
-    return (
-        <div className="fixed inset-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 p-4">
-            <div className={`w-full max-w-md rounded-2xl shadow-2xl ${modalTypes[type]} border-2 transform transition-all duration-300 scale-100`}>
-                <div className="flex justify-between items-center p-6 border-b border-gray-200">
-                    <h3 className="text-xl font-bold text-gray-800 flex items-center gap-2">
-                        {type === 'success' && <CheckCircle className="text-green-600" size={24} />}
-                        {type === 'error' && <AlertCircle className="text-red-600" size={24} />}
-                        {type === 'warning' && <AlertCircle className="text-yellow-600" size={24} />}
-                        {title}
-                    </h3>
-                    <button
-                        onClick={onClose}
-                        className="p-2 hover:bg-gray-100 rounded-full transition-colors"
-                    >
-                        <X size={20} />
-                    </button>
-                </div>
-                <div className="p-6">
-                    {children}
-                </div>
-            </div>
-        </div>
-    );
-};
+import Modal from './Modal';
 
 // Device Submission Hook
 const useDeviceSubmission = () => {
@@ -193,32 +160,6 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
     );
 };
 
-// Stat Card Component (dari StatsSuratMasuk)
-const StatCard = ({ title, count, icon: Icon, subtitle, trend, bgColor = 'bg-white', borderColor = 'border-gray-200', titleColor = 'text-gray-400', countColor = 'text-black', bgIcon = 'bg-teal-400', iconColor = 'text-white' }) => (
-    <div className={`${bgColor} p-4 rounded-xl shadow-lg border-2 ${borderColor} hover:shadow-xl transition-all duration-300`}>
-        <div className="flex items-start justify-between">
-            <div className="flex-1">
-                <div className="flex items-center gap-2 mb-2">
-                    <p className={`text-sm font-semibold ${titleColor}`}>{title}</p>
-                    {trend && (
-                        <div className="flex items-center gap-1 text-teal-400">
-                            <TrendingUp className="w-3 h-3" />
-                            <span className="text-xs font-medium">+{trend}%</span>
-                        </div>
-                    )}
-                </div>
-                <p className={`text-3xl font-bold ${countColor} leading-tight`}>{count}</p>
-                {subtitle && (
-                    <p className="text-xs text-gray-500 mt-1 font-medium">{subtitle}</p>
-                )}
-            </div>
-            <div className={`${bgIcon} p-3 self-end rounded-xl shadow-lg transition-all duration-300`}>
-                <Icon className={`w-6 h-6 ${iconColor}`} />
-            </div>
-        </div>
-    </div>
-);
-
 // Main Component
 const PublikBukuTamu = () => {
     const [eventData, setEventData] = useState(null);
@@ -239,7 +180,6 @@ const PublikBukuTamu = () => {
     });
     const [selectedFiles, setSelectedFiles] = useState([]);
     const [previewFiles, setPreviewFiles] = useState([]);
-    const [uploadProgress, setUploadProgress] = useState(0);
 
     const getQRTokenFromURL = () => {
         const path = window.location.pathname;
@@ -305,6 +245,7 @@ const PublikBukuTamu = () => {
             setLoading(false);
             return;
         }
+
         try {
             const response = await guestBookAPI.checkDeviceSubmission(qrToken, deviceId);
             setEventData(response.event);
@@ -313,12 +254,21 @@ const PublikBukuTamu = () => {
                 setSubmissionData(response.submission);
             }
         } catch (error) {
-            try {
-                const eventResponse = await guestBookAPI.getEventInfo(qrToken);
-                setEventData(eventResponse.event);
-            } catch (fallbackError) {
-                showModal('error', 'Acara Tidak Ditemukan',
-                    error.message || 'Acara tidak ditemukan atau sudah tidak aktif.');
+            // Hanya coba fallback jika error 404 (acara tidak ditemukan di checkDeviceSubmission)
+            if (error.response?.status === 404) {
+                try {
+                    const eventResponse = await guestBookAPI.getEventInfo(qrToken);
+                    setEventData(eventResponse.event);
+                } catch (fallbackError) {
+                    showModal('error', 'Acara Tidak Ditemukan',
+                        'Acara tidak ditemukan atau sudah tidak aktif.'
+                    );
+                }
+            } else {
+                // Error jaringan/server lainnya
+                showModal('error', 'Gagal Memuat Data',
+                    'Terjadi kesalahan saat menghubungi server. Periksa koneksi internet Anda.'
+                );
             }
         } finally {
             setLoading(false);
@@ -414,7 +364,6 @@ const PublikBukuTamu = () => {
             return;
         }
         setSubmitting(true);
-        setUploadProgress(0);
         try {
             const submitData = new FormData();
             submitData.append('nama_lengkap', formData.nama_lengkap);
@@ -426,45 +375,42 @@ const PublikBukuTamu = () => {
                 submitData.append('photos', file);
             });
 
-            const progressInterval = setInterval(() => {
-                setUploadProgress(prev => prev >= 90 ? 90 : prev + 10);
-            }, 200);
             const response = await guestBookAPI.submitAttendance(qrToken, submitData);
-            clearInterval(progressInterval);
-            setUploadProgress(100);
 
-            const submissionInfo = {
+            // Gunakan markSubmitted untuk konsistensi state lokal
+            const submissionInfo = markSubmitted(qrToken, deviceId, {
                 nama_lengkap: formData.nama_lengkap,
                 instansi: formData.instansi,
                 jabatan: formData.jabatan,
                 keperluan: formData.keperluan,
                 submitted_at: new Date().toISOString(),
                 photo_count: selectedFiles.length
-            };
+            });
 
+            showModal('success', 'Berhasil!',
+                `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''}`
+            );
+
+            // Tampilkan halaman "sudah submit" setelah delay
             setTimeout(() => {
-                showModal('success', 'Berhasil!',
-                    `Kehadiran Anda berhasil dicatat. ${selectedFiles.length > 0 ? `${response.photo_count || selectedFiles.length} foto berhasil diunggah.` : ''}`
-                );
-                setTimeout(() => {
-                    setAlreadySubmitted(true);
-                    setSubmissionData(submissionInfo);
-                }, 2000);
-            }, 500);
+                setAlreadySubmitted(true);
+                setSubmissionData(submissionInfo.data);
+            }, 2000);
         } catch (error) {
-            setUploadProgress(0);
             if (error.response?.status === 409) {
                 showModal('warning', 'Sudah Pernah Mengisi',
-                    error.response.data.error || 'Anda sudah mengisi buku tamu untuk acara ini.');
+                    error.response.data.error || 'Anda sudah mengisi buku tamu untuk acara ini.'
+                );
                 if (error.response.data.existing_submission) {
+                    const existing = error.response.data.existing_submission;
                     setAlreadySubmitted(true);
                     setSubmissionData({
-                        nama_lengkap: error.response.data.existing_submission.nama_lengkap,
-                        submitted_at: error.response.data.existing_submission.submitted_at,
-                        instansi: '',
-                        jabatan: '',
-                        keperluan: '',
-                        photo_count: 0
+                        nama_lengkap: existing.nama_lengkap,
+                        submitted_at: existing.submitted_at,
+                        instansi: existing.instansi || '',
+                        jabatan: existing.jabatan || '',
+                        keperluan: existing.keperluan || '',
+                        photo_count: existing.photo_count || 0
                     });
                 }
             } else {
@@ -673,21 +619,6 @@ const PublikBukuTamu = () => {
                                         />
                                     </div>
                                 </div>
-
-                                {submitting && uploadProgress > 0 && (
-                                    <div className="space-y-2">
-                                        <div className="flex justify-between text-sm text-gray-600">
-                                            <span>Upload Progress</span>
-                                            <span>{uploadProgress}%</span>
-                                        </div>
-                                        <div className="w-full bg-gray-200 rounded-full h-2">
-                                            <div
-                                                className="bg-gradient-to-r from-teal-400 to-teal-600 h-2 rounded-full transition-all duration-300"
-                                                style={{ width: `${uploadProgress}%` }}
-                                            ></div>
-                                        </div>
-                                    </div>
-                                )}
 
                                 <div className="pt-4">
                                     <button

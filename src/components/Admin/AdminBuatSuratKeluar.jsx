@@ -182,7 +182,7 @@ const AdminBuatSuratKeluar = () => {
                 onFocus={() => setFocusedField('nama_surat')}
                 onBlur={() => setFocusedField(null)}
                 required
-                className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300 bg-[#FDFCFB] ${focusedField === 'nama_surat'
+                className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300  ${focusedField === 'nama_surat'
                   ? 'border-teal-400 shadow-lg ring-4 ring-teal-400/20'
                   : 'border-[#EDE6E3] hover:border-teal-400'}`}
                 
@@ -202,7 +202,7 @@ const AdminBuatSuratKeluar = () => {
                 onFocus={() => setFocusedField('tanggal_surat')}
                 onBlur={() => setFocusedField(null)}
                 required
-                className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300 bg-[#FDFCFB] ${focusedField === 'tanggal_surat'
+                className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300  ${focusedField === 'tanggal_surat'
                   ? 'border-teal-400 shadow-lg ring-4 ring-teal-400/20'
                   : 'border-[#EDE6E3] hover:border-teal-400'}`}
                 
@@ -222,7 +222,7 @@ const AdminBuatSuratKeluar = () => {
               onFocus={() => setFocusedField('ditujukan_ke')}
               onBlur={() => setFocusedField(null)}
               required
-              className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300 bg-[#FDFCFB] ${focusedField === 'ditujukan_ke'
+              className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300  ${focusedField === 'ditujukan_ke'
                 ? 'border-teal-400 shadow-lg ring-4 ring-teal-400/20'
                 : 'border-[#EDE6E3] hover:border-teal-400'}`}
               
@@ -241,7 +241,7 @@ const AdminBuatSuratKeluar = () => {
               rows="4"
               onFocus={() => setFocusedField('keterangan')}
               onBlur={() => setFocusedField(null)}
-              className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300 bg-[#FDFCFB] ${focusedField === 'keterangan'
+              className={`w-full px-4 py-3 rounded-xl outline-none border-2 transition-all duration-300  ${focusedField === 'keterangan'
                 ? 'border-teal-400 shadow-lg ring-4 ring-teal-400/20'
                 : 'border-[#EDE6E3] hover:border-teal-400'}`}
               
@@ -269,7 +269,7 @@ const AdminBuatSuratKeluar = () => {
           />
 
           {files.length === 0 ? (
-            <label htmlFor="lampiran" className="block text-center p-12 border-2 border-dashed border-[#EDE6E3] rounded-xl cursor-pointer hover:bg-[#FDFCFB] hover:border-teal-400 transition-all duration-300">
+            <label htmlFor="lampiran" className="block text-center p-12 border-2 border-dashed border-[#EDE6E3] rounded-xl cursor-pointer hover: hover:border-teal-400 transition-all duration-300">
               <Upload className="w-10 h-10 mx-auto mb-4"  />
               <p className="font-semibold" >Klik untuk upload file</p>
               <p className="text-sm" >JPEG, PNG, GIF, WEBP, PDF (maks 5MB)</p>
@@ -281,7 +281,7 @@ const AdminBuatSuratKeluar = () => {
                   <div key={index} className="relative group">
                     {file.type === 'application/pdf' ? (
                       <div
-                        className="w-full h-24 bg-[#FDFCFB] rounded-lg flex flex-col items-center justify-center cursor-pointer border-2 border-[#EDE6E3] hover:border-teal-400 transition-all duration-300"
+                        className="w-full h-24  rounded-lg flex flex-col items-center justify-center cursor-pointer border-2 border-[#EDE6E3] hover:border-teal-400 transition-all duration-300"
                         onClick={() => openPreviewModal(null, index)}
                       >
                         {getFileIcon(file)}
@@ -325,7 +325,7 @@ const AdminBuatSuratKeluar = () => {
                 {files.length < MAX_FILES && (
                   <label
                     htmlFor="lampiran"
-                    className="flex flex-col items-center justify-center border-2 border-dashed border-[#EDE6E3] rounded-lg h-24 cursor-pointer hover:bg-[#FDFCFB] hover:border-teal-400 transition-all duration-300"
+                    className="flex flex-col items-center justify-center border-2 border-dashed border-[#EDE6E3] rounded-lg h-24 cursor-pointer hover: hover:border-teal-400 transition-all duration-300"
                   >
                     <Plus className="w-5 h-5"  />
                     <span className="text-xs" >Tambah</span>

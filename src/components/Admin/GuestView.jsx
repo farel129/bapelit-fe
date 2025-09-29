@@ -23,7 +23,7 @@ const GuestView = ({
             {view === 'guests' && currentEvent && (
                 <div className="space-y-4">
                     {/* Back Button */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 mt-7">
                         <button
                             onClick={() => setView('events')}
                             className="flex items-center text-black hover:text-gray-700 font-medium transition-colors"
@@ -35,7 +35,8 @@ const GuestView = ({
 
                     {/* Event Info Card */}
                     <div className="bg-white rounded-2xl border border-slate-200 shadow-lg p-4">
-                        <h2 className="text-xl font-semibold text-neutral-500 mb-4">Nama acara: <span className='text-black'>{currentEvent.nama_acara}</span></h2>
+                        <p className=' text-sm text-gray-400'>Nama Acara</p>
+                        <h2 className='text-lg font-bold mt-1 mb-5'>{currentEvent.nama_acara}</h2>
                         <div className="flex flex-wrap gap-4 text-sm text-black">
                             <div className="flex items-center">
                                 <Calendar className="w-5 h-5 text-teal-400 mr-2" />
