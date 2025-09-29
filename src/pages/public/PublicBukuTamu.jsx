@@ -63,7 +63,7 @@ const WelcomeSplash = ({ onComplete }) => {
         transform: 'scale(1)',
         transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
       }}
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-white"
     >
       <div className="text-center px-6">
         {/* Logo */}
