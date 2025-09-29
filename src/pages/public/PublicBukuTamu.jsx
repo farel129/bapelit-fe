@@ -3,6 +3,7 @@ import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcas
 import { guestBookAPI } from '../../utils/api';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 import Modal from './Modal';
+import imgLogo from '../../assets/img/logobapelit.png'
 
 // Welcome Splash Component
 const WelcomeSplash = ({ onComplete }) => {
@@ -75,8 +76,8 @@ const WelcomeSplash = ({ onComplete }) => {
           }}
           className="mb-8"
         >
-          <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-2xl">
-            <Building className="text-teal-500" size={48} />
+          <div className="inline-flex items-center justify-center w-24">
+            <img src={imgLogo} alt="" />
           </div>
         </div>
 
