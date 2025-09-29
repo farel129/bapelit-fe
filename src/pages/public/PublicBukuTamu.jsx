@@ -1,22 +1,129 @@
-import React, { useState, useEffect, useRef, useLayoutEffect } from 'react';
-import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, Plus, UserCircle2 } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Camera, Upload, X, MapPin, Calendar, FileText, User, Building, Briefcase, MessageSquare, CheckCircle, AlertCircle, Loader, Lock, UserCircle2 } from 'lucide-react';
 import { guestBookAPI } from '../../utils/api';
 import LoadingSpinner from '../../components/Ui/LoadingSpinner';
 import Modal from './Modal';
-import gsap from 'gsap'; 
 
+// Welcome Splash Component
+const WelcomeSplash = ({ onComplete }) => {
+  const splashRef = useRef(null);
+  const titleRef = useRef(null);
+  const subtitleRef = useRef(null);
+  const logoRef = useRef(null);
+
+  useEffect(() => {
+    const timeline = () => {
+      // Logo fade in & scale
+      setTimeout(() => {
+        if (logoRef.current) {
+          logoRef.current.style.opacity = '1';
+          logoRef.current.style.transform = 'scale(1) translateY(0)';
+        }
+      }, 100);
+
+      // Title fade in from bottom
+      setTimeout(() => {
+        if (titleRef.current) {
+          titleRef.current.style.opacity = '1';
+          titleRef.current.style.transform = 'translateY(0)';
+        }
+      }, 600);
+
+      // Subtitle fade in
+      setTimeout(() => {
+        if (subtitleRef.current) {
+          subtitleRef.current.style.opacity = '1';
+          subtitleRef.current.style.transform = 'translateY(0)';
+        }
+      }, 1000);
+
+      // Fade out everything
+      setTimeout(() => {
+        if (splashRef.current) {
+          splashRef.current.style.opacity = '0';
+          splashRef.current.style.transform = 'scale(1.05)';
+        }
+      }, 3000);
+
+      // Complete
+      setTimeout(() => {
+        onComplete();
+      }, 3500);
+    };
+
+    timeline();
+  }, [onComplete]);
+
+  return (
+    <div
+      ref={splashRef}
+      style={{
+        opacity: 1,
+        transform: 'scale(1)',
+        transition: 'opacity 0.6s ease-out, transform 0.6s ease-out'
+      }}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900"
+    >
+      <div className="text-center px-6">
+        {/* Logo */}
+        <div
+          ref={logoRef}
+          style={{
+            opacity: 0,
+            transform: 'scale(0.8) translateY(-20px)',
+            transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          }}
+          className="mb-8"
+        >
+          <div className="inline-flex items-center justify-center w-24 h-24 bg-white rounded-full shadow-2xl">
+            <Building className="text-slate-900" size={48} />
+          </div>
+        </div>
+
+        {/* Title */}
+        <h1
+          ref={titleRef}
+          style={{
+            opacity: 0,
+            transform: 'translateY(30px)',
+            transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
+          }}
+          className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight"
+        >
+          Selamat Datang
+        </h1>
+
+        {/* Subtitle */}
+        <p
+          ref={subtitleRef}
+          style={{
+            opacity: 0,
+            transform: 'translateY(20px)',
+            transition: 'all 0.8s cubic-bezier(0.22, 1, 0.36, 1)'
+          }}
+          className="text-xl md:text-2xl text-slate-300 font-light"
+        >
+          di <span className="font-semibold text-white">Bapelitbangda</span>
+        </p>
+
+        {/* Decorative line */}
+        <div className="mt-8 flex justify-center">
+          <div className="w-32 h-1 bg-gradient-to-r from-transparent via-white to-transparent opacity-50 rounded-full"></div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // Device Submission Hook
 const useDeviceSubmission = () => {
     const STORAGE_KEY = 'guestbook_submissions';
     const [submissionState, setSubmissionState] = useState(() => {
         try {
-            if (typeof window !== 'undefined' && window.sessionStorage) {
-                const stored = sessionStorage.getItem(STORAGE_KEY);
-                if (stored) {
-                    const parsed = JSON.parse(stored);
-                    return new Map(parsed);
-                }
+            const stored = localStorage.getItem(STORAGE_KEY);
+            if (stored) {
+                const parsed = JSON.parse(stored);
+                return new Map(parsed);
             }
         } catch (error) {
             console.warn('Failed to load submission state:', error);
@@ -26,10 +133,8 @@ const useDeviceSubmission = () => {
 
     useEffect(() => {
         try {
-            if (typeof window !== 'undefined' && window.sessionStorage) {
-                const serialized = JSON.stringify([...submissionState]);
-                sessionStorage.setItem(STORAGE_KEY, serialized);
-            }
+            const serialized = JSON.stringify([...submissionState]);
+            localStorage.setItem(STORAGE_KEY, serialized);
         } catch (error) {
             console.warn('Failed to save submission state:', error);
         }
@@ -164,13 +269,11 @@ const AlreadySubmitted = ({ eventData, submissionData }) => {
 
 // Main Component
 const PublikBukuTamu = () => {
-    const [showWelcome, setShowWelcome] = useState(true);
-    const welcomeRef = useRef(null);
-
+    const [showSplash, setShowSplash] = useState(true);
     const [eventData, setEventData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
-    const [uploadProgress, setUploadProgress] = useState(0); // <-- tetap dipakai
+    const [uploadProgress, setUploadProgress] = useState(0);
     const [modal, setModal] = useState({ isOpen: false, type: 'default', title: '', message: '' });
     const [alreadySubmitted, setAlreadySubmitted] = useState(false);
     const [submissionData, setSubmissionData] = useState(null);
@@ -280,57 +383,11 @@ const PublikBukuTamu = () => {
     };
 
     useEffect(() => {
-        if (deviceId) {
+        if (deviceId && !showSplash) {
             fetchEventData();
         }
-    }, [deviceId]);
+    }, [deviceId, showSplash]);
 
-    useLayoutEffect(() => {
-        if (!showWelcome) return;
-
-        const el = welcomeRef.current;
-        if (!el) {
-            // Jika ref belum siap, coba sembunyikan setelah delay (fallback)
-            const fallback = setTimeout(() => setShowWelcome(false), 2500);
-            return () => clearTimeout(fallback);
-        }
-
-        // Coba jalankan GSAP
-        try {
-            // Animasi masuk
-            gsap.fromTo(el,
-                { opacity: 0, scale: 0.8, y: 20 },
-                {
-                    opacity: 1,
-                    scale: 1,
-                    y: 0,
-                    duration: 0.8,
-                    ease: "power3.out"
-                }
-            );
-
-            // Animasi keluar setelah delay
-            const timer = setTimeout(() => {
-                gsap.to(el, {
-                    opacity: 0,
-                    scale: 0.9,
-                    y: 10,
-                    duration: 0.6,
-                    ease: "power2.in",
-                    onComplete: () => setShowWelcome(false)
-                });
-            }, 2500);
-
-            return () => clearTimeout(timer);
-        } catch (error) {
-            console.warn('GSAP animation failed, using fallback:', error);
-            // Fallback: langsung sembunyikan
-            const fallback = setTimeout(() => setShowWelcome(false), 2500);
-            return () => clearTimeout(fallback);
-        }
-    }, [showWelcome]);
-
-    // 🔁 Simulasi progress saat submitting
     useEffect(() => {
         let interval;
         if (submitting) {
@@ -338,9 +395,9 @@ const PublikBukuTamu = () => {
             interval = setInterval(() => {
                 setUploadProgress(prev => {
                     if (prev >= 90) {
-                        return 90; // jangan sampai 100% sebelum benar-benar selesai
+                        return 90;
                     }
-                    return prev + Math.random() * 8 + 2; // naik acak 2–10%
+                    return prev + Math.random() * 8 + 2;
                 });
             }, 300);
         } else {
@@ -454,7 +511,6 @@ const PublikBukuTamu = () => {
                 photo_count: selectedFiles.length
             });
 
-            // Set progress ke 100% saat sukses
             setUploadProgress(100);
 
             showModal('success', 'Berhasil!',
@@ -466,7 +522,7 @@ const PublikBukuTamu = () => {
                 setSubmissionData(submissionInfo.data);
             }, 2000);
         } catch (error) {
-            setUploadProgress(0); // reset saat error
+            setUploadProgress(0);
             if (error.response?.status === 409) {
                 showModal('warning', 'Sudah Pernah Mengisi',
                     error.response.data.error || 'Anda sudah mengisi buku tamu untuk acara ini.'
@@ -495,6 +551,11 @@ const PublikBukuTamu = () => {
         }
     };
 
+    // Show splash screen first
+    if (showSplash) {
+        return <WelcomeSplash onComplete={() => setShowSplash(false)} />;
+    }
+
     if (loading) {
         return (
             <div className="flex items-center justify-center py-16 bg-gradient-to-bl from-gray-100 via-white to-gray-100 h-screen">
@@ -517,28 +578,6 @@ const PublikBukuTamu = () => {
 
     if (alreadySubmitted && submissionData) {
         return <AlreadySubmitted eventData={eventData} submissionData={submissionData} />;
-    }
-
-    if (showWelcome) {
-        return (
-            <div className="fixed inset-0 z-[100] flex items-center justify-center bg-gradient-to-br from-gray-900 to-black">
-                <div
-                    ref={welcomeRef}
-                    className="text-center px-6 opacity-0"
-                    style={{ willChange: 'opacity, transform' }}
-                >
-                    <div className="inline-flex items-center justify-center w-24 h-24 bg-teal-500 rounded-full mb-6">
-                        <UserCircle2 className="text-white" size={48} />
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-white mb-4 tracking-tight">
-                        Selamat Datang
-                    </h1>
-                    <p className="text-teal-300 text-lg md:text-xl max-w-md mx-auto">
-                        di Bapelitbangda Kota Tasikmalaya
-                    </p>
-                </div>
-            </div>
-        );
     }
 
     return (
@@ -712,7 +751,6 @@ const PublikBukuTamu = () => {
                                     </div>
                                 </div>
 
-                                {/* Progress Bar - tetap ditampilkan saat submitting */}
                                 {submitting && uploadProgress > 0 && (
                                     <div className="space-y-2">
                                         <div className="flex justify-between text-sm text-gray-600">
